@@ -1,43 +1,56 @@
 # Nexus Learning
 
-Phase 1 public homepage in the existing Next.js app. No credentials or cloud accounts required. The displayed workspace and courses are labelled previews; accounts, real lessons, AI, payments and saved progress are not implemented.
+Next.js learning platform with a public homepage and Phase 2 account, onboarding and learner-dashboard implementation. Real lessons, grading, saved learning progress, AI and payments belong to later phases.
 
-## Local setup
+## Preview without a backend
 
-Use Node 24 (tested with 24.19.0) and its npm. With nvm installed: `nvm install && nvm use` in this directory.
+Use Node 24 (tested with 24.19.0). From the repository root:
 
 ```sh
-cd nexus_learning_platform # from the repository root
+cd nexus_learning_platform
 npm ci
-npm run dev
+npm run dev -- --webpack
 ```
 
-Open http://localhost:3000. For production preview, run `npm run build` then `npm start`. Production builds use the supported webpack option because Turbopack’s PostCSS worker cannot bind its internal port in this workspace. If development has the same restriction, use `npm run dev -- --webpack`.
+Open http://127.0.0.1:3000. Without Supabase configuration, public pages work and account pages show an explicit unavailable state. There is no fake account or auth bypass. Production preview: `npm run build` then `npm start`.
 
-In the provided Linux workspace Node is installed at `/home/hasan/.config/nvm/versions/node/v24.19.0/bin`; if missing from PATH, prepend that directory. A sandbox may require permission to bind a local server.
+The supported webpack build avoids this workspace's Turbopack internal-port restriction. On this Linux machine Node is at `/home/hasan/.config/nvm/versions/node/v24.19.0/bin`; prepend it to PATH if needed. A sandbox may require local server permissions.
 
-## Checks
+## Enable local accounts
+
+See [Phase 2 setup](../docs/PHASE_2_SETUP.md) for Docker/Supabase setup, email confirmation, environment boundaries and verification limitations. No hosted services are required. The coding environment lacked Docker/Podman, so real Supabase integration remains unverified.
 
 ```sh
-npm run format:check
-npm run lint
-npm run typecheck
-npm run build
-npx playwright install chromium
-npm test
+npm run db:start
+npm run db:reset # resets LOCAL development data; use only for a fresh database
+npm run db:env   # creates .env.local; refuses to overwrite it
+npm run dev -- --webpack
 ```
 
-Browser tests start the production app on port 3100, so build first. They cover 320/390/768/1440px layouts, keyboard navigation, real anchor targets, path disclosures, automated accessibility, runtime errors and reduced motion. `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` can point to an existing compatible Chromium binary. `npm run check` runs the complete sequence once the browser is installed. Automated accessibility is not a substitute for assistive-technology user testing.
+Register at `/register`, confirm through local email testing at http://127.0.0.1:54324, then complete onboarding. `/settings` edits private preferences. `npm run db:stop` stops local services.
+
+## Verification
+
+```sh
+npx playwright install chromium
+npm run check
+```
+
+`check` runs formatting, lint, TypeScript, unit tests, isolated PostgreSQL policy tests, generated-type drift, production build, public browser tests and account-flow tests. `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` can select a preinstalled Chromium binary.
+
+The flow suite uses an explicitly test-only HTTP provider on port 54331 and app port 3102. It tests the real app's SSR forms/cookies/UI; it is not evidence of live Supabase compatibility. `test:db` uses PGlite with minimal Supabase auth shims to execute real migration SQL. No fixture is imported by application code.
+
+With real local Supabase running, separately run `npm run db:test:local` and `npm run test:integration`. These fail if local services are missing; they never target hosted projects. The integration test creates and deletes unique synthetic accounts.
 
 ## Structure and tracking
 
-- `app/`: public page, metadata and shared styles/tokens.
-- `components/ui/`: link buttons, badges, cards and brand.
-- `components/marketing/`: responsive header and illustrative workspace.
-- `tests/`: browser behaviour and accessibility checks.
-- `../docs/features.csv`: canonical task register; spreadsheet remains an initial snapshot, not synchronised.
-- `../docs/PROGRESS.md`: current state, verification and next action.
-- `../docs/DECISIONS.md`: architecture and scope decisions.
-- `../nexus_learning_UI_samples/`: homepage, dashboard and lesson references; not runtime assets.
+- `app/`: public/account pages, protected learner route group, server actions and confirmation handler.
+- `components/`: shared UI, marketing, account and learner components.
+- `lib/auth/`, `lib/supabase/`: verified sessions, guarded configuration and request-scoped clients.
+- `modules/profile/`: validated preference updates and timezone options.
+- `supabase/`: versioned migrations, local config, confirmation template and real pgTAP checks.
+- `tests/`: public, fixture-backed account, isolated SQL and real local integration suites.
+- `../docs/features.csv`: canonical feature register; spreadsheets do not synchronise automatically.
+- `../docs/PROGRESS.md`, `../docs/DECISIONS.md`: handoff state and architecture decisions.
 
-Root `.github/workflows/ci.yml` checks this app. It has not run remotely. Deployment, remote branch gates and cloud configuration require later work and owner instruction.
+Root GitHub Actions configuration includes local checks and a separate local-Supabase job. Neither remote CI execution nor branch protection is claimed. No deployment workflow is included.

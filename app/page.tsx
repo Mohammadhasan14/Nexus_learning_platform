@@ -211,13 +211,14 @@ export default function Home() {
               Every breakthrough starts with one step.
             </h2>
             <p>
-              You’re exploring an early preview. Accounts and your personal
-              dashboard arrive in Phase 2; lessons and saved progress follow in
-              Phase 3. Sign-up is not open yet.
+              You’re exploring an early version. Set a learning goal and make
+              room for your next step. Accounts are available when this
+              environment is connected; lessons and saved progress arrive in
+              Phase 3.
             </p>
           </div>
-          <ButtonLink href="#learning-paths">
-            Find your starting point <span aria-hidden="true">→</span>
+          <ButtonLink href="/register">
+            Create your learning space <span aria-hidden="true">→</span>
           </ButtonLink>
         </section>
         <section className="container about section" id="about">
@@ -226,9 +227,10 @@ export default function Home() {
             <p>
               Nexus Learning is being built for adult and college learners,
               beginning with JavaScript. The examples above are illustrative,
-              not live courses or learner results. This preview has no account
-              forms, payments, analytics, or AI requests. Public privacy notices
-              and support channels will be reviewed before beta.
+              not live courses or learner results. Accounts require a connected
+              environment. There are no payments, analytics, or AI requests.
+              Public privacy notices and support channels will be reviewed
+              before beta.
             </p>
           </details>
         </section>

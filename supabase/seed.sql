@@ -1,0 +1,2 @@
+-- Intentionally no real learner data or credentials.
+-- Browser integration tests create unique synthetic users and remove them afterwards.

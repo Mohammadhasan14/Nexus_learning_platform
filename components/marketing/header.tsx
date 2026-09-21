@@ -33,8 +33,8 @@ export function Header() {
           <a href="#how-it-works">How it works</a>
           <a href="#learning-paths">Learning paths</a>
           <a href="#projects">Projects</a>
-          <a className="login-link" href="#availability">
-            Log in <span className="sr-only">— coming in Phase 2</span>
+          <a className="login-link" href="/login">
+            Log in
           </a>
           <ButtonLink href="#learning-paths">
             Explore learning <span aria-hidden="true">↗</span>

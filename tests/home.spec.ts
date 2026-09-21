@@ -85,8 +85,10 @@ test("reduced motion preserves content with no entrance animations", async ({
   ).toBe("auto");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await page.getByRole("link", { name: "Log in" }).click();
-  await expect(page).toHaveURL(/#availability$/);
-  await expect(page.getByText(/Sign-up is not open yet/)).toBeVisible();
+  await expect(page).toHaveURL(/\/login$/);
+  await expect(
+    page.getByRole("heading", { name: /Accounts aren’t available/ }),
+  ).toBeVisible();
 });
 
 test("public information and path disclosures work without JavaScript and with reduced motion", async ({
