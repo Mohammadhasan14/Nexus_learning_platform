@@ -180,6 +180,18 @@ const server = createServer(async (req, res) => {
     }
     return respond(200, profile);
   }
+  if (
+    [
+      "course_versions",
+      "lessons",
+      "exercises",
+      "enrolments",
+      "lesson_reads",
+      "attempts",
+      "exercise_evidence",
+    ].some((table) => url.pathname === `/rest/v1/${table}`)
+  )
+    return respond(200, []);
   return respond(404, { message: "Unsupported fixture request" });
 });
 server.listen(54331, "127.0.0.1");

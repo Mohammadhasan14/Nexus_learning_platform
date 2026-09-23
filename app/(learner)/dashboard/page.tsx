@@ -1,10 +1,15 @@
-import { redirect } from "next/navigation";
-import { requireProfile } from "@/lib/auth/session";
+import { learningData } from "@/modules/learning/data";
+import { recommendation } from "@/modules/learning/rules";
+
 import { Badge, ButtonLink, Card } from "@/components/ui";
 export const metadata = { title: "Today — Nexus Learning" };
 export default async function Dashboard() {
-  const { profile } = await requireProfile();
-  if (!profile.onboarding_completed_at) redirect("/onboarding");
+  const data = await learningData();
+  const { profile } = data;
+  const enrolled = data.courses.find((c) =>
+    data.enrolments.some((n) => n.course_id === c.id),
+  );
+  const step = enrolled ? recommendation(data, enrolled.id) : undefined;
   const today = new Intl.DateTimeFormat(profile.locale, {
     weekday: "long",
     month: "long",
@@ -28,20 +33,28 @@ export default async function Dashboard() {
       <div className="dashboard-grid">
         <Card className="next-step-card">
           <p className="eyebrow">YOUR NEXT STEP</p>
-          <h2>
-            You’ve made space
-            <br />
-            for something new.
-          </h2>
+          <h2>{step?.lesson?.title ?? "Make room for your first lesson."}</h2>
           <p>
-            Your learning preferences are ready. Explore the proposed JavaScript
-            path while the first reviewed lessons are being prepared.
+            {step?.reason ??
+              "Choose a course and enrol to save your learning progress."}
           </p>
-          <ButtonLink href="/#learning-paths">
-            Preview learning paths <span aria-hidden="true">→</span>
+          <ButtonLink
+            href={
+              step?.lesson
+                ? `/courses/${enrolled!.id}/${step.lesson.id}`
+                : "/courses"
+            }
+          >
+            {step?.complete
+              ? "Revisit course"
+              : step?.lesson
+                ? "Continue learning"
+                : "Open my courses"}{" "}
+            <span aria-hidden="true">→</span>
           </ButtonLink>
           <small>
-            Lessons and enrolment arrive in Phase 3. No course is enrolled yet.
+            Course content is an editorial preview. Reviews and projects arrive
+            later.
           </small>
           <div className="dashboard-orbit" aria-hidden="true">
             ✦

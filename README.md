@@ -54,3 +54,11 @@ With real local Supabase running, separately run `npm run db:test:local` and `np
 - `../docs/PROGRESS.md`, `../docs/DECISIONS.md`: handoff state and architecture decisions.
 
 Root GitHub Actions configuration includes local checks and a separate local-Supabase job. Neither remote CI execution nor branch protection is claimed. No deployment workflow is included.
+
+## Phase 3 learning preview
+
+After signing in and completing onboarding, open `/courses`. Local Supabase provides versioned enrolment, a three-question starting check, three introductory JavaScript lessons, protected option-based grading, and saved evidence. Reading and practice are tracked separately; no learner code is executed. Content is labelled an editorial preview pending review.
+
+Apply new local migrations with `npx supabase migration up --local` without resetting existing records. Run `npm run db:types` after schema changes; type generation now uses the running local provider. `npm run check` is Docker-independent; `npm run db:test:local`, `npm run db:types:check`, and `npm run test:integration` require Docker/Supabase. Browser suites have separate result directories.
+
+The workspace's canonical task register and handoff live in `../docs/features.csv` and `../docs/PROGRESS.md`; review instructions are in `../docs/PHASE_3_CONTENT_REVIEW.md`. These workspace files are outside this app Git repository. Phase 4 requires separate instruction.

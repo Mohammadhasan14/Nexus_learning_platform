@@ -17,8 +17,10 @@ export const registrationSchema = credentialsSchema.extend({
 // An allowlist avoids external URLs, scheme-relative URLs and encoded redirect tricks.
 export function safeDestination(
   value: unknown,
-): "/dashboard" | "/settings" | "/onboarding" {
-  return value === "/settings" || value === "/onboarding"
+): "/dashboard" | "/settings" | "/onboarding" | "/courses" {
+  return value === "/settings" ||
+    value === "/onboarding" ||
+    value === "/courses"
     ? value
     : "/dashboard";
 }

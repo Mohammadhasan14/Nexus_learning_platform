@@ -1588,3 +1588,91 @@ button:disabled {
     font-size: 1.9rem;
   }
 }
+
+/* Learning reuses the existing midnight tokens and native keyboard controls. */
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+.course-grid .card {
+  padding: 2rem;
+}
+.lesson-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+.lesson-navigation a {
+  padding: 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+.lesson-navigation [aria-current="page"] {
+  outline: 2px solid #a78bfa;
+}
+.lesson-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 2rem;
+}
+.lesson-grid p {
+  line-height: 1.8;
+  margin: 1rem 0;
+}
+.lesson-grid pre {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  max-width: 100%;
+  overflow: auto;
+  padding: 1.25rem;
+  background: #080e21;
+  border-radius: 1rem;
+  line-height: 1.7;
+}
+.practice-panel {
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  align-self: start;
+}
+.exercise-form fieldset {
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.exercise-form legend {
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+.exercise-option {
+  display: flex;
+  align-items: start;
+  gap: 0.7rem;
+  padding: 0.8rem;
+  margin: 0.5rem 0;
+  border: 1px solid #4b5875;
+  border-radius: 0.6rem;
+  cursor: pointer;
+}
+.exercise-option input {
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.25rem;
+  accent-color: #a78bfa;
+  flex-shrink: 0;
+}
+.practice-panel details {
+  margin: 1.5rem 0;
+}
+.practice-panel summary {
+  cursor: pointer;
+}
+@media (max-width: 1000px) {
+  .lesson-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
