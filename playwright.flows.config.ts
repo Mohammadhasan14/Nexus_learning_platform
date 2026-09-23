@@ -1,5 +1,6 @@
 import { defineConfig } from "@playwright/test";
 export default defineConfig({
+  outputDir: "test-results/flows",
   testDir: "./tests/flows",
   workers: 1,
   fullyParallel: false,

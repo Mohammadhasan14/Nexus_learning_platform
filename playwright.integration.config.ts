@@ -2,6 +2,7 @@ import { defineConfig } from "@playwright/test";
 import { localSupabase } from "./scripts/local-supabase";
 const backend = localSupabase();
 export default defineConfig({
+  outputDir: "test-results/integration",
   testDir: "./tests/integration",
   workers: 1,
   forbidOnly: !!process.env.CI,

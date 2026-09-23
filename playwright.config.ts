@@ -1,6 +1,7 @@
 import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
+  outputDir: "test-results/public",
   testDir: "./tests",
   testMatch: "**/*.spec.ts",
   testIgnore: ["**/integration/**", "**/flows/**"],

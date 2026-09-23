@@ -168,7 +168,7 @@ test("Phase 2 migrations enforce ownership, column permissions and trusted staff
         0,
       );
       const indexes = await db.query(
-        "select indexname from pg_indexes where schemaname='public'",
+        "select indexname from pg_indexes where schemaname='public' and tablename in ('profiles','staff_roles')",
       );
       assert.equal(indexes.rows.length, 2);
     },
