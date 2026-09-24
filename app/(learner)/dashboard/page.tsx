@@ -6,8 +6,8 @@ export const metadata = { title: "Today — Nexus Learning" };
 export default async function Dashboard() {
   const data = await learningData();
   const { profile } = data;
-  const enrolled = data.courses.find((c) =>
-    data.enrolments.some((n) => n.course_id === c.id),
+  const enrolled = data.courses.find(
+    (c) => c.id === data.enrolments[0]?.course_id,
   );
   const step = enrolled ? recommendation(data, enrolled.id) : undefined;
   const today = new Intl.DateTimeFormat(profile.locale, {
@@ -53,8 +53,8 @@ export default async function Dashboard() {
             <span aria-hidden="true">→</span>
           </ButtonLink>
           <small>
-            Course content is an editorial preview. Reviews and projects arrive
-            later.
+            Course versions keep your saved evidence separate. Scheduled reviews
+            and projects arrive later.
           </small>
           <div className="dashboard-orbit" aria-hidden="true">
             ✦

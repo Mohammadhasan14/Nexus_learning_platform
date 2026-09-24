@@ -35,7 +35,7 @@ test("local learner enrols, retries practice and reloads saved evidence", async 
     await expect(page).toHaveURL(/\/dashboard$/);
     await page.goto("/courses");
     await page.getByRole("button", { name: "Enrol in this version" }).click();
-    await page.goto("/courses/javascript-foundations-v1/js-v1-functions");
+    await page.goto("/courses/javascript-foundations-v2/js-v2-functions");
     await expect(
       page.getByRole("heading", { name: "One step at a time." }),
     ).toBeVisible();
@@ -75,25 +75,23 @@ test("local learner enrols, retries practice and reloads saved evidence", async 
     expect(
       (await admin.from("enrolments").delete().eq("user_id", id)).error,
     ).toBeNull();
-    await page.getByLabel("const score = 0;", { exact: true }).check();
+    await page.getByLabel("0 (number)", { exact: true }).check();
     await page.getByRole("button", { name: "Check answer" }).click();
     await expect(
       page.getByRole("alert").filter({ hasText: "Could not save your answer" }),
     ).toBeVisible();
-    await expect(
-      page.getByLabel("const score = 0;", { exact: true }),
-    ).toBeChecked();
+    await expect(page.getByLabel("0 (number)", { exact: true })).toBeChecked();
     expect(
       (
         await admin
           .from("enrolments")
-          .insert({ user_id: id, course_id: "javascript-foundations-v1" })
+          .insert({ user_id: id, course_id: "javascript-foundations-v2" })
       ).error,
     ).toBeNull();
     await page.getByRole("button", { name: "Check answer" }).click();
     await expect(page.getByText("Not yet.", { exact: false })).toBeVisible();
     await page.getByRole("button", { name: "Try again" }).click();
-    await page.getByLabel("let score = 0;", { exact: true }).check();
+    await page.getByLabel("2 (number)", { exact: true }).check();
     await page.route("**/courses/**", (route) =>
       route.request().method() === "POST"
         ? route.abort("failed")
@@ -103,9 +101,7 @@ test("local learner enrols, retries practice and reloads saved evidence", async 
     await expect(
       page.getByRole("alert").filter({ hasText: "Could not reach the server" }),
     ).toBeVisible();
-    await expect(
-      page.getByLabel("let score = 0;", { exact: true }),
-    ).toBeChecked();
+    await expect(page.getByLabel("2 (number)", { exact: true })).toBeChecked();
     await page.unroute("**/courses/**");
     await page.getByRole("button", { name: "Check answer" }).click();
     await expect(page.getByText("Correct.", { exact: true })).toBeVisible();
@@ -129,7 +125,7 @@ test("local learner enrols, retries practice and reloads saved evidence", async 
         window.scrollTo(0, 0);
       });
       await page.screenshot({
-        path: `../docs/verification/phase3/lesson-${width}.png`,
+        path: `../docs/verification/phase3/lesson-v2-${width}.png`,
         fullPage: true,
       });
     }
@@ -140,7 +136,7 @@ test("local learner enrols, retries practice and reloads saved evidence", async 
       page.getByRole("link", { name: "2. Decisions with conditions" }),
     ).toBeFocused();
     await page.keyboard.press("Enter");
-    await expect(page).toHaveURL(/js-v1-conditions$/);
+    await expect(page).toHaveURL(/js-v2-conditions$/);
     await page
       .getByRole("link", { name: "2. Decisions with conditions" })
       .click();

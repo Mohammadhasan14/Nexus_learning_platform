@@ -1,4 +1,4 @@
-import { recommendation } from "@/modules/learning/rules";
+import { recommendation, visibleCourses } from "@/modules/learning/rules";
 import Link from "next/link";
 import { learningData, passed } from "@/modules/learning/data";
 import { Card, Badge } from "@/components/ui";
@@ -12,7 +12,7 @@ export default async function Courses() {
       <h1>Your learning paths.</h1>
       <p>Short lessons. Focused practice. Progress you can return to.</p>
       <div className="course-grid">
-        {data.courses.map((c) => {
+        {visibleCourses(data).map((c) => {
           const lessons = data.lessons.filter((l) => l.course_id === c.id),
             enrolled = data.enrolments.some((n) => n.course_id === c.id);
           const step = recommendation(data, c.id);
@@ -33,8 +33,15 @@ export default async function Courses() {
               </p>
               {c.review_status === "preview" && (
                 <p>
-                  Available for local evaluation. Human editorial approval is
-                  pending.
+                  Earlier preview. Your enrolment and progress remain tied to
+                  this version.
+                </p>
+              )}
+              {c.review_status === "reviewed" && (
+                <p>
+                  AI-assisted editorial review · September 2026. Three
+                  introductory lessons; no independent learning-outcome
+                  validation.
                 </p>
               )}
               {enrolled && next ? (

@@ -36,7 +36,16 @@ export default async function Assessment({
         not an independent assessment.
       </p>
       {item.review_status === "preview" && (
-        <p>Editorial preview: question review is pending.</p>
+        <p>
+          Earlier preview questions. The reviewed course is available from All
+          courses.
+        </p>
+      )}
+      {item.review_status === "reviewed" && (
+        <p>
+          Questions received AI-assisted editorial review. This is still a small
+          learning check, not a validated placement test.
+        </p>
       )}
       <section aria-label="Starting check summary" className="practice-panel">
         <h2>Your starting evidence</h2>
