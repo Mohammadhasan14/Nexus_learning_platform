@@ -54,26 +54,40 @@ export type Database = {
       course_versions: {
         Row: {
           id: string;
+          review_record: string | null;
           review_status: string;
           summary: string;
+          supersedes_id: string | null;
           title: string;
           version: number;
         };
         Insert: {
           id: string;
+          review_record?: string | null;
           review_status: string;
           summary: string;
+          supersedes_id?: string | null;
           title: string;
           version: number;
         };
         Update: {
           id?: string;
+          review_record?: string | null;
           review_status?: string;
           summary?: string;
+          supersedes_id?: string | null;
           title?: string;
           version?: number;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "course_versions_supersedes_id_fkey";
+            columns: ["supersedes_id"];
+            isOneToOne: false;
+            referencedRelation: "course_versions";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       enrolments: {
         Row: {

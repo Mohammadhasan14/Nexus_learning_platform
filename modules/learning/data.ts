@@ -8,7 +8,12 @@ export async function learningData() {
     client.from("course_versions").select("*").order("title"),
     client.from("lessons").select("*").order("position"),
     client.from("exercises").select("*"),
-    client.from("enrolments").select("*").eq("user_id", user.id),
+    client
+      .from("enrolments")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("enrolled_at", { ascending: false })
+      .order("course_id"),
     client.from("lesson_reads").select("*").eq("user_id", user.id),
     client
       .from("attempts")

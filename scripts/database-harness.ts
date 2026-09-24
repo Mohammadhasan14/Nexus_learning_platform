@@ -2,7 +2,7 @@ import { PGlite } from "@electric-sql/pglite";
 import { readdir, readFile } from "node:fs/promises";
 
 /** Isolated PostgreSQL engine. Supabase auth.uid/users are shims, not a live Auth service. */
-export async function migrationDatabase() {
+export async function migrationDatabase(through?: string) {
   const db = new PGlite();
   await db.exec(`
     create role anon nologin;
@@ -15,7 +15,7 @@ export async function migrationDatabase() {
     grant execute on function auth.uid() to anon, authenticated;
   `);
   for (const file of (await readdir("supabase/migrations"))
-    .filter((f) => f.endsWith(".sql"))
+    .filter((f) => f.endsWith(".sql") && (!through || f <= through))
     .sort()) {
     await db.exec(await readFile(`supabase/migrations/${file}`, "utf8"));
   }

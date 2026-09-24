@@ -56,3 +56,17 @@ export function recommendation(data: LearningData, course: string) {
     : "This is your earliest lesson without a passing practice attempt. Earlier prerequisite checks are satisfied.";
   return { lesson, reason, complete: false };
 }
+
+// New learners discover current versions; an enrolled older version remains resumable.
+export function visibleCourses(
+  data: Pick<LearningData, "courses" | "enrolments">,
+) {
+  const superseded = new Set(
+    data.courses.map((c) => c.supersedes_id).filter(Boolean),
+  );
+  return data.courses.filter(
+    (c) =>
+      !superseded.has(c.id) ||
+      data.enrolments.some((n) => n.course_id === c.id),
+  );
+}
