@@ -1676,3 +1676,15 @@ button:disabled {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+.tutor-panel {
+  margin-block: 1.5rem;
+  padding-block: 1.5rem;
+  border-block: 1px solid var(--border);
+}
+.tutor-reply {
+  overflow-wrap: anywhere;
+}
+.tutor-panel select {
+  max-width: 100%;
+}

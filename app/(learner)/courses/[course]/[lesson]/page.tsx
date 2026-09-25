@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { learningData, unlocked, passed } from "@/modules/learning/data";
+import { TutorPanel } from "@/components/learning/tutor-panel";
 import { ExerciseForm, ReadForm } from "@/components/learning/forms";
 export default async function Lesson({
   params,
@@ -87,13 +88,15 @@ export default async function Lesson({
               request={randomUUID()}
             />
           )}
-          <details>
-            <summary>About the tutor</summary>
-            <p>
-              The AI tutor arrives in Phase 4. For now, use the example and
-              feedback to guide your next attempt.
-            </p>
-          </details>
+          <TutorPanel
+            key={lesson}
+            lesson={lesson}
+            request={randomUUID()}
+            enabled={
+              process.env.TUTOR_MODE === "scripted" &&
+              course === "javascript-foundations-v2"
+            }
+          />
           <h3>Recent attempts</h3>
           <p>
             Showing up to five from your latest 50 attempts. Saved progress

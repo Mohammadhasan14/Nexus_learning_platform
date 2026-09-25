@@ -20,6 +20,7 @@ export default defineConfig({
     reuseExistingServer: false,
     env: {
       APP_ENV: "local",
+      TUTOR_MODE: process.env.TUTOR_MODE || "scripted",
       SUPABASE_PROJECT_ENV: "local",
       SUPABASE_URL: backend.url,
       SUPABASE_PUBLISHABLE_KEY: backend.key,

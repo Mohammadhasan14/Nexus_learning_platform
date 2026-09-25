@@ -62,3 +62,9 @@ After signing in and completing onboarding, open `/courses`. Local Supabase prov
 Apply new local migrations with `npx supabase migration up --local` without resetting existing records. Run `npm run db:types` after schema changes; type generation now uses the running local provider. `npm run check` is Docker-independent; `npm run db:test:local`, `npm run db:types:check`, and `npm run test:integration` require Docker/Supabase. Browser suites have separate result directories.
 
 The workspace's canonical task register and handoff live in `../docs/features.csv` and `../docs/PROGRESS.md`; the editorial review record is in `../docs/PHASE_3_CONTENT_REVIEW.md`. These workspace files are outside this app Git repository. Phase 4 requires separate instruction.
+
+## Phase 4 scripted tutor
+
+Run `TUTOR_MODE=scripted npm run dev -- --webpack` after applying local migrations to enable prepared guidance on reviewed v2 lessons. The tutor is clearly labelled, links to its lesson source, and makes no external AI calls. Unset the variable or use `TUTOR_MODE=disabled` for the lesson-only fallback.
+
+Demo allowances are 20 requests per learner and 1,000 globally per UTC day, enforced atomically in PostgreSQL with idempotent retries. These are request units, not live spending limits. `npm run test:tutor` runs the fixed scripted evaluations and isolated quota/reconciliation tests; the real integration suite adds browser and concurrent quota checks. See [Phase 4 setup](../docs/PHASE_4_SETUP.md). Live provider, streaming, monetary controls and live-model evaluations remain pending.
