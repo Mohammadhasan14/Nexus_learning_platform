@@ -296,6 +296,10 @@ export type Database = {
         Args: { exercise: string; request: string; submitted: string };
         Returns: Json;
       };
+      use_scripted_tutor: {
+        Args: { intent: string; lesson: string; request: string };
+        Returns: Json;
+      };
     };
     Enums: {
       [_ in never]: never;
