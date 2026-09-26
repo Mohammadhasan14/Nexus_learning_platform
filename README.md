@@ -68,3 +68,11 @@ The workspace's canonical task register and handoff live in `../docs/features.cs
 Run `TUTOR_MODE=scripted npm run dev -- --webpack` after applying local migrations to enable prepared guidance on reviewed v2 lessons. The tutor is clearly labelled, links to its lesson source, and makes no external AI calls. Unset the variable or use `TUTOR_MODE=disabled` for the lesson-only fallback.
 
 Demo allowances are 20 requests per learner and 1,000 globally per UTC day, enforced atomically in PostgreSQL with idempotent retries. These are request units, not live spending limits. `npm run test:tutor` runs the fixed scripted evaluations and isolated quota/reconciliation tests; the real integration suite adds browser and concurrent quota checks. See [Phase 4 setup](../docs/PHASE_4_SETUP.md). Live provider, streaming, monetary controls and live-model evaluations remain pending.
+
+## Phase 5 projects and reviews
+
+Apply local migrations, then open `/reviews` and `/projects` after signing in. Reviews follow the latest saved practice result using your timezone: one calendar day after an incorrect answer, three after a correct answer. No daily job is required.
+
+Passing all JavaScript v2 practice checks unlocks the study-planner project. Save private milestone revisions against rubric v1, retain earlier submissions and get clearly labelled completeness feedback. This is not correctness grading; submitted code is never executed. Stale saves report a conflict and keep your text. The dashboard shows your due count and saved project revision. See [Phase 5 setup](../docs/PHASE_5_SETUP.md).
+
+Live AI stays disabled. The isolated runner, notes, publishing/admin, search, analytics and error reporting remain separate Phase 5 backlog items.

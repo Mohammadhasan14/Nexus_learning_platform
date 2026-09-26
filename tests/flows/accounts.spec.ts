@@ -41,11 +41,9 @@ test("SSR sign-in, onboarding, editing, reload and sign-out (test HTTP provider)
     page.getByText("Build accessible JavaScript websites", { exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByText("No reviews scheduled.", { exact: false }),
+    page.getByText("No reviews scheduled yet.", { exact: false }),
   ).toBeVisible();
-  await expect(
-    page.getByText("No projects started.", { exact: false }),
-  ).toBeVisible();
+  await expect(page.getByRole("link", { name: /Open projects/ })).toBeVisible();
   const cookies = await context.cookies();
   expect(cookies.some((c) => c.name.startsWith("nexus-test-auth"))).toBe(true);
   expect(

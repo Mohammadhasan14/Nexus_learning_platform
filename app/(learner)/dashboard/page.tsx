@@ -1,10 +1,18 @@
+import { projectData } from "@/modules/projects/data";
+import { reviewData } from "@/modules/review/data";
 import { learningData } from "@/modules/learning/data";
 import { recommendation } from "@/modules/learning/rules";
 
 import { Badge, ButtonLink, Card } from "@/components/ui";
 export const metadata = { title: "Today — Nexus Learning" };
 export default async function Dashboard() {
-  const data = await learningData();
+  const [data, review, projects] = await Promise.all([
+    learningData(),
+    reviewData(),
+    projectData(),
+  ]);
+  const latestProject = projects.submissions[0];
+  const due = review.reviews.filter((r) => r.due).length;
   const { profile } = data;
   const enrolled = data.courses.find(
     (c) => c.id === data.enrolments[0]?.course_id,
@@ -53,8 +61,8 @@ export default async function Dashboard() {
             <span aria-hidden="true">→</span>
           </ButtonLink>
           <small>
-            Course versions keep your saved evidence separate. Scheduled reviews
-            and projects arrive later.
+            Course versions keep your saved evidence separate. Review your
+            practice and apply it in a project when you are ready.
           </small>
           <div className="dashboard-orbit" aria-hidden="true">
             ✦
@@ -84,10 +92,13 @@ export default async function Dashboard() {
           </span>
           <h2>Room to remember.</h2>
           <p>
-            No reviews scheduled. Reviews will follow saved practice once
-            lessons and review scheduling are available.
+            {review.reviews.length
+              ? `${due} reviews due in your timezone. Revisit a lesson to refresh its practice evidence.`
+              : "No reviews scheduled yet. Your next practice attempt will schedule a reminder."}
           </p>
-          <Badge>Review scheduling · Phase 5</Badge>
+          <ButtonLink href="/reviews" secondary>
+            Open reviews
+          </ButtonLink>
         </Card>
         <Card className="dashboard-empty">
           <span className="feature-icon" aria-hidden="true">
@@ -95,19 +106,20 @@ export default async function Dashboard() {
           </span>
           <h2>Build something real.</h2>
           <p>
-            No projects started. Future projects will help you turn each new
-            concept into something you can use.
+            {latestProject
+              ? `Your latest saved project revision is ${latestProject.revision}. Continue your milestones or revisit its completeness feedback.`
+              : "Turn your course practice into a study planner. Save private milestone revisions against a versioned rubric."}
           </p>
-          <ButtonLink href="/#projects" secondary>
-            Explore planned projects <span aria-hidden="true">↗</span>
+          <ButtonLink href="/projects" secondary>
+            Open projects <span aria-hidden="true">↗</span>
           </ButtonLink>
         </Card>
       </div>
       <div className="dashboard-note">
         <span aria-hidden="true">✧</span>
         <p>
-          Your learning space is taking shape. AI tutoring arrives in Phase 4;
-          no live AI is connected here.
+          Prepared tutor guidance is available on reviewed lessons when enabled.
+          Live AI remains disabled.
         </p>
       </div>
     </>

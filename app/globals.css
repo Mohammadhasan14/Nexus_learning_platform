@@ -1688,3 +1688,51 @@ button:disabled {
 .tutor-panel select {
   max-width: 100%;
 }
+
+.project-card {
+  margin-block: 1.5rem;
+  padding: clamp(18px, 3vw, 32px);
+  min-width: 0;
+}
+.project-card h3 {
+  margin-top: 28px;
+}
+.project-revision {
+  margin-top: 20px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+.project-revision summary {
+  cursor: pointer;
+}
+.project-revision pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  padding: 16px;
+  background: var(--background);
+}
+.project-revision h4 {
+  margin-top: 18px;
+}
+
+.review-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 20px;
+  margin-top: 28px;
+}
+.review-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 24px;
+  min-width: 0;
+}
+.review-card h2 {
+  font-size: 1.55rem;
+  line-height: 1.25;
+}
+.review-card .button {
+  margin-top: auto;
+}

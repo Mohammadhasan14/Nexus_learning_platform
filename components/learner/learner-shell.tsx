@@ -45,6 +45,18 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
           >
             <span aria-hidden="true">◇</span>Courses
           </Link>
+          <Link
+            href="/reviews"
+            aria-current={path === "/reviews" ? "page" : undefined}
+          >
+            <span aria-hidden="true">↻</span>Reviews
+          </Link>
+          <Link
+            href="/projects"
+            aria-current={path === "/projects" ? "page" : undefined}
+          >
+            <span aria-hidden="true">◇</span>Projects
+          </Link>
         </nav>
         <div className="sidebar-bottom">
           <small>
@@ -63,11 +75,15 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
             Workspace <span aria-hidden="true">/</span>{" "}
             {path.startsWith("/courses")
               ? "Learning"
-              : path === "/settings"
-                ? "Preferences"
-                : path === "/onboarding"
-                  ? "Getting started"
-                  : "Today"}
+              : path === "/reviews"
+                ? "Reviews"
+                : path === "/projects"
+                  ? "Projects"
+                  : path === "/settings"
+                    ? "Preferences"
+                    : path === "/onboarding"
+                      ? "Getting started"
+                      : "Today"}
           </span>
           <span className="badge">Early learning space</span>
         </header>

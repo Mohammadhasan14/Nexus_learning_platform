@@ -31,7 +31,13 @@ for (const width of [320, 768, 1440]) {
 test("private routes fail closed without backend configuration", async ({
   page,
 }) => {
-  for (const route of ["/dashboard", "/settings", "/onboarding"]) {
+  for (const route of [
+    "/dashboard",
+    "/settings",
+    "/onboarding",
+    "/projects",
+    "/reviews",
+  ]) {
     await page.goto(route);
     await expect(page).toHaveURL(/\/login\?reason=unavailable$/);
     await expect(
