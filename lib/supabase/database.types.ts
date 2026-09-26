@@ -250,6 +250,88 @@ export type Database = {
         };
         Relationships: [];
       };
+      project_submissions: {
+        Row: {
+          base_revision: number;
+          created_at: string;
+          feedback: Json;
+          feedback_version: string;
+          id: string;
+          milestones: Json;
+          project_id: string;
+          request_id: string;
+          revision: number;
+          user_id: string;
+        };
+        Insert: {
+          base_revision: number;
+          created_at?: string;
+          feedback: Json;
+          feedback_version?: string;
+          id?: string;
+          milestones: Json;
+          project_id: string;
+          request_id: string;
+          revision: number;
+          user_id: string;
+        };
+        Update: {
+          base_revision?: number;
+          created_at?: string;
+          feedback?: Json;
+          feedback_version?: string;
+          id?: string;
+          milestones?: Json;
+          project_id?: string;
+          request_id?: string;
+          revision?: number;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "project_submissions_project_id_fkey";
+            columns: ["project_id"];
+            isOneToOne: false;
+            referencedRelation: "project_versions";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      project_versions: {
+        Row: {
+          brief: string;
+          course_id: string;
+          id: string;
+          rubric: Json;
+          title: string;
+          version: number;
+        };
+        Insert: {
+          brief: string;
+          course_id: string;
+          id: string;
+          rubric: Json;
+          title: string;
+          version: number;
+        };
+        Update: {
+          brief?: string;
+          course_id?: string;
+          id?: string;
+          rubric?: Json;
+          title?: string;
+          version?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "project_versions_course_id_fkey";
+            columns: ["course_id"];
+            isOneToOne: false;
+            referencedRelation: "course_versions";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       staff_roles: {
         Row: {
           created_at: string;
@@ -288,12 +370,56 @@ export type Database = {
           },
         ];
       };
+      review_schedule: {
+        Row: {
+          attempt_id: string | null;
+          correct: boolean | null;
+          course_id: string | null;
+          created_at: string | null;
+          due: boolean | null;
+          due_date: string | null;
+          exercise_id: string | null;
+          lesson_id: string | null;
+          policy_version: string | null;
+          timezone: string | null;
+          title: string | null;
+          today: string | null;
+          user_id: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "attempts_exercise_id_fkey";
+            columns: ["exercise_id"];
+            isOneToOne: false;
+            referencedRelation: "exercises";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "exercises_lesson_id_fkey";
+            columns: ["lesson_id"];
+            isOneToOne: false;
+            referencedRelation: "lessons";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "lessons_course_id_fkey";
+            columns: ["course_id"];
+            isOneToOne: false;
+            referencedRelation: "course_versions";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Functions: {
       enrol_course: { Args: { course: string }; Returns: undefined };
       mark_lesson_read: { Args: { lesson: string }; Returns: undefined };
       submit_attempt: {
         Args: { exercise: string; request: string; submitted: string };
+        Returns: Json;
+      };
+      submit_project: {
+        Args: { base: number; project: string; request: string; work: Json };
         Returns: Json;
       };
       use_scripted_tutor: {

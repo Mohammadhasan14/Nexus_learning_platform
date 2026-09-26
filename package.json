@@ -14,7 +14,7 @@
     "format:check": "prettier --check .",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm run test:unit && npm run test:db && npm run build && npm test && npm run test:flows",
     "test:unit": "node --import tsx tests/unit/security.test.ts && node --import tsx tests/unit/tutor.test.ts",
-    "test:db": "node --import tsx tests/database/policies.test.ts && node --import tsx tests/database/learning.test.ts && node --import tsx tests/database/content.test.ts && node --import tsx tests/database/tutor.test.ts",
+    "test:db": "node --import tsx tests/database/policies.test.ts && node --import tsx tests/database/learning.test.ts && node --import tsx tests/database/content.test.ts && node --import tsx tests/database/tutor.test.ts && node --import tsx tests/database/projects-reviews.test.ts",
     "db:types": "node --import tsx scripts/database-types.ts",
     "db:types:check": "node --import tsx scripts/database-types.ts --check",
     "db:start": "supabase start",

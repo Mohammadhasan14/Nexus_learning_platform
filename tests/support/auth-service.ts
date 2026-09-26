@@ -189,6 +189,9 @@ const server = createServer(async (req, res) => {
       "lesson_reads",
       "attempts",
       "exercise_evidence",
+      "review_schedule",
+      "project_versions",
+      "project_submissions",
     ].some((table) => url.pathname === `/rest/v1/${table}`)
   )
     return respond(200, []);
