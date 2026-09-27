@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ReportForm } from "@/components/reports/report-form";
 import { notFound } from "next/navigation";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
@@ -75,6 +76,7 @@ export default async function Lesson({
             Read status is separate from passing practice; neither proves broad
             mastery.
           </p>
+          <ReportForm lesson={lesson} request={randomUUID()} />
         </article>
         <aside className="practice-panel" aria-label="Practice">
           <p className="eyebrow">PUT IT INTO PRACTICE</p>

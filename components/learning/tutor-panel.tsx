@@ -1,4 +1,5 @@
 "use client";
+import { ReportForm } from "@/components/reports/report-form";
 import { useActionState, useState } from "react";
 import { askTutor, type TutorState } from "@/modules/tutor/actions";
 async function recover(state: TutorState, form: FormData): Promise<TutorState> {
@@ -77,21 +78,28 @@ export function TutorPanel({
               {state.message}
             </p>
           )}
-          {answered && state.reply && (
-            <div className="tutor-reply" role="status">
-              <p>{state.reply.text}</p>
-              {state.reply.source && (
-                <a href={state.reply.source.href}>
-                  Source: {state.reply.source.title}
-                </a>
-              )}
-              <p>
-                {state.remaining} scripted requests left today. Resets at
-                midnight UTC.
-              </p>
-            </div>
-          )}
         </form>
+      )}
+      {answered && state.reply && (
+        <div className="tutor-reply">
+          <div role="status">
+            <p>{state.reply.text}</p>
+            {state.reply.source && (
+              <a href={state.reply.source.href}>
+                Source: {state.reply.source.title}
+              </a>
+            )}
+            <p>
+              {state.remaining} scripted requests left today. Resets at midnight
+              UTC.
+            </p>
+          </div>
+          <ReportForm
+            lesson={lesson}
+            request={state.request!}
+            tutorRequest={state.request!}
+          />
+        </div>
       )}
     </section>
   );
