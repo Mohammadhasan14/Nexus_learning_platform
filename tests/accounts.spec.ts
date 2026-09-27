@@ -37,6 +37,8 @@ test("private routes fail closed without backend configuration", async ({
     "/onboarding",
     "/projects",
     "/reviews",
+    "/reports",
+    "/admin",
   ]) {
     await page.goto(route);
     await expect(page).toHaveURL(/\/login\?reason=unavailable$/);

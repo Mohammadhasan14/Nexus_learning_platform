@@ -1,12 +1,8 @@
 "use server";
 import { requireUser } from "@/lib/auth/session";
-import {
-  tutorInput,
-  scriptedTutor,
-  respondWithFallback,
-  type TutorReply,
-} from "./adapter";
+import { tutorInput, type TutorReply } from "./adapter";
 import { z } from "zod";
+import { tutorReplySchema } from "@/modules/reports/schema";
 export type TutorState = {
   message?: string;
   reply?: TutorReply;
@@ -44,6 +40,7 @@ export async function askTutor(
       lesson: z.string().optional(),
       course: z.string().optional(),
       title: z.string().optional(),
+      reply: tutorReplySchema.optional(),
     })
     .safeParse(data);
   if (!result.success)
@@ -63,10 +60,11 @@ export async function askTutor(
     return {
       message: "The tutor context is unavailable. Continue with the lesson.",
     };
-  const reply = await respondWithFallback(
-    scriptedTutor,
-    { lesson: r.lesson, course: r.course, title: r.title, reviewed: true },
-    input.data.intent,
-  );
+  if (!r.reply)
+    return {
+      message:
+        "The tutor response could not be loaded. Continue with the lesson.",
+    };
+  const reply = r.reply;
   return { reply, request: input.data.request, remaining: r.remaining };
 }

@@ -51,6 +51,145 @@ export type Database = {
           },
         ];
       };
+      content_audit: {
+        Row: {
+          action: string;
+          actor: string | null;
+          after_state: Json | null;
+          before_state: Json | null;
+          created_at: string;
+          draft_id: string | null;
+          id: string;
+        };
+        Insert: {
+          action: string;
+          actor?: string | null;
+          after_state?: Json | null;
+          before_state?: Json | null;
+          created_at?: string;
+          draft_id?: string | null;
+          id?: string;
+        };
+        Update: {
+          action?: string;
+          actor?: string | null;
+          after_state?: Json | null;
+          before_state?: Json | null;
+          created_at?: string;
+          draft_id?: string | null;
+          id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "content_audit_draft_id_fkey";
+            columns: ["draft_id"];
+            isOneToOne: false;
+            referencedRelation: "content_drafts";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      content_drafts: {
+        Row: {
+          content: Json;
+          created_at: string;
+          id: string;
+          published_course: string | null;
+          review_note: string | null;
+          reviewed_revision: number | null;
+          reviewer: string | null;
+          revision: number;
+          source_course: string;
+        };
+        Insert: {
+          content: Json;
+          created_at?: string;
+          id: string;
+          published_course?: string | null;
+          review_note?: string | null;
+          reviewed_revision?: number | null;
+          reviewer?: string | null;
+          revision?: number;
+          source_course: string;
+        };
+        Update: {
+          content?: Json;
+          created_at?: string;
+          id?: string;
+          published_course?: string | null;
+          review_note?: string | null;
+          reviewed_revision?: number | null;
+          reviewer?: string | null;
+          revision?: number;
+          source_course?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "content_drafts_published_course_fkey";
+            columns: ["published_course"];
+            isOneToOne: false;
+            referencedRelation: "course_versions";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "content_drafts_source_course_fkey";
+            columns: ["source_course"];
+            isOneToOne: false;
+            referencedRelation: "course_versions";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      content_reports: {
+        Row: {
+          created_at: string;
+          id: string;
+          lesson_id: string;
+          message: string;
+          request_id: string;
+          revision: number;
+          snapshot: Json;
+          staff_note: string;
+          status: string;
+          tutor_request: string | null;
+          user_id: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          lesson_id: string;
+          message: string;
+          request_id: string;
+          revision?: number;
+          snapshot: Json;
+          staff_note?: string;
+          status?: string;
+          tutor_request?: string | null;
+          user_id?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          lesson_id?: string;
+          message?: string;
+          request_id?: string;
+          revision?: number;
+          snapshot?: Json;
+          staff_note?: string;
+          status?: string;
+          tutor_request?: string | null;
+          user_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "content_reports_lesson_id_fkey";
+            columns: ["lesson_id"];
+            isOneToOne: false;
+            referencedRelation: "lessons";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       course_versions: {
         Row: {
           id: string;
@@ -332,6 +471,41 @@ export type Database = {
           },
         ];
       };
+      report_audit: {
+        Row: {
+          actor: string | null;
+          created_at: string;
+          id: string;
+          note: string;
+          report_id: string;
+          status: string;
+        };
+        Insert: {
+          actor?: string | null;
+          created_at?: string;
+          id?: string;
+          note: string;
+          report_id: string;
+          status: string;
+        };
+        Update: {
+          actor?: string | null;
+          created_at?: string;
+          id?: string;
+          note?: string;
+          report_id?: string;
+          status?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "report_audit_report_id_fkey";
+            columns: ["report_id"];
+            isOneToOne: false;
+            referencedRelation: "content_reports";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       staff_roles: {
         Row: {
           created_at: string;
@@ -412,8 +586,35 @@ export type Database = {
       };
     };
     Functions: {
+      content_review_material: { Args: { draft: string }; Returns: Json };
+      create_content_draft: {
+        Args: { request: string; source: string };
+        Returns: string;
+      };
       enrol_course: { Args: { course: string }; Returns: undefined };
+      is_content_staff: { Args: never; Returns: boolean };
       mark_lesson_read: { Args: { lesson: string }; Returns: undefined };
+      publish_content_draft: {
+        Args: { draft: string; expected: number };
+        Returns: string;
+      };
+      report_content: {
+        Args: {
+          lesson: string;
+          message: string;
+          request: string;
+          tutor_request?: string;
+        };
+        Returns: string;
+      };
+      review_content_draft: {
+        Args: { draft: string; expected: number; note: string };
+        Returns: undefined;
+      };
+      save_content_draft: {
+        Args: { content: Json; draft: string; expected: number };
+        Returns: undefined;
+      };
       submit_attempt: {
         Args: { exercise: string; request: string; submitted: string };
         Returns: Json;
@@ -421,6 +622,15 @@ export type Database = {
       submit_project: {
         Args: { base: number; project: string; request: string; work: Json };
         Returns: Json;
+      };
+      triage_content_report: {
+        Args: {
+          expected: number;
+          note: string;
+          report: string;
+          status: string;
+        };
+        Returns: undefined;
       };
       use_scripted_tutor: {
         Args: { intent: string; lesson: string; request: string };

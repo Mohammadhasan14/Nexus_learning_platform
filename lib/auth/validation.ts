@@ -23,12 +23,16 @@ export function safeDestination(
   | "/onboarding"
   | "/courses"
   | "/reviews"
-  | "/projects" {
+  | "/projects"
+  | "/reports"
+  | "/admin" {
   return value === "/settings" ||
     value === "/onboarding" ||
     value === "/courses" ||
     value === "/reviews" ||
-    value === "/projects"
+    value === "/projects" ||
+    value === "/reports" ||
+    value === "/admin"
     ? value
     : "/dashboard";
 }
