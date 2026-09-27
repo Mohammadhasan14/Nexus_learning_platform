@@ -1736,3 +1736,42 @@ button:disabled {
 .review-card .button {
   margin-top: auto;
 }
+
+.report-form {
+  margin-top: 24px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+.report-form summary {
+  cursor: pointer;
+}
+.preserve-text {
+  white-space: pre-wrap;
+}
+.project-card fieldset {
+  min-width: 0;
+  margin-bottom: 18px;
+}
+.project-card fieldset > .field {
+  margin-bottom: 16px;
+}
+.project-card fieldset > button {
+  margin-top: 16px;
+}
+.project-card legend {
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.project-card pre,
+.review-card pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.project-card p,
+.project-revision p {
+  overflow-wrap: anywhere;
+}
+
+.review-card {
+  overflow-wrap: anywhere;
+}

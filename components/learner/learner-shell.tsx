@@ -16,7 +16,13 @@ function SignOutButton() {
     </button>
   );
 }
-export function LearnerShell({ children }: { children: React.ReactNode }) {
+export function LearnerShell({
+  children,
+  staff = false,
+}: {
+  children: React.ReactNode;
+  staff?: boolean;
+}) {
   const path = usePathname();
   return (
     <div className="learner-shell">
@@ -57,6 +63,20 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
           >
             <span aria-hidden="true">◇</span>Projects
           </Link>
+          <Link
+            href="/reports"
+            aria-current={path === "/reports" ? "page" : undefined}
+          >
+            My reports
+          </Link>
+          {staff && (
+            <Link
+              href="/admin"
+              aria-current={path === "/admin" ? "page" : undefined}
+            >
+              Editorial
+            </Link>
+          )}
         </nav>
         <div className="sidebar-bottom">
           <small>
@@ -73,17 +93,21 @@ export function LearnerShell({ children }: { children: React.ReactNode }) {
         <header className="workspace-header">
           <span>
             Workspace <span aria-hidden="true">/</span>{" "}
-            {path.startsWith("/courses")
-              ? "Learning"
-              : path === "/reviews"
-                ? "Reviews"
-                : path === "/projects"
-                  ? "Projects"
-                  : path === "/settings"
-                    ? "Preferences"
-                    : path === "/onboarding"
-                      ? "Getting started"
-                      : "Today"}
+            {path === "/admin"
+              ? "Editorial"
+              : path === "/reports"
+                ? "My reports"
+                : path.startsWith("/courses")
+                  ? "Learning"
+                  : path === "/reviews"
+                    ? "Reviews"
+                    : path === "/projects"
+                      ? "Projects"
+                      : path === "/settings"
+                        ? "Preferences"
+                        : path === "/onboarding"
+                          ? "Getting started"
+                          : "Today"}
           </span>
           <span className="badge">Early learning space</span>
         </header>

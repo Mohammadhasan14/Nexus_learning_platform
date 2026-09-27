@@ -8,6 +8,10 @@ export default async function LearnerLayout({
 }: {
   children: React.ReactNode;
 }) {
-  await requireUser();
-  return <LearnerShell>{children}</LearnerShell>;
+  const { client } = await requireUser();
+  const { data: role } = await client
+    .from("staff_roles")
+    .select("role")
+    .maybeSingle();
+  return <LearnerShell staff={!!role}>{children}</LearnerShell>;
 }
