@@ -75,4 +75,8 @@ Apply local migrations, then open `/reviews` and `/projects` after signing in. R
 
 Passing all JavaScript v2 practice checks unlocks the study-planner project. Save private milestone revisions against rubric v1, retain earlier submissions and get clearly labelled completeness feedback. This is not correctness grading; submitted code is never executed. Stale saves report a conflict and keep your text. The dashboard shows your due count and saved project revision. See [Phase 5 setup](../docs/PHASE_5_SETUP.md).
 
-Live AI stays disabled. The isolated runner, notes, publishing/admin, search, analytics and error reporting remain separate Phase 5 backlog items.
+Live AI stays disabled. The isolated runner, notes, search and analytics remain separate Phase 5 backlog items.
+
+## Editorial workspace and reports
+
+Learners can report a lesson or the exact scripted tutor response and follow updates at `/reports`. Trusted editors/admins use `/admin` to revise lesson text, record review, publish a new immutable course version and triage reports. Role checks and audit records are enforced in PostgreSQL. Existing learner evidence stays with its original content version. No real staff account is auto-promoted. See [staff setup and scope](../docs/EDITORIAL_REPORTING_SETUP.md).

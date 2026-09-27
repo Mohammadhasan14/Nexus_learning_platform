@@ -43,8 +43,10 @@ export default async function Assessment({
       )}
       {item.review_status === "reviewed" && (
         <p>
-          Questions received AI-assisted editorial review. This is still a small
-          learning check, not a validated placement test.
+          {course === "javascript-foundations-v2"
+            ? "Questions received AI-assisted editorial review."
+            : "Questions received staff editorial review for this version."}{" "}
+          This is still a small learning check, not a validated placement test.
         </p>
       )}
       <section aria-label="Starting check summary" className="practice-panel">

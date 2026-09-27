@@ -39,9 +39,10 @@ export default async function Courses() {
               )}
               {c.review_status === "reviewed" && (
                 <p>
-                  AI-assisted editorial review · September 2026. Three
-                  introductory lessons; no independent learning-outcome
-                  validation.
+                  {c.id === "javascript-foundations-v2"
+                    ? "AI-assisted editorial review · September 2026."
+                    : "Staff editorial review recorded for this version."}{" "}
+                  No independent learning-outcome validation.
                 </p>
               )}
               {enrolled && next ? (
