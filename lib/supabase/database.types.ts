@@ -286,6 +286,41 @@ export type Database = {
           },
         ];
       };
+      lesson_notes: {
+        Row: {
+          body: string;
+          lesson_id: string;
+          request_id: string;
+          revision: number;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          body: string;
+          lesson_id: string;
+          request_id: string;
+          revision: number;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          body?: string;
+          lesson_id?: string;
+          request_id?: string;
+          revision?: number;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "lesson_notes_lesson_id_fkey";
+            columns: ["lesson_id"];
+            isOneToOne: false;
+            referencedRelation: "lessons";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       lesson_reads: {
         Row: {
           lesson_id: string;
@@ -614,6 +649,26 @@ export type Database = {
       save_content_draft: {
         Args: { content: Json; draft: string; expected: number };
         Returns: undefined;
+      };
+      save_lesson_note: {
+        Args: {
+          body: string;
+          expected: number;
+          lesson: string;
+          request: string;
+        };
+        Returns: Json;
+      };
+      search_lessons: {
+        Args: { query: string };
+        Returns: {
+          course_id: string;
+          course_title: string;
+          course_version: number;
+          lesson_id: string;
+          objective: string;
+          title: string;
+        }[];
       };
       submit_attempt: {
         Args: { exercise: string; request: string; submitted: string };
