@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { CommandMenu } from "@/components/search/command-menu";
 import { usePathname } from "next/navigation";
 import { Brand } from "@/components/ui";
 import { signOutAction } from "@/app/auth/actions";
@@ -69,6 +70,12 @@ export function LearnerShell({
           >
             My reports
           </Link>
+          <Link
+            href="/search"
+            aria-current={path === "/search" ? "page" : undefined}
+          >
+            Search
+          </Link>
           {staff && (
             <Link
               href="/admin"
@@ -93,23 +100,25 @@ export function LearnerShell({
         <header className="workspace-header">
           <span>
             Workspace <span aria-hidden="true">/</span>{" "}
-            {path === "/admin"
-              ? "Editorial"
-              : path === "/reports"
-                ? "My reports"
-                : path.startsWith("/courses")
-                  ? "Learning"
-                  : path === "/reviews"
-                    ? "Reviews"
-                    : path === "/projects"
-                      ? "Projects"
-                      : path === "/settings"
-                        ? "Preferences"
-                        : path === "/onboarding"
-                          ? "Getting started"
-                          : "Today"}
+            {path === "/search"
+              ? "Search"
+              : path === "/admin"
+                ? "Editorial"
+                : path === "/reports"
+                  ? "My reports"
+                  : path.startsWith("/courses")
+                    ? "Learning"
+                    : path === "/reviews"
+                      ? "Reviews"
+                      : path === "/projects"
+                        ? "Projects"
+                        : path === "/settings"
+                          ? "Preferences"
+                          : path === "/onboarding"
+                            ? "Getting started"
+                            : "Today"}
           </span>
-          <span className="badge">Early learning space</span>
+          <CommandMenu />
         </header>
         <main id="learner-content" tabIndex={-1} className="learner-content">
           {children}

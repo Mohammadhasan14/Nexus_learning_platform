@@ -1775,3 +1775,81 @@ button:disabled {
 .review-card {
   overflow-wrap: anywhere;
 }
+
+/* Notes and search reuse workspace tokens and native focus behaviour. */
+.note-editor {
+  margin-top: 2rem;
+  padding: clamp(1rem, 3vw, 2rem);
+}
+.note-editor textarea {
+  width: 100%;
+  min-height: 10rem;
+  resize: vertical;
+}
+.workspace-search {
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
+  max-width: 48rem;
+  margin-block: 2rem;
+}
+.search-results {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+.search-results a {
+  display: grid;
+  gap: 0.4rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow-wrap: anywhere;
+}
+.search-results a:hover {
+  background: var(--surface);
+}
+.search-results strong {
+  font-size: 1.1rem;
+}
+.command-menu {
+  margin: auto;
+  width: min(42rem, calc(100% - 2rem));
+  max-height: calc(100dvh - 2rem);
+  padding: clamp(1rem, 3vw, 2rem);
+  background: var(--background);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow-y: auto;
+}
+.command-menu::backdrop {
+  background: rgb(3 8 20 / 80%);
+}
+.command-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.command-heading h2 {
+  margin: 0;
+}
+.command-menu form {
+  margin-block: 1rem;
+  display: grid;
+  gap: 0.75rem;
+}
+.workspace-header {
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.workspace-header kbd {
+  font: inherit;
+  font-size: 0.75rem;
+}
+
+.workspace-search .field {
+  width: 100%;
+}

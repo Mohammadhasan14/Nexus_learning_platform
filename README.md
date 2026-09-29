@@ -61,7 +61,7 @@ After signing in and completing onboarding, open `/courses`. Local Supabase prov
 
 Apply new local migrations with `npx supabase migration up --local` without resetting existing records. Run `npm run db:types` after schema changes; type generation now uses the running local provider. `npm run check` is Docker-independent; `npm run db:test:local`, `npm run db:types:check`, and `npm run test:integration` require Docker/Supabase. Browser suites have separate result directories.
 
-The workspace's canonical task register and handoff live in `../docs/features.csv` and `../docs/PROGRESS.md`; the editorial review record is in `../docs/PHASE_3_CONTENT_REVIEW.md`. These workspace files are outside this app Git repository. Phase 4 requires separate instruction.
+The workspace's canonical task register and handoff live in `../docs/features.csv` and `../docs/PROGRESS.md`; the editorial review record is in `../docs/PHASE_3_CONTENT_REVIEW.md`. These workspace files are outside this app Git repository. Live AI requires separate instruction.
 
 ## Phase 4 scripted tutor
 
@@ -75,8 +75,16 @@ Apply local migrations, then open `/reviews` and `/projects` after signing in. R
 
 Passing all JavaScript v2 practice checks unlocks the study-planner project. Save private milestone revisions against rubric v1, retain earlier submissions and get clearly labelled completeness feedback. This is not correctness grading; submitted code is never executed. Stale saves report a conflict and keep your text. The dashboard shows your due count and saved project revision. See [Phase 5 setup](../docs/PHASE_5_SETUP.md).
 
-Live AI stays disabled. The isolated runner, notes, search and analytics remain separate Phase 5 backlog items.
+Live AI stays disabled. The isolated runner and analytics remain separate Phase 5 backlog items.
 
 ## Editorial workspace and reports
 
 Learners can report a lesson or the exact scripted tutor response and follow updates at `/reports`. Trusted editors/admins use `/admin` to revise lesson text, record review, publish a new immutable course version and triage reports. Role checks and audit records are enforced in PostgreSQL. Existing learner evidence stays with its original content version. No real staff account is auto-promoted. See [staff setup and scope](../docs/EDITORIAL_REPORTING_SETUP.md).
+
+## Private notes and search
+
+On an unlocked lesson, write a **Private lesson note** and select **Save note** before leaving. Notes survive reloads and stay with their original lesson version. Stale saves preserve your typed text and explain how to review the newer saved note. Emptying the text and saving clears the note. Notes are plain text, owner-only, capped at 10,000 characters and not sent to the tutor.
+
+Open `/search` or **Quick search** (Ctrl/Cmd+K) to find workspace actions and unlocked lessons. Lesson search requires two characters; it uses literal case-insensitive matching, shows up to 20 lesson matches with course versions, and suggests narrowing broad queries. Submit with Enter, Tab through results, Enter to open, and Escape to close the command menu. Private notes, draft content and grading keys are excluded. The dedicated search page keeps its query in the URL.
+
+Apply `npx supabase migration up --local`, then `npm run dev -- --webpack`. See [notes/search setup](../docs/NOTES_SEARCH_SETUP.md) for privacy, retry behaviour and verification. No extra dependency, search service or live AI provider is needed.
