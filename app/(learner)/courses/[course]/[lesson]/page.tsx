@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { NoteEditor } from "@/components/notes/note-editor";
+import { lessonNote } from "@/modules/notes/data";
 import { ReportForm } from "@/components/reports/report-form";
 import { notFound } from "next/navigation";
 import { randomUUID } from "node:crypto";
@@ -31,6 +33,7 @@ export default async function Lesson({
         </Link>
       </>
     );
+  const note = await lessonNote(lesson);
   const exercise = data.exercises.find(
     (e) => e.lesson_id === lesson && e.kind === "practice",
   );
@@ -77,6 +80,20 @@ export default async function Lesson({
             mastery.
           </p>
           <ReportForm lesson={lesson} request={randomUUID()} />
+          {note.error ? (
+            <p role="alert">
+              Your note could not be loaded. Reload to retry; you can keep
+              reading and practising.
+            </p>
+          ) : (
+            <NoteEditor
+              key={lesson}
+              lesson={lesson}
+              initial={note.note?.body ?? ""}
+              revision={note.note?.revision ?? 0}
+              request={randomUUID()}
+            />
+          )}
         </article>
         <aside className="practice-panel" aria-label="Practice">
           <p className="eyebrow">PUT IT INTO PRACTICE</p>
