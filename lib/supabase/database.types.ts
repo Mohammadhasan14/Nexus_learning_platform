@@ -728,6 +728,10 @@ export type Database = {
       };
     };
     Functions: {
+      claim_live_tutor: {
+        Args: { intent: string; lesson: string; request: string };
+        Returns: Json;
+      };
       content_review_material: { Args: { draft: string }; Returns: Json };
       create_content_draft: {
         Args: { request: string; source: string };
