@@ -26,7 +26,8 @@ export function safeDestination(
   | "/projects"
   | "/reports"
   | "/admin"
-  | "/search" {
+  | "/search"
+  | "/outcomes" {
   return value === "/settings" ||
     value === "/onboarding" ||
     value === "/courses" ||
@@ -34,7 +35,8 @@ export function safeDestination(
     value === "/projects" ||
     value === "/reports" ||
     value === "/admin" ||
-    value === "/search"
+    value === "/search" ||
+    value === "/outcomes"
     ? value
     : "/dashboard";
 }

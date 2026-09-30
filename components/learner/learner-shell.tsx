@@ -76,6 +76,12 @@ export function LearnerShell({
           >
             Search
           </Link>
+          <Link
+            href="/outcomes"
+            aria-current={path === "/outcomes" ? "page" : undefined}
+          >
+            Outcomes
+          </Link>
           {staff && (
             <Link
               href="/admin"
@@ -100,23 +106,25 @@ export function LearnerShell({
         <header className="workspace-header">
           <span>
             Workspace <span aria-hidden="true">/</span>{" "}
-            {path === "/search"
-              ? "Search"
-              : path === "/admin"
-                ? "Editorial"
-                : path === "/reports"
-                  ? "My reports"
-                  : path.startsWith("/courses")
-                    ? "Learning"
-                    : path === "/reviews"
-                      ? "Reviews"
-                      : path === "/projects"
-                        ? "Projects"
-                        : path === "/settings"
-                          ? "Preferences"
-                          : path === "/onboarding"
-                            ? "Getting started"
-                            : "Today"}
+            {path === "/outcomes"
+              ? "Outcomes"
+              : path === "/search"
+                ? "Search"
+                : path === "/admin"
+                  ? "Editorial"
+                  : path === "/reports"
+                    ? "My reports"
+                    : path.startsWith("/courses")
+                      ? "Learning"
+                      : path === "/reviews"
+                        ? "Reviews"
+                        : path === "/projects"
+                          ? "Projects"
+                          : path === "/settings"
+                            ? "Preferences"
+                            : path === "/onboarding"
+                              ? "Getting started"
+                              : "Today"}
           </span>
           <CommandMenu />
         </header>

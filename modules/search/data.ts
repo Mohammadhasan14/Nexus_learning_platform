@@ -27,6 +27,11 @@ export async function searchData(raw: string): Promise<SearchResult> {
     };
   const actions = [
     {
+      title: "Outcomes",
+      detail: "Private learning evidence and delayed practice results",
+      href: "/outcomes",
+    },
+    {
       title: "Today",
       detail: "Your dashboard and next lesson",
       href: "/dashboard",

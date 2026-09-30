@@ -1853,3 +1853,13 @@ button:disabled {
 .workspace-search .field {
   width: 100%;
 }
+
+.outcome-events {
+  list-style: none;
+  padding: 0;
+}
+.review-card dd {
+  margin: 0.25rem 0 1rem;
+  font-size: 1.25rem;
+  color: var(--foreground);
+}

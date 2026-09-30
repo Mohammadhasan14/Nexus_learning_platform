@@ -75,7 +75,7 @@ Apply local migrations, then open `/reviews` and `/projects` after signing in. R
 
 Passing all JavaScript v2 practice checks unlocks the study-planner project. Save private milestone revisions against rubric v1, retain earlier submissions and get clearly labelled completeness feedback. This is not correctness grading; submitted code is never executed. Stale saves report a conflict and keep your text. The dashboard shows your due count and saved project revision. See [Phase 5 setup](../docs/PHASE_5_SETUP.md).
 
-Live AI stays disabled. The isolated runner and analytics remain separate Phase 5 backlog items.
+Live AI stays disabled. The isolated runner remains a separate Phase 5 backlog item.
 
 ## Editorial workspace and reports
 
@@ -88,3 +88,7 @@ On an unlocked lesson, write a **Private lesson note** and select **Save note** 
 Open `/search` or **Quick search** (Ctrl/Cmd+K) to find workspace actions and unlocked lessons. Lesson search requires two characters; it uses literal case-insensitive matching, shows up to 20 lesson matches with course versions, and suggests narrowing broad queries. Submit with Enter, Tab through results, Enter to open, and Escape to close the command menu. Private notes, draft content and grading keys are excluded. The dedicated search page keeps its query in the URL.
 
 Apply `npx supabase migration up --local`, then `npm run dev -- --webpack`. See [notes/search setup](../docs/NOTES_SEARCH_SETUP.md) for privacy, retry behaviour and verification. No extra dependency, search service or live AI provider is needed.
+
+## Learning outcomes
+
+Open `/outcomes` after signing in to inspect private, server-derived attempt metadata and course-version measures. First checks without recorded feedback/tutor use are explicitly an independence proxy; repeat checks after 24 elapsed hours are not proof of mastery on unseen tasks. Empty denominators show insufficient evidence. Events start with this migration; no historical events are fabricated, and no raw answer, code, notes or chat is copied into analytics. See [outcomes setup and definitions](../docs/OUTCOMES_SETUP.md).

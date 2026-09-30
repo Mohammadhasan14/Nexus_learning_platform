@@ -193,6 +193,8 @@ const server = createServer(async (req, res) => {
       "staff_roles",
       "content_reports",
       "lesson_notes",
+      "learning_outcome_events",
+      "learning_outcome_summary",
       "project_versions",
       "project_submissions",
     ].some((table) => url.pathname === `/rest/v1/${table}`)
