@@ -286,6 +286,93 @@ export type Database = {
           },
         ];
       };
+      learning_outcome_events: {
+        Row: {
+          attempt_id: string;
+          correct: boolean;
+          course_id: string;
+          elapsed_seconds: number | null;
+          exercise_id: string;
+          kind: string;
+          lesson_id: string;
+          occurred_at: string;
+          policy_version: string;
+          previous_correct: boolean | null;
+          prior_lesson_attempts: number;
+          prior_task_attempts: number;
+          recorded_tutor_use: boolean;
+          user_id: string;
+        };
+        Insert: {
+          attempt_id: string;
+          correct: boolean;
+          course_id: string;
+          elapsed_seconds?: number | null;
+          exercise_id: string;
+          kind: string;
+          lesson_id: string;
+          occurred_at: string;
+          policy_version?: string;
+          previous_correct?: boolean | null;
+          prior_lesson_attempts: number;
+          prior_task_attempts: number;
+          recorded_tutor_use: boolean;
+          user_id: string;
+        };
+        Update: {
+          attempt_id?: string;
+          correct?: boolean;
+          course_id?: string;
+          elapsed_seconds?: number | null;
+          exercise_id?: string;
+          kind?: string;
+          lesson_id?: string;
+          occurred_at?: string;
+          policy_version?: string;
+          previous_correct?: boolean | null;
+          prior_lesson_attempts?: number;
+          prior_task_attempts?: number;
+          recorded_tutor_use?: boolean;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "learning_outcome_events_attempt_id_fkey";
+            columns: ["attempt_id"];
+            isOneToOne: true;
+            referencedRelation: "attempts";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "learning_outcome_events_attempt_id_fkey";
+            columns: ["attempt_id"];
+            isOneToOne: true;
+            referencedRelation: "review_schedule";
+            referencedColumns: ["attempt_id"];
+          },
+          {
+            foreignKeyName: "learning_outcome_events_course_id_fkey";
+            columns: ["course_id"];
+            isOneToOne: false;
+            referencedRelation: "course_versions";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "learning_outcome_events_exercise_id_fkey";
+            columns: ["exercise_id"];
+            isOneToOne: false;
+            referencedRelation: "exercises";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "learning_outcome_events_lesson_id_fkey";
+            columns: ["lesson_id"];
+            isOneToOne: false;
+            referencedRelation: "lessons";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       lesson_notes: {
         Row: {
           body: string;
@@ -575,6 +662,26 @@ export type Database = {
             columns: ["exercise_id"];
             isOneToOne: false;
             referencedRelation: "exercises";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      learning_outcome_summary: {
+        Row: {
+          course_id: string | null;
+          delayed_checks: number | null;
+          delayed_passed: number | null;
+          initial_checks: number | null;
+          initial_passed: number | null;
+          practice_checks: number | null;
+          user_id: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "learning_outcome_events_course_id_fkey";
+            columns: ["course_id"];
+            isOneToOne: false;
+            referencedRelation: "course_versions";
             referencedColumns: ["id"];
           },
         ];
