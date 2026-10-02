@@ -92,3 +92,13 @@ Apply `npx supabase migration up --local`, then `npm run dev -- --webpack`. See 
 ## Learning outcomes
 
 Open `/outcomes` after signing in to inspect private, server-derived attempt metadata and course-version measures. First checks without recorded feedback/tutor use are explicitly an independence proxy; repeat checks after 24 elapsed hours are not proof of mastery on unseen tasks. Empty denominators show insufficient evidence. Events start with this migration; no historical events are fabricated, and no raw answer, code, notes or chat is copied into analytics. See [outcomes setup and definitions](../docs/OUTCOMES_SETUP.md).
+
+## Local live tutor pilot
+
+Gemini can be enabled for local free-tier testing with server-side `LLM_PROVIDER`,
+`LLM_API_KEY`, and `LLM_MODEL` settings plus explicit `TUTOR_MODE=live` and
+`LLM_FREE_TIER_ONLY=true`. Apply local migrations first. Other providers still
+need adapters; adding a key alone does not enable them. See
+[setup and limitations](../docs/LIVE_TUTOR_SETUP.md). Scripted mode remains
+available; paid/hosted AI, streaming and saved live-response reports are not
+implemented.
