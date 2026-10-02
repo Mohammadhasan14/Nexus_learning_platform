@@ -15,26 +15,34 @@ async function recover(state: TutorState, form: FormData): Promise<TutorState> {
 export function TutorPanel({
   lesson,
   request,
-  enabled,
+  mode,
 }: {
   lesson: string;
   request: string;
-  enabled: boolean;
+  mode: "disabled" | "scripted" | "live";
 }) {
   const [state, action, pending] = useActionState(recover, {});
   const [key, setKey] = useState(request);
   const [intent, setIntent] = useState("hint");
   const answered = state.request === key;
+  const enabled = mode !== "disabled";
+  const live = mode === "live";
   return (
     <section className="tutor-panel" aria-labelledby="tutor-heading">
       <h3 id="tutor-heading">Lesson tutor</h3>
       <p className="eyebrow">
-        {enabled ? "SCRIPTED DEMO · NO LIVE AI" : "TUTOR DISABLED"}
+        {live
+          ? "LIVE AI · LOCAL TESTING"
+          : enabled
+            ? "SCRIPTED DEMO · NO LIVE AI"
+            : "TUTOR DISABLED"}
       </p>
       <p>
-        {enabled
-          ? "Choose prepared guidance for this reviewed lesson. No external AI calls or chat history; this tutor does not grade your work."
-          : "Continue with the lesson, example and practice feedback. Tutor availability does not affect saved progress."}
+        {live
+          ? "Gemini receives this lesson and your selected guidance option. No notes, answers or profile details are sent. Free-tier content may be used to improve Google's products. AI can make mistakes and does not grade your work."
+          : enabled
+            ? "Choose prepared guidance for this reviewed lesson. No external AI calls or chat history; this tutor does not grade your work."
+            : "Continue with the lesson, example and practice feedback. Tutor availability does not affect saved progress."}
       </p>
       {enabled && (
         <form
@@ -71,7 +79,9 @@ export function TutorPanel({
               ? "Loading guidance…"
               : answered
                 ? "Guidance loaded"
-                : "Get scripted guidance"}
+                : live
+                  ? "Ask lesson tutor"
+                  : "Get scripted guidance"}
           </button>
           {state.message && (
             <p role="status" aria-live="polite">
@@ -83,6 +93,13 @@ export function TutorPanel({
       {answered && state.reply && (
         <div className="tutor-reply">
           <div role="status">
+            {live && (
+              <p className="eyebrow">
+                {state.reply.adapter === "scripted-live-fallback-1"
+                  ? "AI UNAVAILABLE · PREPARED GUIDANCE"
+                  : "AI-GENERATED GUIDANCE"}
+              </p>
+            )}
             <p>{state.reply.text}</p>
             {state.reply.source && (
               <a href={state.reply.source.href}>
@@ -90,15 +107,23 @@ export function TutorPanel({
               </a>
             )}
             <p>
-              {state.remaining} scripted requests left today. Resets at midnight
-              UTC.
+              {state.remaining} {live ? "tutor" : "scripted"} requests left
+              today. Resets at midnight UTC.
             </p>
           </div>
-          <ReportForm
-            lesson={lesson}
-            request={state.request!}
-            tutorRequest={state.request!}
-          />
+          {live ? (
+            <p>
+              Live replies are not saved in this testing version. Use the
+              lesson’s report form for lesson issues; exact AI-response
+              reporting is not available yet.
+            </p>
+          ) : (
+            <ReportForm
+              lesson={lesson}
+              request={state.request!}
+              tutorRequest={state.request!}
+            />
+          )}
         </div>
       )}
     </section>

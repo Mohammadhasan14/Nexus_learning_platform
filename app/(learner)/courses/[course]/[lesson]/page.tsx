@@ -7,6 +7,7 @@ import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { learningData, unlocked, passed } from "@/modules/learning/data";
 import { TutorPanel } from "@/components/learning/tutor-panel";
+import { tutorConfig } from "@/modules/tutor/server-only";
 import { ExerciseForm, ReadForm } from "@/components/learning/forms";
 export default async function Lesson({
   params,
@@ -111,9 +112,10 @@ export default async function Lesson({
             key={lesson}
             lesson={lesson}
             request={randomUUID()}
-            enabled={
-              process.env.TUTOR_MODE === "scripted" &&
+            mode={
               course === "javascript-foundations-v2"
+                ? tutorConfig().mode
+                : "disabled"
             }
           />
           <h3>Recent attempts</h3>
