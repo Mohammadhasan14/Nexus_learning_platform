@@ -95,7 +95,8 @@ test("opt-in live tutor: browser guidance, privacy, concurrent claims and respon
     await expect(
       panel.getByText(/exact AI-response reporting is not available yet/),
     ).toBeVisible();
-    const output = "../docs/verification/live-tutor";
+    const output =
+      process.env.TUTOR_VERIFICATION_DIR || "../docs/verification/live-tutor";
     await mkdir(output, { recursive: true });
     await page.emulateMedia({ reducedMotion: "reduce" });
     for (const width of [320, 768, 1440]) {

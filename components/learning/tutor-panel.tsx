@@ -100,7 +100,7 @@ export function TutorPanel({
                   : "AI-GENERATED GUIDANCE"}
               </p>
             )}
-            <p>{state.reply.text}</p>
+            <p className="tutor-response-text">{state.reply.text}</p>
             {state.reply.source && (
               <a href={state.reply.source.href}>
                 Source: {state.reply.source.title}
