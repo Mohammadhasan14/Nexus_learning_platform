@@ -1685,6 +1685,9 @@ button:disabled {
 .tutor-reply {
   overflow-wrap: anywhere;
 }
+.tutor-response-text {
+  white-space: pre-wrap;
+}
 .tutor-panel select {
   max-width: 100%;
 }
