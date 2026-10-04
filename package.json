@@ -13,7 +13,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check": "npm run format:check && npm run lint && npm run typecheck && npm run test:unit && npm run test:db && npm run build && npm test && npm run test:flows",
-    "test:unit": "node --import tsx tests/unit/security.test.ts && node --import tsx tests/unit/tutor.test.ts && node --import tsx tests/unit/live-tutor.test.ts",
+    "test:unit": "node --import tsx tests/unit/security.test.ts && node --import tsx tests/unit/tutor.test.ts && node --import tsx tests/unit/live-tutor.test.ts && node --import tsx tests/unit/tutor-evaluation.test.ts",
     "test:db": "node --import tsx tests/database/policies.test.ts && node --import tsx tests/database/learning.test.ts && node --import tsx tests/database/content.test.ts && node --import tsx tests/database/tutor.test.ts && node --import tsx tests/database/projects-reviews.test.ts && node --import tsx tests/database/editorial-reports.test.ts && node --import tsx tests/database/notes-search.test.ts && node --import tsx tests/database/outcomes.test.ts && node --import tsx tests/database/live-tutor.test.ts",
     "db:types": "node --import tsx scripts/database-types.ts",
     "db:types:check": "node --import tsx scripts/database-types.ts --check",
@@ -24,7 +24,8 @@
     "test:flows": "playwright test --config playwright.flows.config.ts",
     "db:env": "node --import tsx scripts/local-env.ts",
     "test:integration": "playwright test --config playwright.integration.config.ts",
-    "test:tutor": "node --import tsx tests/unit/tutor.test.ts && node --import tsx tests/database/tutor.test.ts && node --import tsx tests/unit/live-tutor.test.ts && node --import tsx tests/database/live-tutor.test.ts"
+    "test:tutor": "node --import tsx tests/unit/tutor.test.ts && node --import tsx tests/database/tutor.test.ts && node --import tsx tests/unit/live-tutor.test.ts && node --import tsx tests/database/live-tutor.test.ts && node --import tsx tests/unit/tutor-evaluation.test.ts",
+    "eval:tutor": "node --import tsx scripts/evaluate-tutor.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

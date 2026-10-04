@@ -102,3 +102,9 @@ need adapters; adding a key alone does not enable them. See
 [setup and limitations](../docs/LIVE_TUTOR_SETUP.md). Scripted mode remains
 available; paid/hosted AI, streaming and saved live-response reports are not
 implemented.
+
+Run `npm run eval:tutor` to inspect the fixed tutor evaluation cases without
+calling a provider. `npm run eval:tutor -- --live` explicitly evaluates the
+configured local Gemini model using up to 16 synthetic requests. Collection
+success is not semantic approval; see the
+[evaluation rubric, archived reviews and limits](tests/evaluations/README.md).
