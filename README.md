@@ -67,7 +67,7 @@ The workspace's canonical task register and handoff live in `../docs/features.cs
 
 Run `TUTOR_MODE=scripted npm run dev -- --webpack` after applying local migrations to enable prepared guidance on reviewed v2 lessons. The tutor is clearly labelled, links to its lesson source, and makes no external AI calls. Unset the variable or use `TUTOR_MODE=disabled` for the lesson-only fallback.
 
-Demo allowances are 20 requests per learner and 1,000 globally per UTC day, enforced atomically in PostgreSQL with idempotent retries. These are request units, not live spending limits. `npm run test:tutor` runs the fixed scripted evaluations and isolated quota/reconciliation tests; the real integration suite adds browser and concurrent quota checks. See [Phase 4 setup](../docs/PHASE_4_SETUP.md). Live provider, streaming, monetary controls and live-model evaluations remain pending.
+Demo allowances are 20 requests per learner and 1,000 globally per UTC day, enforced atomically in PostgreSQL with idempotent retries. These are request units, not live spending limits. `npm run test:tutor` runs the fixed scripted evaluations and isolated quota/reconciliation tests; the real integration suite adds browser and concurrent quota checks. See [Phase 4 setup](../docs/PHASE_4_SETUP.md). Local live streaming and bounded real-model evaluations are now available as described below; token/currency controls remain pending.
 
 ## Phase 5 projects and reviews
 
@@ -75,11 +75,11 @@ Apply local migrations, then open `/reviews` and `/projects` after signing in. R
 
 Passing all JavaScript v2 practice checks unlocks the study-planner project. Save private milestone revisions against rubric v1, retain earlier submissions and get clearly labelled completeness feedback. This is not correctness grading; submitted code is never executed. Stale saves report a conflict and keep your text. The dashboard shows your due count and saved project revision. See [Phase 5 setup](../docs/PHASE_5_SETUP.md).
 
-Live AI stays disabled. The isolated runner remains a separate Phase 5 backlog item.
+Live AI is local-only and explicitly opt-in. The isolated runner remains a separate Phase 5 backlog item.
 
 ## Editorial workspace and reports
 
-Learners can report a lesson or the exact scripted tutor response and follow updates at `/reports`. Trusted editors/admins use `/admin` to revise lesson text, record review, publish a new immutable course version and triage reports. Role checks and audit records are enforced in PostgreSQL. Existing learner evidence stays with its original content version. No real staff account is auto-promoted. See [staff setup and scope](../docs/EDITORIAL_REPORTING_SETUP.md).
+Learners can report a lesson or an exact saved scripted/live tutor response and follow updates at `/reports`. Trusted editors/admins use `/admin` to revise lesson text, record review, publish a new immutable course version and triage reports. Role checks and audit records are enforced in PostgreSQL. Existing learner evidence stays with its original content version. No real staff account is auto-promoted. See [staff setup and scope](../docs/EDITORIAL_REPORTING_SETUP.md).
 
 ## Private notes and search
 
@@ -97,11 +97,24 @@ Open `/outcomes` after signing in to inspect private, server-derived attempt met
 
 Gemini can be enabled for local free-tier testing with server-side `LLM_PROVIDER`,
 `LLM_API_KEY`, and `LLM_MODEL` settings plus explicit `TUTOR_MODE=live` and
-`LLM_FREE_TIER_ONLY=true`. Apply local migrations first. Other providers still
-need adapters; adding a key alone does not enable them. See
-[setup and limitations](../docs/LIVE_TUTOR_SETUP.md). Scripted mode remains
-available; paid/hosted AI, streaming and saved live-response reports are not
-implemented.
+`LLM_FREE_TIER_ONLY=true`. Apply local migrations, run
+`npm run tutor:receipts:setup`, then restart `npm run dev`. The setup command
+requires access to the existing local Docker stack and writes a separate server-only
+receipt signing key into ignored `.env.local` and the private local database;
+it never displays the key and does not use a service-role app client.
+
+On an unlocked JavaScript foundations v2 lesson, **Ask lesson tutor** streams
+guidance. **Cancel guidance** stops receiving it; uncertain work still counts
+against the daily request allowance. **Recover saved reply** retrieves a completed
+reply with the same request identity without a second AI call. Incomplete replies
+are discarded; provider failures return labelled prepared guidance. Completed
+private receipts support **Report this tutor response**, with the exact server-saved
+quote. Account deletion removes receipts; submitted report snapshots keep their
+existing staff-review retention policy.
+
+Other providers still need adapters; adding a key alone does not enable them.
+See [setup and limitations](../docs/LIVE_TUTOR_SETUP.md). Scripted mode remains
+available; paid/hosted AI and token/currency controls remain unimplemented.
 
 Run `npm run eval:tutor` to inspect the fixed tutor evaluation cases without
 calling a provider. `npm run eval:tutor -- --live` explicitly evaluates the

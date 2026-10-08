@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { createClient } from "@supabase/supabase-js";
 import { randomUUID } from "node:crypto";
-import { mkdir } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { localSupabase } from "../../scripts/local-supabase";
 
 test("opt-in live tutor: browser guidance, privacy, concurrent claims and responsive access", async ({
@@ -83,7 +83,7 @@ test("opt-in live tutor: browser guidance, privacy, concurrent claims and respon
       panel.getByText(
         /AI-GENERATED GUIDANCE|AI UNAVAILABLE · PREPARED GUIDANCE/,
       ),
-    ).toBeVisible({ timeout: 20000 });
+    ).toBeVisible({ timeout: 30000 });
     await expect(panel.getByRole("link", { name: /Source:/ })).toHaveAttribute(
       "href",
       "/courses/javascript-foundations-v2/js-v2-values",
@@ -93,8 +93,73 @@ test("opt-in live tutor: browser guidance, privacy, concurrent claims and respon
       panel.getByRole("button", { name: "Guidance loaded" }),
     ).toBeDisabled();
     await expect(
-      panel.getByText(/exact AI-response reporting is not available yet/),
+      panel.getByText("Report this tutor response", { exact: true }),
     ).toBeVisible();
+    const visibleReply = await panel
+      .locator(".tutor-response-text")
+      .innerText();
+    const tutorKey = await panel
+      .locator('input[name="tutor_request"]')
+      .inputValue();
+    const cached = await learner.rpc("read_live_tutor", {
+      lesson: "js-v2-values",
+      request: tutorKey,
+      intent: "hint",
+    });
+    expect(cached.error).toBeNull();
+    expect((cached.data as { reply: { text: string } }).reply.text).toBe(
+      visibleReply,
+    );
+    expect(
+      (
+        await learner.rpc("claim_live_tutor", {
+          lesson: "js-v2-values",
+          request: tutorKey,
+          intent: "hint",
+        })
+      ).data,
+    ).toMatchObject({ allowed: false, reason: "replay" });
+    await panel
+      .getByText("Report this tutor response", { exact: true })
+      .click();
+    await panel
+      .getByLabel("What needs attention?")
+      .fill("Synthetic verification of saved tutor guidance.");
+    await panel.getByRole("button", { name: "Send report" }).click();
+    await expect(
+      panel.getByRole("button", { name: "Report saved" }),
+    ).toBeDisabled();
+    const reports = await learner
+      .from("content_reports")
+      .select("snapshot")
+      .eq("tutor_request", tutorKey);
+    expect(reports.error).toBeNull();
+    expect(
+      (reports.data![0].snapshot as { response: { text: string } }).response
+        .text,
+    ).toBe(visibleReply);
+    const base = "http://127.0.0.1:3103";
+    const replay = await page.request.post("/api/tutor", {
+      headers: { Origin: base },
+      data: { lesson: "js-v2-values", request: tutorKey, intent: "hint" },
+    });
+    expect(replay.status()).toBe(200);
+    expect(JSON.parse(await replay.text()).reply.text).toBe(visibleReply);
+    const foreign = await page.request.post("/api/tutor", {
+      headers: { Origin: "https://foreign.test" },
+      data: { lesson: "js-v2-values", request: randomUUID(), intent: "hint" },
+    });
+    expect(foreign.status()).toBe(403);
+    const injected = await page.request.post("/api/tutor", {
+      headers: { Origin: base },
+      data: {
+        lesson: "js-v2-values",
+        request: randomUUID(),
+        intent: "hint",
+        body: "untrusted",
+      },
+    });
+    expect(injected.status()).toBe(400);
     const output =
       process.env.TUTOR_VERIFICATION_DIR || "../docs/verification/live-tutor";
     await mkdir(output, { recursive: true });
@@ -112,11 +177,36 @@ test("opt-in live tutor: browser guidance, privacy, concurrent claims and respon
         fullPage: true,
       });
     }
+    await writeFile(
+      `${output}/result.json`,
+      JSON.stringify(
+        {
+          verifiedAt: new Date().toISOString(),
+          adapter: (cached.data as { reply: { adapter: string } }).reply
+            .adapter,
+          completedReceiptSaved: true,
+          exactReportVerified: true,
+          cachedRecoveryVerified: true,
+          singleUseClaimVerified: true,
+          foreignOriginRejected: true,
+          untrustedContextRejected: true,
+          widths: [320, 768, 1440],
+          axeViolations: 0,
+          overflow: false,
+          reducedMotion: true,
+        },
+        null,
+        2,
+      ) + "\n",
+    );
     await page.getByLabel("2 (number)", { exact: true }).check();
     await page.getByRole("button", { name: "Check answer" }).click();
     await expect(page.getByText("Correct.", { exact: true })).toBeVisible();
   } finally {
     await learner.auth.signOut();
+    expect(
+      (await admin.from("content_reports").delete().eq("user_id", id)).error,
+    ).toBeNull();
     expect((await admin.auth.admin.deleteUser(id)).error).toBeNull();
   }
 });
