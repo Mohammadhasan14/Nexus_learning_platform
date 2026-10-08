@@ -1,9 +1,10 @@
+import { pgcrypto } from "@electric-sql/pglite/contrib/pgcrypto";
 import { PGlite } from "@electric-sql/pglite";
 import { readdir, readFile } from "node:fs/promises";
 
 /** Isolated PostgreSQL engine. Supabase auth.uid/users are shims, not a live Auth service. */
 export async function migrationDatabase(through?: string) {
-  const db = new PGlite();
+  const db = new PGlite({ extensions: { pgcrypto } });
   await db.exec(`
     create role anon nologin;
     create role authenticated nologin;

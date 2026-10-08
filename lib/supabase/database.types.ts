@@ -738,11 +738,19 @@ export type Database = {
         Returns: string;
       };
       enrol_course: { Args: { course: string }; Returns: undefined };
+      finish_live_tutor: {
+        Args: { receipt: string; request: string; signature: string };
+        Returns: boolean;
+      };
       is_content_staff: { Args: never; Returns: boolean };
       mark_lesson_read: { Args: { lesson: string }; Returns: undefined };
       publish_content_draft: {
         Args: { draft: string; expected: number };
         Returns: string;
+      };
+      read_live_tutor: {
+        Args: { intent: string; lesson: string; request: string };
+        Returns: Json;
       };
       report_content: {
         Args: {
