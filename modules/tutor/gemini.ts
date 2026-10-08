@@ -13,7 +13,7 @@ export type ReviewedContext = TutorContext & {
   body: string;
   example: string;
 };
-const contextSchema = z.object({
+export const contextSchema = z.object({
   reviewed: z.literal(true),
   course: z.literal("javascript-foundations-v2"),
   lesson: z.enum(["js-v2-values", "js-v2-conditions", "js-v2-functions"]),
