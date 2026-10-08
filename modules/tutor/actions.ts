@@ -4,7 +4,6 @@ import { tutorInput, type TutorReply } from "./adapter";
 import { z } from "zod";
 import { tutorReplySchema } from "@/modules/reports/schema";
 import { tutorConfig } from "./server-only";
-import { geminiGuidance } from "./gemini";
 export type TutorState = {
   message?: string;
   reply?: TutorReply;
@@ -28,10 +27,11 @@ export async function askTutor(
       message:
         "The tutor is disabled. Continue with the lesson, example and practice feedback.",
     };
-  const { data, error } = await client.rpc(
-    config.mode === "live" ? "claim_live_tutor" : "use_scripted_tutor",
-    input.data,
-  );
+  if (config.mode === "live")
+    return {
+      message: "Use the streaming lesson tutor to request live guidance.",
+    };
+  const { data, error } = await client.rpc("use_scripted_tutor", input.data);
   if (error)
     return {
       message:
@@ -70,27 +70,6 @@ export async function askTutor(
     return {
       message: "The tutor context is unavailable. Continue with the lesson.",
     };
-  if (config.mode === "live") {
-    if (!r.objective || !r.body || !r.example)
-      return {
-        message:
-          "Reviewed lesson context is unavailable. Continue with the lesson.",
-      };
-    const reply = await geminiGuidance(
-      config,
-      {
-        lesson: r.lesson,
-        course: r.course,
-        title: r.title,
-        reviewed: true,
-        objective: r.objective,
-        body: r.body,
-        example: r.example,
-      },
-      input.data.intent,
-    );
-    return { reply, request: input.data.request, remaining: r.remaining };
-  }
   if (!r.reply)
     return {
       message:

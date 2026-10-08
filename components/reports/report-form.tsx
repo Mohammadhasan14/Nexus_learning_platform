@@ -62,9 +62,8 @@ export function ReportForm({
         </div>
         <p>
           Staff will receive your description and this content version
-          {tutorRequest ? ", including the exact scripted response" : ""}.
-          Include no passwords or other private details. Up to ten reports per
-          UTC day.
+          {tutorRequest ? ", including the exact saved response" : ""}. Include
+          no passwords or other private details. Up to ten reports per UTC day.
         </p>
         <button
           className="button button-secondary"
