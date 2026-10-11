@@ -742,6 +742,7 @@ export type Database = {
         Args: { receipt: string; request: string; signature: string };
         Returns: boolean;
       };
+      get_tutor_usage: { Args: never; Returns: Json };
       is_content_staff: { Args: never; Returns: boolean };
       mark_lesson_read: { Args: { lesson: string }; Returns: undefined };
       publish_content_draft: {
