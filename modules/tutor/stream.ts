@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { tokenUsageSchema, tokenAllowanceSchema } from "./usage";
 import { tutorReplySchema } from "../reports/schema";
 
 export const tutorEventSchema = z.discriminatedUnion("type", [
@@ -9,6 +10,8 @@ export const tutorEventSchema = z.discriminatedUnion("type", [
     request: z.string().uuid(),
     remaining: z.number().optional(),
     saved: z.boolean(),
+    usage: tokenUsageSchema.nullish(),
+    tokens: tokenAllowanceSchema.optional(),
   }),
   z.object({ type: z.literal("error"), message: z.string() }),
 ]);

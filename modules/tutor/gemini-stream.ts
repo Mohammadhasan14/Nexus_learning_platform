@@ -8,8 +8,10 @@ import {
 } from "./adapter";
 import { tutorSystemInstruction } from "./prompt";
 import { sseObjects } from "./stream";
+import { UsageTracker, type TokenUsage } from "./usage";
 
 const frameSchema = z.object({
+  usageMetadata: z.unknown().optional(),
   promptFeedback: z.object({ blockReason: z.string().optional() }).optional(),
   candidates: z
     .array(
@@ -37,7 +39,12 @@ export async function streamGemini(
   config: { apiKey: string; model: string },
   context: ReviewedContext,
   intent: TutorIntent,
-  options: { signal: AbortSignal; onDelta: (text: string) => void },
+  options: {
+    signal: AbortSignal;
+    onDelta: (text: string) => void;
+    onUsage?: (usage: TokenUsage) => void;
+    reservedTokens?: number;
+  },
   transport: typeof fetch = fetch,
   timeoutMs = 20000,
 ): Promise<TutorReply> {
@@ -59,6 +66,17 @@ export async function streamGemini(
       },
     });
     if (text.length > 12000) throw new Error("Context too large");
+    const payload = JSON.stringify({
+      systemInstruction: { parts: [{ text: tutorSystemInstruction }] },
+      contents: [{ role: "user", parts: [{ text }] }],
+      generationConfig: { maxOutputTokens: 768, temperature: 0.2 },
+    });
+    // Conservative local estimate; actual overruns pause further admission.
+    if (
+      Buffer.byteLength(payload, "utf8") + 768 + 1024 >
+      (options.reservedTokens ?? 65536)
+    )
+      throw new Error("Context exceeds token reservation");
     const response = await transport(
       `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(config.model)}:streamGenerateContent?alt=sse`,
       {
@@ -70,23 +88,26 @@ export async function streamGemini(
         cache: "no-store",
         redirect: "error",
         signal: controller.signal,
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: tutorSystemInstruction }] },
-          contents: [{ role: "user", parts: [{ text }] }],
-          generationConfig: { maxOutputTokens: 768, temperature: 0.2 },
-        }),
+        body: payload,
       },
     );
     if (!response.ok || !response.body) throw new Error("Provider unavailable");
+    const usageTracker = new UsageTracker();
+    let finalUsage: unknown;
     let answer = "",
       stopped = false;
     for await (const raw of sseObjects(response.body)) {
       controller.signal.throwIfAborted();
       const frame = frameSchema.parse(raw);
+      usageTracker.observe(frame.usageMetadata);
       if (frame.promptFeedback?.blockReason)
         throw new Error("Blocked response");
       const candidate = frame.candidates?.[0];
-      if (!candidate) continue; // Usage-only frames contain no learner text.
+      if (!candidate) {
+        if (stopped && frame.usageMetadata !== undefined)
+          finalUsage = frame.usageMetadata;
+        continue;
+      }
       if (candidate.index !== undefined && candidate.index !== 0)
         throw new Error("Unexpected candidate");
       const delta = (candidate.content?.parts ?? [])
@@ -101,10 +122,15 @@ export async function streamGemini(
       if (answer.length > 6000) throw new Error("Output too large");
       if (delta) options.onDelta(delta);
       controller.signal.throwIfAborted();
-      if (candidate.finishReason === "STOP") stopped = true;
+      if (candidate.finishReason === "STOP") {
+        stopped = true;
+        finalUsage = frame.usageMetadata;
+      }
     }
     controller.signal.throwIfAborted();
     if (!stopped || !answer.trim()) throw new Error("Incomplete response");
+    const usage = usageTracker.finish(finalUsage, config.model);
+    if (usage) options.onUsage?.(usage);
     return {
       text: answer.trim(),
       adapter: `gemini:${config.model}`,
