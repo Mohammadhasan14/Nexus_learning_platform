@@ -5,6 +5,7 @@ import { tutorConfig } from "@/modules/tutor/server-only";
 import { tutorInput } from "@/modules/tutor/adapter";
 import { runLiveResponse } from "@/modules/tutor/live-response";
 import { tutorReplySchema } from "@/modules/reports/schema";
+import { tokenAllowanceSchema, tokenUsageSchema } from "@/modules/tutor/usage";
 import type { TutorEvent } from "@/modules/tutor/stream";
 
 export const runtime = "nodejs";
@@ -21,6 +22,8 @@ const errorResponse = (message: string, status: number) =>
   );
 const claimSchema = z.object({
   allowed: z.boolean(),
+  tokenReserved: z.number().int().positive().optional(),
+  tokens: tokenAllowanceSchema.optional(),
   reason: z.string().optional(),
   remaining: z.number().optional(),
   lesson: z.string().optional(),
@@ -92,7 +95,12 @@ export async function POST(request: Request) {
       403,
     );
   const saved = z
-    .object({ reply: tutorReplySchema, remaining: z.number() })
+    .object({
+      reply: tutorReplySchema,
+      remaining: z.number(),
+      usage: tokenUsageSchema.nullish(),
+      tokens: tokenAllowanceSchema.optional(),
+    })
     .safeParse(previous);
   if (saved.success)
     return new Response(
@@ -114,14 +122,20 @@ export async function POST(request: Request) {
   const r = parsed.data;
   if (!r.allowed)
     return errorResponse(
-      r.reason === "replay"
-        ? "This request was already used and has no completed reply. Choose another guidance option for a new request."
-        : r.reason === "limit"
-          ? "Today’s tutor allowance is used up. It resets at midnight UTC. Lessons remain available."
-          : "The tutor is disabled. Lessons remain available.",
+      r.reason === "tokens_limit"
+        ? "Today’s AI token allowance is used up or reserved by unfinished requests. It resets at midnight UTC. Lessons remain available."
+        : r.reason === "tokens_disabled"
+          ? "Live AI is paused. Continue with the lesson and practice feedback."
+          : r.reason === "replay"
+            ? "This request was already used and has no completed reply. Choose another guidance option for a new request."
+            : r.reason === "limit"
+              ? "Today’s tutor allowance is used up. It resets at midnight UTC. Lessons remain available."
+              : "The tutor is disabled. Lessons remain available.",
       409,
     );
   if (
+    !r.tokenReserved ||
+    !r.tokens ||
     !r.lesson ||
     !r.course ||
     !r.title ||
@@ -146,12 +160,19 @@ export async function POST(request: Request) {
   const abort = () => controller.abort();
   request.signal.addEventListener("abort", abort, { once: true });
   if (request.signal.aborted) abort();
+  let tokens = r.tokens;
   const encoder = new TextEncoder();
   const body = new ReadableStream<Uint8Array>({
     async start(output) {
       const send = (event: TutorEvent) => {
         controller.signal.throwIfAborted();
-        output.enqueue(encoder.encode(JSON.stringify(event) + "\n"));
+        output.enqueue(
+          encoder.encode(
+            JSON.stringify(
+              event.type === "done" ? { ...event, tokens } : event,
+            ) + "\n",
+          ),
+        );
       };
       try {
         await runLiveResponse({
@@ -162,6 +183,7 @@ export async function POST(request: Request) {
           request: input.request,
           signingKey,
           remaining: r.remaining,
+          reservedTokens: r.tokenReserved,
           signal: controller.signal,
           emit: send,
           persist: async (signed) => {
@@ -169,6 +191,9 @@ export async function POST(request: Request) {
               request: input.request,
               ...signed,
             });
+            const overview = await client.rpc("get_tutor_usage");
+            const checked = tokenAllowanceSchema.safeParse(overview.data);
+            if (checked.success) tokens = checked.data;
             return !result.error && result.data === true;
           },
         });
