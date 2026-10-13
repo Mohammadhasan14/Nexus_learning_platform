@@ -1,6 +1,6 @@
 # Nexus Learning
 
-Next.js learning platform with a public homepage, accounts, onboarding, learner dashboard, versioned lessons, protected grading and saved progress. Phase 3 is complete with an explicitly AI-assisted editorial review of the introductory course. AI tutor and payments remain later work.
+Next.js learning platform with a public homepage, accounts, onboarding, learner dashboard, versioned lessons, protected grading and saved progress. The introductory course has an explicitly AI-assisted editorial review. Prepared guidance and an opt-in local Gemini tutor are available; payments remain future work.
 
 ## Preview without a backend
 
@@ -67,7 +67,7 @@ The workspace's canonical task register and handoff live in `../docs/features.cs
 
 Run `TUTOR_MODE=scripted npm run dev -- --webpack` after applying local migrations to enable prepared guidance on reviewed v2 lessons. The tutor is clearly labelled, links to its lesson source, and makes no external AI calls. Unset the variable or use `TUTOR_MODE=disabled` for the lesson-only fallback.
 
-Demo allowances are 20 requests per learner and 1,000 globally per UTC day, enforced atomically in PostgreSQL with idempotent retries. These are request units, not live spending limits. `npm run test:tutor` runs the fixed scripted evaluations and isolated quota/reconciliation tests; the real integration suite adds browser and concurrent quota checks. See [Phase 4 setup](../docs/PHASE_4_SETUP.md). Local live streaming and bounded real-model evaluations are now available as described below; token/currency controls remain pending.
+Demo allowances are 20 requests per learner and 1,000 globally per UTC day, enforced atomically in PostgreSQL with idempotent retries. These are request units, not live spending limits. `npm run test:tutor` runs the fixed scripted evaluations and isolated quota/reconciliation tests; the real integration suite adds browser and concurrent quota checks. See [Phase 4 setup](../docs/PHASE_4_SETUP.md). Local live streaming, token accounting and bounded real-model evaluations are available as described below; monetary controls remain pending.
 
 ## Phase 5 projects and reviews
 
@@ -114,7 +114,16 @@ existing staff-review retention policy.
 
 Other providers still need adapters; adding a key alone does not enable them.
 See [setup and limitations](../docs/LIVE_TUTOR_SETUP.md). Scripted mode remains
-available; paid/hosted AI and token/currency controls remain unimplemented.
+available; paid/hosted AI and monetary controls remain unimplemented.
+
+Live dispatch reserves 65,536 tokens atomically against daily allowances of
+250,000 per learner and 5,000,000 globally. A completed, server-signed receipt
+reconciles validated final provider usage once. Unknown, interrupted or cancelled
+usage retains the reservation; measured overruns are charged in full and pause
+new live requests. After guidance, the lesson tutor shows reported usage and the
+learner's remaining allowance. These are app token controls, not currency budgets
+or Gemini quota guarantees. See the repository's
+[token accounting and local operator guide](docs/tutor-token-accounting.md).
 
 Run `npm run eval:tutor` to inspect the fixed tutor evaluation cases without
 calling a provider. `npm run eval:tutor -- --live` explicitly evaluates the
