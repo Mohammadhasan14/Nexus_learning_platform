@@ -141,6 +141,19 @@ test("offline stream UI: cancellation, recovery, fallback and incomplete output"
               reply,
               remaining: 19,
               saved: scenario === "saved",
+              usage:
+                scenario === "saved"
+                  ? {
+                      input: 100,
+                      output: 20,
+                      thoughts: 5,
+                      cached: 10,
+                      total: 125,
+                      model: "gemini-3.1-flash-lite",
+                      promptVersion: "lesson-guidance-3",
+                    }
+                  : null,
+              tokens: { limit: 250000, charged: 65661, remaining: 184339 },
             }) + "\n");
       await route.fulfill({ contentType: "application/x-ndjson", body });
     });
@@ -160,6 +173,10 @@ test("offline stream UI: cancellation, recovery, fallback and incomplete output"
     await panel.getByRole("button", { name: "Recover saved reply" }).click();
     await expect(panel.getByText(/Synthetic saved guidance/)).toBeVisible();
     expect(lastRequest).toBe(cancelledKey);
+    await expect(panel.getByText(/Provider reported 100 input/)).toBeVisible();
+    await expect(
+      panel.getByText(/184,339 of 250,000 daily AI tokens left/),
+    ).toBeVisible();
     await expect(
       panel.getByText("Report this tutor response", { exact: true }),
     ).toBeVisible();
@@ -185,6 +202,9 @@ test("offline stream UI: cancellation, recovery, fallback and incomplete output"
       panel.getByText("AI UNAVAILABLE · PREPARED GUIDANCE", { exact: true }),
     ).toBeVisible();
     await expect(panel.getByText(/reply could not be saved/)).toBeVisible();
+    await expect(
+      panel.getByText(/Provider token usage was unavailable/),
+    ).toBeVisible();
     await page.emulateMedia({ reducedMotion: "reduce" });
     for (const width of [320, 768, 1440]) {
       await page.setViewportSize({ width, height: 960 });

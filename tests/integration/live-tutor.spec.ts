@@ -110,6 +110,30 @@ test("opt-in live tutor: browser guidance, privacy, concurrent claims and respon
     expect((cached.data as { reply: { text: string } }).reply.text).toBe(
       visibleReply,
     );
+    const tokenReceipt = cached.data as {
+      usage: {
+        input: number;
+        output: number;
+        thoughts: number;
+        total: number;
+      } | null;
+      tokens: { charged: number; limit: number };
+    };
+    if (tokenReceipt.usage) {
+      expect(tokenReceipt.usage.total).toBe(
+        tokenReceipt.usage.input +
+          tokenReceipt.usage.output +
+          tokenReceipt.usage.thoughts,
+      );
+      await expect(panel.getByText(/Provider reported/)).toBeVisible();
+    } else
+      await expect(
+        panel.getByText(/Provider token usage was unavailable/),
+      ).toBeVisible();
+    expect(tokenReceipt.tokens.charged).toBe(
+      65536 + (tokenReceipt.usage?.total ?? 65536),
+    );
+    await expect(panel.getByText(/250,000 daily AI tokens left/)).toBeVisible();
     expect(
       (
         await learner.rpc("claim_live_tutor", {
@@ -185,6 +209,8 @@ test("opt-in live tutor: browser guidance, privacy, concurrent claims and respon
           adapter: (cached.data as { reply: { adapter: string } }).reply
             .adapter,
           completedReceiptSaved: true,
+          tokenUsage: tokenReceipt.usage,
+          tokenAllowance: tokenReceipt.tokens,
           exactReportVerified: true,
           cachedRecoveryVerified: true,
           singleUseClaimVerified: true,

@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ReportForm } from "@/components/reports/report-form";
 import { tutorEvents } from "@/modules/tutor/stream";
+import type { TokenUsage, TokenAllowance } from "@/modules/tutor/usage";
 import type { TutorReply } from "@/modules/tutor/adapter";
 
 type State = {
@@ -10,6 +11,8 @@ type State = {
   reply?: TutorReply;
   remaining?: number;
   saved?: boolean;
+  usage?: TokenUsage | null;
+  tokens?: TokenAllowance;
 };
 export function LiveTutorPanel({
   lesson,
@@ -63,6 +66,8 @@ export function LiveTutorPanel({
             reply: next.reply,
             remaining: next.remaining,
             saved: next.saved,
+            usage: next.usage,
+            tokens: next.tokens,
           });
         } else {
           feedback = next.message;
@@ -162,6 +167,29 @@ export function LiveTutorPanel({
           <p>
             {state.remaining} tutor requests left today. Resets at midnight UTC.
           </p>
+          {state.usage ? (
+            <p>
+              Provider reported {state.usage.input.toLocaleString()} input and{" "}
+              {state.usage.output.toLocaleString()} response tokens
+              {state.usage.thoughts > 0
+                ? `, plus ${state.usage.thoughts.toLocaleString()} thinking tokens`
+                : ""}
+              ; {state.usage.total.toLocaleString()} total.
+            </p>
+          ) : (
+            <p>
+              Provider token usage was unavailable. Unknown or interrupted
+              requests keep their token reservation.
+            </p>
+          )}
+          {state.tokens && (
+            <p>
+              {state.tokens.remaining.toLocaleString()} of{" "}
+              {state.tokens.limit.toLocaleString()} daily AI tokens left. This
+              app allowance resets at midnight UTC and is separate from Gemini’s
+              limits.
+            </p>
+          )}
           {state.saved ? (
             <ReportForm lesson={lesson} request={key} tutorRequest={key} />
           ) : (
