@@ -2,12 +2,14 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { createClient } from "@supabase/supabase-js";
 import { randomUUID } from "node:crypto";
+import { mkdir, writeFile } from "node:fs/promises";
 import { localSupabase } from "../../scripts/local-supabase";
 
 test("offline stream UI: cancellation, recovery, fallback and incomplete output", async ({
   page,
   request: anonymous,
 }) => {
+  test.setTimeout(60000);
   test.skip(
     process.env.TUTOR_MODE !== "live",
     "Requires live UI; provider route is intercepted with labelled synthetic fixtures.",
@@ -107,7 +109,11 @@ test("offline stream UI: cancellation, recovery, fallback and incomplete output"
       release = resolve;
     });
     let lastRequest: string | undefined;
-    let scenario: "waiting" | "saved" | "truncated" | "fallback" = "waiting";
+    let scenario:
+      "waiting" | "saved" | "truncated" | "fallback" | "adversarial" =
+      "waiting";
+    const hostileText =
+      'Synthetic adversarial fixture: <img src=x onerror="window.nexusAdversarialExecuted=true"><script>window.nexusAdversarialExecuted=true</script> javascript:alert(1) https://untrusted.example.test/answer';
     await page.route("**/api/tutor", async (route) => {
       const input = route.request().postDataJSON();
       lastRequest = input.request;
@@ -118,9 +124,11 @@ test("offline stream UI: cancellation, recovery, fallback and incomplete output"
       }
       const reply = {
         text:
-          scenario === "fallback"
-            ? "Synthetic prepared fallback."
-            : "Synthetic saved guidance.\nRead each line.",
+          scenario === "adversarial"
+            ? hostileText
+            : scenario === "fallback"
+              ? "Synthetic prepared fallback."
+              : "Synthetic saved guidance.\nRead each line.",
         adapter:
           scenario === "fallback"
             ? "scripted-live-fallback-1"
@@ -205,6 +213,31 @@ test("offline stream UI: cancellation, recovery, fallback and incomplete output"
     await expect(
       panel.getByText(/Provider token usage was unavailable/),
     ).toBeVisible();
+    scenario = "adversarial";
+    await panel.getByLabel("What would help?").selectOption("reflect");
+    await panel.getByRole("button", { name: "Ask lesson tutor" }).click();
+    await expect(panel.locator(".tutor-response-text")).toHaveText(hostileText);
+    await expect(
+      panel.locator(".tutor-reply img, .tutor-reply script"),
+    ).toHaveCount(0);
+    expect(
+      await page.evaluate(() =>
+        Reflect.get(window, "nexusAdversarialExecuted"),
+      ),
+    ).toBeUndefined();
+    await expect(
+      panel.getByRole("link", { name: "Source: Values" }),
+    ).toHaveAttribute(
+      "href",
+      "/courses/javascript-foundations-v2/js-v2-values",
+    );
+    await expect(
+      panel.locator(
+        'a[href*="untrusted.example.test"], a[href^="javascript:"]',
+      ),
+    ).toHaveCount(0);
+    const verification = "../docs/verification/tutor-resilience";
+    await mkdir(verification, { recursive: true });
     await page.emulateMedia({ reducedMotion: "reduce" });
     for (const width of [320, 768, 1440]) {
       await page.setViewportSize({ width, height: 960 });
@@ -214,7 +247,32 @@ test("offline stream UI: cancellation, recovery, fallback and incomplete output"
         ),
       ).toBe(true);
       expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+      await page.screenshot({
+        path: `${verification}/adversarial-${width}.png`,
+        fullPage: true,
+      });
     }
+    await writeFile(
+      `${verification}/browser.json`,
+      JSON.stringify(
+        {
+          verifiedAt: new Date().toISOString(),
+          fixture: "Synthetic intercepted response; no provider calls",
+          inertMarkup: true,
+          providerUrlsNotLinked: true,
+          trustedSource: true,
+          cancelledRecoverySameKey: true,
+          preparedFallback: true,
+          partialDiscarded: true,
+          widths: [320, 768, 1440],
+          axeViolations: 0,
+          overflow: false,
+          reducedMotion: true,
+        },
+        null,
+        2,
+      ) + "\n",
+    );
   } finally {
     await learner.auth.signOut();
     expect((await admin.auth.admin.deleteUser(data.user!.id)).error).toBeNull();

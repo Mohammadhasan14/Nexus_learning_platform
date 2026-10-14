@@ -1,6 +1,12 @@
 # Tutor evaluations — NX-022.2
 
-These cases test the current **bounded-intent** Gemini tutor. No free-form student reasoning, uploaded document ingestion or streaming exists. The suite is an opt-in operator tool, not a learner endpoint or independent safety certification.
+These cases test the current **bounded-intent** Gemini tutor. The real-model collection tool uses the non-streaming adapter; the application supports streaming separately. No free-form student reasoning or uploaded document ingestion exists. The suite is an opt-in operator tool, not a learner endpoint or independent safety certification.
+
+The separate [offline streaming regressions](streaming-regressions.md) cover
+transport failures, cancellation, receipt races and adversarial rendering. Run
+`npm run eval:tutor:streams` without a provider key or Docker; it uses synthetic
+responses, an isolated database and two loopback HTTP tests. These tests do not
+count as real-model semantic approval.
 
 ## Run
 
@@ -34,6 +40,6 @@ The review found misleading assignment/const explanations and requests for conte
 
 ## Remaining scope
 
-NX-022 remains partial against the broader build guide: submitted wrong student reasoning is unavailable under the present input contract; evaluate it when such an interface is implemented. Streaming/disconnect fallback tests depend on NX-020. Learner/human validation and broader adversarial/ambiguity/language samples remain future release evidence. Token/currency reconciliation belongs to NX-021. Actual live-response reporting still needs trusted receipts.
+NX-022 remains partial against the broader build guide: submitted wrong student reasoning is unavailable under the present input contract; evaluate it when such an interface is implemented. NX-020.2 supplies streaming and trusted response receipts; NX-021.3 supplies local token accounting. NX-022.3 adds fixed transport, receipt-race and adversarial-boundary regressions. Hosted proxy disconnects, learner/human validation and broader real-model adversarial/ambiguity/language samples remain future release evidence. Currency controls remain in NX-021. This operator quality runner still bypasses learner token reservations.
 
 References: [build guide](../../../Nexus_Learning_Build_Guide.md), [Google safety guidance](https://ai.google.dev/gemini-api/docs/safety-guidance), [rate-limit documentation](https://ai.google.dev/gemini-api/docs/rate-limits). Model output can vary across runs; preserve the failed and passing evidence rather than overwriting it.
