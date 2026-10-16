@@ -43,6 +43,10 @@ next-env.d.ts
 /playwright-report/
 /test-results/
 
+# Local historical evidence; keep large archives out of commits.
+/.local-archive/
+/docs/verification/
+
 !.env.example
 /supabase/.temp/
 /supabase/.branches/

@@ -107,7 +107,7 @@ test("local learner enrols, retries practice and reloads saved evidence", async 
     await expect(page.getByText("Correct.", { exact: true })).toBeVisible();
     await page.reload();
     await expect(page.getByText("Passed ·", { exact: false })).toBeVisible();
-    await mkdir("../docs/verification/phase3", { recursive: true });
+    await mkdir("test-results/verification/phase3", { recursive: true });
     for (const width of [320, 768, 1440]) {
       await page.setViewportSize({ width, height: 900 });
       expect(
@@ -125,7 +125,7 @@ test("local learner enrols, retries practice and reloads saved evidence", async 
         window.scrollTo(0, 0);
       });
       await page.screenshot({
-        path: `../docs/verification/phase3/lesson-v2-${width}.png`,
+        path: `test-results/verification/phase3/lesson-v2-${width}.png`,
         fullPage: true,
       });
     }

@@ -150,5 +150,6 @@ recorded adapter and usage before claiming actual provider success. The operator
 evaluation runner (`npm run eval:tutor -- --live`) has its own bounded case count
 and does not use learner database token reservations. Hosted proxy disconnects,
 monetary controls, other providers and independent human/pilot safety validation
-remain separate work. Workspace verification and canonical progress records live
-in `../docs/`; they are outside this application Git repository.
+remain separate work. [Current progress](PROGRESS.md) is versioned under `docs/`;
+[dated verification is available in the local archive](README.md#historical-evidence).
+New browser evidence is written to ignored `test-results/verification/`.

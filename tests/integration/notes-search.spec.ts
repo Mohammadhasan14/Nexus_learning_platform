@@ -135,7 +135,7 @@ test("private notes survive retries and conflicts; search and command menu respe
     );
     await note.getByRole("button", { name: "Save note", exact: true }).click();
     await expect(note.getByRole("status")).toContainText("revision 6");
-    await mkdir("../docs/verification/phase5-notes-search", {
+    await mkdir("test-results/verification/phase5-notes-search", {
       recursive: true,
     });
     for (const width of [320, 768, 1440]) {
@@ -148,7 +148,7 @@ test("private notes survive retries and conflicts; search and command menu respe
       ).toBe(true);
       expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
       await page.screenshot({
-        path: `../docs/verification/phase5-notes-search/notes-${width}.png`,
+        path: `test-results/verification/phase5-notes-search/notes-${width}.png`,
         fullPage: true,
       });
     }
@@ -228,7 +228,7 @@ test("private notes survive retries and conflicts; search and command menu respe
       ).toBe(true);
       expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
       await page.screenshot({
-        path: `../docs/verification/phase5-notes-search/search-${width}.png`,
+        path: `test-results/verification/phase5-notes-search/search-${width}.png`,
         fullPage: true,
       });
     }
@@ -249,7 +249,7 @@ test("private notes survive retries and conflicts; search and command menu respe
       ).toBe(true);
       expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
       await page.screenshot({
-        path: `../docs/verification/phase5-notes-search/command-${width}.png`,
+        path: `test-results/verification/phase5-notes-search/command-${width}.png`,
         fullPage: true,
       });
     }

@@ -185,7 +185,8 @@ test("opt-in live tutor: browser guidance, privacy, concurrent claims and respon
     });
     expect(injected.status()).toBe(400);
     const output =
-      process.env.TUTOR_VERIFICATION_DIR || "../docs/verification/live-tutor";
+      process.env.TUTOR_VERIFICATION_DIR ||
+      "test-results/verification/live-tutor";
     await mkdir(output, { recursive: true });
     await page.emulateMedia({ reducedMotion: "reduce" });
     for (const width of [320, 768, 1440]) {

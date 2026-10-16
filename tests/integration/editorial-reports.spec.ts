@@ -209,7 +209,9 @@ insert into learning_private.answer_keys(exercise_id,answer,hint,explanation) se
     await expect(
       page.getByText(/Staff update: Checked the saved version/),
     ).toBeVisible();
-    await mkdir("../docs/verification/phase5-editorial", { recursive: true });
+    await mkdir("test-results/verification/phase5-editorial", {
+      recursive: true,
+    });
     for (const [name, p] of [
       ["reports", page],
       ["admin", staffPage],
@@ -238,7 +240,7 @@ insert into learning_private.answer_keys(exercise_id,answer,hint,explanation) se
           (await new AxeBuilder({ page: p }).analyze()).violations,
         ).toEqual([]);
         await p.screenshot({
-          path: `../docs/verification/phase5-editorial/${name}-${width}.png`,
+          path: `test-results/verification/phase5-editorial/${name}-${width}.png`,
           fullPage: true,
         });
       }

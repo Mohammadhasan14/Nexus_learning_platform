@@ -1,0 +1,61 @@
+name: Application checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Code, database and browser checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run check
+
+  local-supabase:
+    name: Local Supabase integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      TUTOR_MODE: scripted
+      LIVE_TUTOR_SMOKE: "false"
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run db:start
+      # This reset targets only the disposable database on the CI runner.
+      - run: npm run db:reset
+      - run: npm run db:env
+      - run: npm run tutor:receipts:setup
+      - run: npm run db:test:local
+      - run: npm run db:types:check
+      - run: npm run build
+      - run: npm run test:integration
+      - if: always()
+        run: npm run db:stop

@@ -101,7 +101,7 @@ test(
         .getByRole("button", { name: "Get scripted guidance" })
         .click();
       await expect(panel.getByText(/new value is 7/)).toBeVisible();
-      await mkdir("../docs/verification/phase4", { recursive: true });
+      await mkdir("test-results/verification/phase4", { recursive: true });
       for (const width of [320, 768, 1440]) {
         await page.setViewportSize({ width, height: 900 });
         await expect
@@ -115,7 +115,7 @@ test(
           [],
         );
         await page.screenshot({
-          path: `../docs/verification/phase4/tutor-${width}.png`,
+          path: `test-results/verification/phase4/tutor-${width}.png`,
           fullPage: true,
         });
       }

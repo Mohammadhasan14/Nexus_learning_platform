@@ -135,7 +135,9 @@ test("private outcomes record atomic attempts and distinguish delayed evidence",
         () => getComputedStyle(document.documentElement).scrollBehavior,
       ),
     ).toBe("auto");
-    await mkdir("../docs/verification/phase5-outcomes", { recursive: true });
+    await mkdir("test-results/verification/phase5-outcomes", {
+      recursive: true,
+    });
     for (const width of [320, 768, 1440]) {
       await page.setViewportSize({ width, height: 900 });
       expect(
@@ -145,7 +147,7 @@ test("private outcomes record atomic attempts and distinguish delayed evidence",
       ).toBe(true);
       expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
       await page.screenshot({
-        path: `../docs/verification/phase5-outcomes/outcomes-${width}.png`,
+        path: `test-results/verification/phase5-outcomes/outcomes-${width}.png`,
         fullPage: true,
       });
     }

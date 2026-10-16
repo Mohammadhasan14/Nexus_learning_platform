@@ -4,10 +4,9 @@ Next.js learning platform with a public homepage, accounts, onboarding, learner 
 
 ## Preview without a backend
 
-Use Node 24 (tested with 24.19.0). From the workspace root:
+Use Node 24 (tested with 24.19.0). Run from the repository root (the directory containing `package.json`):
 
 ```sh
-cd nexus_learning_platform
 npm ci
 npm run dev -- --webpack
 ```
@@ -18,7 +17,7 @@ The supported webpack build avoids this workspace's Turbopack internal-port rest
 
 ## Enable local accounts
 
-See [Phase 2 setup](../docs/PHASE_2_SETUP.md) for Docker/Supabase setup, email confirmation, environment boundaries and verification limitations. No hosted services are required. Real local Supabase integration is verified; see [Phase 3 setup](../docs/PHASE_3_SETUP.md).
+See [Phase 2 setup](docs/PHASE_2_SETUP.md) for Docker/Supabase setup, email confirmation, environment boundaries and verification limitations. No hosted services are required. Real local Supabase integration is verified; see [Phase 3 setup](docs/PHASE_3_SETUP.md).
 
 ```sh
 npm run db:start
@@ -50,10 +49,10 @@ With real local Supabase running, separately run `npm run db:test:local`, `npm r
 - `modules/profile/`: validated preference updates and timezone options.
 - `supabase/`: versioned migrations, local config, confirmation template and real pgTAP checks.
 - `tests/`: public, fixture-backed account, isolated SQL and real local integration suites.
-- `../docs/features.csv`: canonical feature register; spreadsheets do not synchronise automatically.
-- `../docs/PROGRESS.md`, `../docs/DECISIONS.md`: handoff state and architecture decisions.
+- [Feature register](docs/features.csv): canonical task tracking; spreadsheets do not synchronise automatically.
+- [Current progress](docs/PROGRESS.md), [decisions](docs/DECISIONS.md), and [documentation index](docs/README.md): handoff, architecture and setup guides.
 
-Root GitHub Actions configuration includes local checks and a separate local-Supabase job. Neither remote CI execution nor branch protection is claimed. No deployment workflow is included.
+[GitHub Actions](.github/workflows/ci.yml) runs repository-rooted checks and a separate local-Supabase job, with immutable action versions and no external AI calls. See [CI setup and limits](docs/CI.md). Remote execution and branch protection remain unverified; no deployment workflow is included.
 
 ## Phase 3 learning
 
@@ -61,25 +60,25 @@ After signing in and completing onboarding, open `/courses`. Local Supabase prov
 
 Apply new local migrations with `npx supabase migration up --local` without resetting existing records. Run `npm run db:types` after schema changes; type generation now uses the running local provider. `npm run check` is Docker-independent; `npm run db:test:local`, `npm run db:types:check`, and `npm run test:integration` require Docker/Supabase. Browser suites have separate result directories.
 
-The workspace's canonical task register and handoff live in `../docs/features.csv` and `../docs/PROGRESS.md`; the editorial review record is in `../docs/PHASE_3_CONTENT_REVIEW.md`. These workspace files are outside this app Git repository. Live AI requires separate instruction.
+The canonical task register and handoff are versioned in this repository under `docs/`; see the [editorial review record](docs/PHASE_3_CONTENT_REVIEW.md) for course evidence. Parent-workspace copies are legacy snapshots. Live AI requires separate instruction.
 
 ## Phase 4 scripted tutor
 
 Run `TUTOR_MODE=scripted npm run dev -- --webpack` after applying local migrations to enable prepared guidance on reviewed v2 lessons. The tutor is clearly labelled, links to its lesson source, and makes no external AI calls. Unset the variable or use `TUTOR_MODE=disabled` for the lesson-only fallback.
 
-Demo allowances are 20 requests per learner and 1,000 globally per UTC day, enforced atomically in PostgreSQL with idempotent retries. These are request units, not live spending limits. `npm run test:tutor` runs the fixed scripted evaluations and isolated quota/reconciliation tests; the real integration suite adds browser and concurrent quota checks. See [Phase 4 setup](../docs/PHASE_4_SETUP.md). Local live streaming, token accounting and bounded real-model evaluations are available as described below; monetary controls remain pending.
+Demo allowances are 20 requests per learner and 1,000 globally per UTC day, enforced atomically in PostgreSQL with idempotent retries. These are request units, not live spending limits. `npm run test:tutor` runs the fixed scripted evaluations and isolated quota/reconciliation tests; the real integration suite adds browser and concurrent quota checks. See [Phase 4 setup](docs/PHASE_4_SETUP.md). Local live streaming, token accounting and bounded real-model evaluations are available as described below; monetary controls remain pending.
 
 ## Phase 5 projects and reviews
 
 Apply local migrations, then open `/reviews` and `/projects` after signing in. Reviews follow the latest saved practice result using your timezone: one calendar day after an incorrect answer, three after a correct answer. No daily job is required.
 
-Passing all JavaScript v2 practice checks unlocks the study-planner project. Save private milestone revisions against rubric v1, retain earlier submissions and get clearly labelled completeness feedback. This is not correctness grading; submitted code is never executed. Stale saves report a conflict and keep your text. The dashboard shows your due count and saved project revision. See [Phase 5 setup](../docs/PHASE_5_SETUP.md).
+Passing all JavaScript v2 practice checks unlocks the study-planner project. Save private milestone revisions against rubric v1, retain earlier submissions and get clearly labelled completeness feedback. This is not correctness grading; submitted code is never executed. Stale saves report a conflict and keep your text. The dashboard shows your due count and saved project revision. See [Phase 5 setup](docs/PHASE_5_SETUP.md).
 
 Live AI is local-only and explicitly opt-in. The isolated runner remains a separate Phase 5 backlog item.
 
 ## Editorial workspace and reports
 
-Learners can report a lesson or an exact saved scripted/live tutor response and follow updates at `/reports`. Trusted editors/admins use `/admin` to revise lesson text, record review, publish a new immutable course version and triage reports. Role checks and audit records are enforced in PostgreSQL. Existing learner evidence stays with its original content version. No real staff account is auto-promoted. See [staff setup and scope](../docs/EDITORIAL_REPORTING_SETUP.md).
+Learners can report a lesson or an exact saved scripted/live tutor response and follow updates at `/reports`. Trusted editors/admins use `/admin` to revise lesson text, record review, publish a new immutable course version and triage reports. Role checks and audit records are enforced in PostgreSQL. Existing learner evidence stays with its original content version. No real staff account is auto-promoted. See [staff setup and scope](docs/EDITORIAL_REPORTING_SETUP.md).
 
 ## Private notes and search
 
@@ -87,11 +86,11 @@ On an unlocked lesson, write a **Private lesson note** and select **Save note** 
 
 Open `/search` or **Quick search** (Ctrl/Cmd+K) to find workspace actions and unlocked lessons. Lesson search requires two characters; it uses literal case-insensitive matching, shows up to 20 lesson matches with course versions, and suggests narrowing broad queries. Submit with Enter, Tab through results, Enter to open, and Escape to close the command menu. Private notes, draft content and grading keys are excluded. The dedicated search page keeps its query in the URL.
 
-Apply `npx supabase migration up --local`, then `npm run dev -- --webpack`. See [notes/search setup](../docs/NOTES_SEARCH_SETUP.md) for privacy, retry behaviour and verification. No extra dependency, search service or live AI provider is needed.
+Apply `npx supabase migration up --local`, then `npm run dev -- --webpack`. See [notes/search setup](docs/NOTES_SEARCH_SETUP.md) for privacy, retry behaviour and verification. No extra dependency, search service or live AI provider is needed.
 
 ## Learning outcomes
 
-Open `/outcomes` after signing in to inspect private, server-derived attempt metadata and course-version measures. First checks without recorded feedback/tutor use are explicitly an independence proxy; repeat checks after 24 elapsed hours are not proof of mastery on unseen tasks. Empty denominators show insufficient evidence. Events start with this migration; no historical events are fabricated, and no raw answer, code, notes or chat is copied into analytics. See [outcomes setup and definitions](../docs/OUTCOMES_SETUP.md).
+Open `/outcomes` after signing in to inspect private, server-derived attempt metadata and course-version measures. First checks without recorded feedback/tutor use are explicitly an independence proxy; repeat checks after 24 elapsed hours are not proof of mastery on unseen tasks. Empty denominators show insufficient evidence. Events start with this migration; no historical events are fabricated, and no raw answer, code, notes or chat is copied into analytics. See [outcomes setup and definitions](docs/OUTCOMES_SETUP.md).
 
 ## Local live tutor pilot
 
@@ -113,7 +112,7 @@ quote. Account deletion removes receipts; submitted report snapshots keep their
 existing staff-review retention policy.
 
 Other providers still need adapters; adding a key alone does not enable them.
-See [setup and limitations](../docs/LIVE_TUTOR_SETUP.md). Scripted mode remains
+See [setup and limitations](docs/LIVE_TUTOR_SETUP.md). Scripted mode remains
 available; paid/hosted AI and monetary controls remain unimplemented.
 
 Live dispatch reserves 65,536 tokens atomically against daily allowances of

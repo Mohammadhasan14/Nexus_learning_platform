@@ -236,7 +236,7 @@ test("offline stream UI: cancellation, recovery, fallback and incomplete output"
         'a[href*="untrusted.example.test"], a[href^="javascript:"]',
       ),
     ).toHaveCount(0);
-    const verification = "../docs/verification/tutor-resilience";
+    const verification = "test-results/verification/tutor-resilience";
     await mkdir(verification, { recursive: true });
     await page.emulateMedia({ reducedMotion: "reduce" });
     for (const width of [320, 768, 1440]) {

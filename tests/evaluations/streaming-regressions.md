@@ -76,9 +76,11 @@ removal, prepared fallback, keyboard controls, axe, reduced motion and overflow
 at 320/768/1440. The real accounting RPC case confirms denied AI requests still
 allow protected grading. Earlier scripted/disabled regressions remain separate.
 
-Browser records/screenshots live in workspace `../docs/verification/tutor-resilience/`,
-outside app Git. Tests use disposable local accounts and delete them. No
-credential/configuration change or learner promotion is required.
+New browser records/screenshots are written to ignored
+`test-results/verification/tutor-resilience/` inside the repository. The
+[historical verification archive](../../docs/README.md#historical-evidence)
+is kept in an ignored local ZIP. Tests use disposable local accounts and delete
+them. No credential/configuration change or learner promotion is required.
 
 ## Limits and next evidence
 

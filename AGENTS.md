@@ -7,3 +7,10 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Project handoff
+
+Read `docs/PROGRESS.md`, `docs/features.csv` and `docs/DECISIONS.md` before
+continuing implementation. `docs/README.md` indexes setup guides and evidence.
+These repository files are canonical; parent-workspace documents and archived
+handoffs describe earlier states. Run package commands from this repository root.

@@ -177,7 +177,7 @@ test("projects keep private revisions and reviews follow saved practice", async 
       [],
     );
     expect((await other.from("review_schedule").select("*")).data).toEqual([]);
-    await mkdir("../docs/verification/phase5", { recursive: true });
+    await mkdir("test-results/verification/phase5", { recursive: true });
     for (const route of ["projects", "reviews"]) {
       await page.goto(`/${route}`);
       for (const width of [320, 768, 1440]) {
@@ -191,7 +191,7 @@ test("projects keep private revisions and reviews follow saved practice", async 
           [],
         );
         await page.screenshot({
-          path: `../docs/verification/phase5/${route}-${width}.png`,
+          path: `test-results/verification/phase5/${route}-${width}.png`,
           fullPage: true,
         });
       }
