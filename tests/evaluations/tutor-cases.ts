@@ -3,7 +3,7 @@ import type { TutorIntent } from "../../modules/tutor/adapter";
 
 export type EvaluationCase = {
   id: string;
-  kind: "accuracy" | "uncertainty" | "injection";
+  kind: "accuracy" | "uncertainty" | "injection" | "ambiguity" | "clarity";
   context: ReviewedContext;
   intent: TutorIntent;
   rubric: string[];
