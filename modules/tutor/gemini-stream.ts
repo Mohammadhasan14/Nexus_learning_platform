@@ -7,6 +7,7 @@ import {
   type TutorReply,
 } from "./adapter";
 import { tutorSystemInstruction } from "./prompt";
+import { completeGuidanceText } from "./guidance-text";
 import { sseObjects } from "./stream";
 import { UsageTracker, type TokenUsage } from "./usage";
 
@@ -132,7 +133,7 @@ export async function streamGemini(
     const usage = usageTracker.finish(finalUsage, config.model);
     if (usage) options.onUsage?.(usage);
     return {
-      text: answer.trim(),
+      text: completeGuidanceText(answer),
       adapter: `gemini:${config.model}`,
       source: {
         title: checked.title,

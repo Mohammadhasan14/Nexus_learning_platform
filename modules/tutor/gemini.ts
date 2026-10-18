@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { tutorSystemInstruction } from "./prompt";
+import { completeGuidanceText } from "./guidance-text";
 import {
   scriptedTutor,
   tutorInput,
@@ -115,7 +116,7 @@ export async function geminiGuidance(
       .trim();
     if (!answer || answer.length > 6000) throw new Error("Invalid response");
     return {
-      text: answer,
+      text: completeGuidanceText(answer),
       adapter: `gemini:${config.model}`,
       source: {
         title: context.title,
