@@ -229,3 +229,52 @@ point historical evidence references to [archive instructions](README.md#histori
 and preserve original member paths in feature notes. New browser output remains
 in ignored `test-results/verification/`. This changes no task acceptance criteria,
 dependencies or status, and includes no staging, commit or push.
+
+## 2026-10-17 — Extended tutor evaluation and CI verification limits
+
+Keep the original 16-case non-streaming suite and reviewed reports unchanged.
+Add a separate, explicitly selected 16-case extended suite using the same
+streaming adapter as the lesson tutor: four ambiguous-reference cases, four
+beginner-English clarity cases and eight adversarial-reference cases across
+lesson fields. This adds no learner input contract, multilingual UI, provider
+adapter or model/prompt upgrade. Reports identify suite/version, configured model
+alias, prompt/adapter/case hashes and validated final usage where available.
+
+The collector persists uncertain attempts before network dispatch, permits at
+most one dispatch per case and sixteen per run, paces sequentially, and stops on
+first unavailable reply. Dry mode makes no provider calls. Fallback and Not run
+remain pending, while actual live replies require explicit editorial review;
+automated screening is never semantic approval. Preserve failed/unavailable
+reports. The first extended run received HTTP 503 and supplies no quality pass.
+
+Inspect existing GitHub jobs without pushing or changing protection blindly.
+The first code/database/browser job passed, but the local-Supabase job failed at
+integration. Public annotations do not identify the test; authenticated log/admin
+access remains necessary. Add Playwright GitHub annotations to future reviewed
+runs for diagnosable failures rather than changing timeouts/retries on conjecture.
+Do not claim remote green CI or enforced required checks from local passes.
+
+Restore missing dependencies using the existing npm lockfile. Run heavy checks
+sequentially at low priority on two CPU cores for this machine. Docker automatic
+startup and Vector collector restart stay disabled; no schema reset, log deletion
+or paid/hosted resource is introduced. Preserve all original backlog criteria.
+
+## 2026-10-17 — Canonical uncertainty continuation
+
+The actual extended matrix captured 16 streaming replies; editorial review found
+15 passes and one missing next-step instruction despite no screening warnings.
+Retain that failed reply and its rubric rationale. Complete only the exact
+canonical sentence “The reviewed lesson does not provide enough information.”
+with the already requested direction to continue using lesson text and practice
+feedback. Do not rewrite other model content or infer which arbitrary response
+means uncertainty. Apply after natural provider completion in both adapters and
+before signing/storing the final reply; usage accounting remains unchanged.
+
+This is an application response guard, not a model/prompt improvement. Keep the
+system prompt/version unchanged, and record a separate output-policy version/hash
+in new operator reports. A targeted one-case live recheck passes; do not present
+it as a second full 16-case matrix or claim independent human/model safety validation.
+Fresh offline checks use the restored locked dependencies and cached Chromium
+override. Docker stays off; no stopped collector is restarted for verification.
+Remote CI remains partial until authenticated failure details and a new verified
+run are available; no branch-protection mutation or push is performed.

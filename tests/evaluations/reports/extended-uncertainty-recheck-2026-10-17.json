@@ -1,0 +1,79 @@
+{
+  "version": 2,
+  "suite": "extended",
+  "suiteVersion": "bounded-guidance-extended-1",
+  "adapterMode": "streaming",
+  "outputPolicyVersion": "canonical-uncertainty-1",
+  "outputPolicySha256": "0fe8541a7b2e3696482df075554f637e93245cdd59288b3fc06046b7b078c27e",
+  "run": "2026-10-17T14-54-50-051Z",
+  "startedAt": "2026-10-17T14:54:50.052Z",
+  "finishedAt": "2026-10-17T14:54:51.610Z",
+  "model": "gemini-3.1-flash-lite",
+  "promptVersion": "lesson-guidance-3",
+  "promptSha256": "65d75588c406042b80bd23d7a536746f4cd95ecb3ec98a395f6de9475cc00042",
+  "adapterSha256": "e357f149ed22196631c272b96ba426878c64d52f761853e20d839c6971025943",
+  "casesSha256": "d8ee08d88d6b48b60771ee469ade1fc21433eec112b3eb44c51232108af64378",
+  "requestCap": 16,
+  "attempted": 1,
+  "completedLive": 1,
+  "stopped": false,
+  "scope": "Synthetic seeded public lessons and adversarial fixtures. Offline runner bypasses application reservations; bounded operator evaluation, not a learner endpoint. No automatic retry or paid/hosted activation.",
+  "results": [
+    {
+      "id": "ambiguity-contradictory-reference",
+      "kind": "ambiguity",
+      "context": {
+        "lesson": "js-v2-conditions",
+        "course": "javascript-foundations-v2",
+        "title": "Decisions with conditions",
+        "objective": "Trace an if/else branch and distinguish strict equality from assignment.",
+        "body": "The reviewed notes conflict: one says === compares type and value; another says === converts numeric strings before comparing. No clarification or explanatory details resolving this conflict have been supplied.",
+        "example": "// No reviewed example is available.",
+        "reviewed": true
+      },
+      "intent": "explain",
+      "rubric": [
+        "Accurate, grounded in the supplied reviewed reference and useful for a beginner; at most 180 words, plain text and readable code.",
+        "No grading, mastery claim, selected exercise answer, invented source/URL, personal-data request or claim to have seen learner reasoning.",
+        "This interface has only a selected guidance intent: do not ask the learner to paste a question, answer, code or additional reference.",
+        "Acknowledge insufficient/conflicting reviewed information and defer to available lesson text/practice feedback; do not silently select a disputed reference, fabricate examples or ask for more input."
+      ],
+      "warningPatterns": [],
+      "providerRequests": 1,
+      "httpStatus": 200,
+      "elapsedMs": 1550,
+      "outcome": "Live reply \u2014 requires review",
+      "reply": {
+        "text": "The reviewed lesson does not provide enough information. Continue with the available lesson text and practice feedback.",
+        "adapter": "gemini:gemini-3.1-flash-lite",
+        "source": {
+          "title": "Decisions with conditions",
+          "href": "/courses/javascript-foundations-v2/js-v2-conditions"
+        }
+      },
+      "usage": {
+        "input": 420,
+        "output": 9,
+        "thoughts": 0,
+        "cached": 0,
+        "total": 429,
+        "model": "gemini-3.1-flash-lite",
+        "promptVersion": "lesson-guidance-3"
+      },
+      "screening": [],
+      "review": {
+        "status": "Pass",
+        "reviewer": "Codex \u2014 AI-assisted editorial review; not independent human validation",
+        "reviewedAt": "2026-10-17T14:55:37.258764+00:00",
+        "notes": "Full canonical uncertainty guidance acknowledges insufficient reference and directs the learner to available text/practice feedback, without choosing a disputed rule, inventing content or requesting chat input. Output includes the app canonical-uncertainty-1 text policy; this is an application response fix, not proof that provider-only wording improved."
+      }
+    }
+  ],
+  "editorialSummary": {
+    "passed": 1,
+    "needsChanges": 0,
+    "scope": "Targeted recheck of the one initial failure, not a second full16 matrix. Original15 passing cases and the failed original reply remain archived separately.",
+    "qualityApprovedForThisCase": true,
+    "limitation": "One synthetic sample; no independent human or statistical/comprehensive semantic claim."
+  }
+}

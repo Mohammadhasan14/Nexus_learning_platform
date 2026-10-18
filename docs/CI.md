@@ -20,6 +20,10 @@ a temporary receipt signing capability, runs pgTAP and generated-type checks,
 builds the app and runs the integration suite. Receipt setup lets the token
 accounting RPC regression execute on a fresh runner. Cleanup runs even when an
 earlier step fails. No hosted project or repository secret is required.
+The integration command now includes Playwright's `list,github` reporters so a
+future failing run can expose the failing test location in check annotations,
+as well as detailed runner logs. This diagnostic change has not been pushed or
+verified remotely.
 
 The integration job explicitly uses `TUTOR_MODE=scripted` and
 `LIVE_TUTOR_SMOKE=false`. The real-model smoke and live-only intercepted stream UI
@@ -62,8 +66,37 @@ must state any such execution limitations.
 
 ## Release limits
 
-Adding this workflow does not execute GitHub Actions until these files are
-committed and pushed. Remote job execution, required status checks and branch
-protection remain unverified. The workflow has no deployment or hosted migration
-step. NX-036 remains In progress; environment separation, controlled release,
-rollback, backups and the other launch gates remain separate work.
+The first remote run is now verified on commit `402e6a5`:
+[Actions run 38935858138](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/38935858138).
+**Code, database and browser checks passed. Local Supabase integration failed**
+at `npm run test:integration`; setup, receipt provisioning, pgTAP, type drift and
+production build passed, and cleanup completed. The public failure annotation
+only says exit code 1. The detailed log API returns 403 (admin access required),
+and branch-protection API returns 401 (authentication required). No authenticated
+GitHub admin client is configured here, so neither the failing test nor existing
+branch rules can be inferred from those responses. Do not claim CI is green or
+that protection is absent.
+
+After inspecting the failure log, fix the identified test/root cause, commit and
+push the reviewed changes yourself, then verify a new run on its exact SHA.
+Re-running the local suite against the existing development stack is useful
+but is not a fresh-runner or GitHub reproduction. The workflow has no deployment
+or hosted migration step. NX-036 remains In progress.
+
+## Required checks to configure with authenticated admin access
+
+For `main`, preserve any existing rule and other required checks. Enable
+**Require status checks to pass before merging** and add the exact job names
+from the current workflow:
+
+- `Code, database and browser checks`
+- `Local Supabase integration`
+
+Select GitHub Actions as the expected source where available. This does not
+bypass a failed job; resolve integration before claiming the release gate passes.
+GitHub requires a successful recent check before it can be selected in some
+settings. See [protected branch behavior](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches)
+and [required-check troubleshooting](https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/troubleshooting-required-status-checks).
+No setting was changed in this session. Configure only these requested checks;
+broader environment separation, release/rollback, backups and launch gates stay
+separate work.

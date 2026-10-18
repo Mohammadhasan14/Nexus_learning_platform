@@ -1,6 +1,5 @@
 import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import { setTimeout as delay } from "node:timers/promises";
 import { loadEnvConfig } from "@next/env";
 import { migrationDatabase } from "./database-harness";
 import { parseTutorConfig } from "../modules/tutor/config";
@@ -9,17 +8,22 @@ import {
   tutorSystemInstruction,
 } from "../modules/tutor/prompt";
 import { geminiGuidance, type ReviewedContext } from "../modules/tutor/gemini";
-import { evaluationCases, screenReply } from "../tests/evaluations/tutor-cases";
+import { evaluationCases } from "../tests/evaluations/tutor-cases";
+import { collectEvaluation } from "./tutor-evaluation-run";
+import {
+  extendedEvaluationCases,
+  extendedSuiteVersion,
+} from "../tests/evaluations/tutor-extended-cases";
+import {
+  evaluationOptions,
+  selectEvaluationCases,
+} from "../tests/evaluations/tutor-options";
+import { streamGemini } from "../modules/tutor/gemini-stream";
+import type { TokenUsage } from "../modules/tutor/usage";
+import { guidanceTextPolicyVersion } from "../modules/tutor/guidance-text";
 
 async function main() {
-  const args = process.argv.slice(2);
-  if (args.some((a) => a !== "--live" && !a.startsWith("--only=")))
-    throw new Error("Use --live and optional --only=case-id,case-id");
-  const live = args.includes("--live");
-  const only = args
-    .find((a) => a.startsWith("--only="))
-    ?.slice(7)
-    .split(",");
+  const { live, suite, only } = evaluationOptions(process.argv.slice(2));
   const db = await migrationDatabase();
   let lessons: ReviewedContext[];
   try {
@@ -31,15 +35,22 @@ async function main() {
   } finally {
     await db.close();
   }
-  const all = evaluationCases(lessons);
-  if (only?.some((id) => !all.some((c) => c.id === id)))
-    throw new Error("Unknown evaluation case ID");
-  const cases = only ? all.filter((c) => only.includes(c.id)) : all;
-  if (cases.length < 1 || cases.length > 16)
-    throw new Error("Evaluation requires 1–16 cases");
+  const cases = selectEvaluationCases(
+    suite === "extended"
+      ? extendedEvaluationCases(lessons)
+      : evaluationCases(lessons),
+    only,
+  );
+  const adapterPath =
+    suite === "extended"
+      ? "modules/tutor/gemini-stream.ts"
+      : "modules/tutor/gemini.ts";
   if (!live) {
     console.log(
       "Dry run: no provider calls. Use --live for a bounded real-model run.",
+    );
+    console.log(
+      `Suite: ${suite}; adapter: ${suite === "extended" ? "streaming" : "non-streaming"}; ${cases.length}/16 cases.`,
     );
     for (const c of cases)
       console.log(`${c.id} (${c.kind}): ${c.rubric.join(" ")}`);
@@ -58,7 +69,17 @@ async function main() {
   const redact = (value: string) =>
     value.replaceAll(config.apiKey, "[REDACTED]");
   const report = {
-    version: 1,
+    version: 2,
+    suite,
+    suiteVersion:
+      suite === "extended"
+        ? extendedSuiteVersion
+        : "bounded-guidance-baseline-1",
+    adapterMode: suite === "extended" ? "streaming" : "non-streaming",
+    outputPolicyVersion: guidanceTextPolicyVersion,
+    outputPolicySha256: createHash("sha256")
+      .update(await readFile("modules/tutor/guidance-text.ts"))
+      .digest("hex"),
     run,
     startedAt: new Date().toISOString(),
     finishedAt: "",
@@ -68,7 +89,7 @@ async function main() {
       .update(tutorSystemInstruction)
       .digest("hex"),
     adapterSha256: createHash("sha256")
-      .update(await readFile("modules/tutor/gemini.ts"))
+      .update(await readFile(adapterPath))
       .digest("hex"),
     casesSha256: createHash("sha256")
       .update(JSON.stringify(cases))
@@ -83,57 +104,32 @@ async function main() {
   };
   const save = async () =>
     writeFile(output, redact(JSON.stringify(report, null, 2)) + "\n");
-  await save();
-  for (const [index, item] of cases.entries()) {
-    if (index > 0) await delay(10000); // Conservative pacing; actual project quotas can still reject requests.
-    let httpStatus: number | undefined;
-    let providerRequests = 0;
-    const start = Date.now();
-    const reply = await geminiGuidance(
-      config,
-      item.context,
-      item.intent,
-      async (input, init) => {
-        providerRequests++;
-        report.attempted++;
-        await save(); // Preserve uncertain usage before dispatch; never replay automatically.
-        const response = await fetch(input, init);
-        httpStatus = response.status;
-        return response;
-      },
-    );
-    const generated = reply.adapter === `gemini:${config.model}`;
-    if (generated) report.completedLive++;
-    report.results.push({
-      ...item,
-      providerRequests,
-      httpStatus: httpStatus ?? null,
-      elapsedMs: Date.now() - start,
-      outcome: generated
-        ? "Live reply — requires review"
-        : "Unavailable — not a quality pass",
-      reply,
-      screening: generated ? screenReply(item, reply.text) : [],
-      review: { status: "In review", reviewer: null, notes: null },
-    });
-    await save();
-    console.log(
-      `${item.id}: ${generated ? "live reply captured" : "unavailable; stopping"}`,
-    );
-    if (!generated) {
-      report.stopped = true;
-      break;
-    }
-  }
-  const attemptedIds = new Set(report.results.map((r) => r.id));
-  for (const item of cases)
-    if (!attemptedIds.has(item.id))
-      report.results.push({
-        id: item.id,
-        kind: item.kind,
-        outcome: "Not run",
-        review: { status: "Pending", reviewer: null, notes: null },
-      });
+  await collectEvaluation({
+    cases,
+    model: config.model,
+    report,
+    save,
+    generate: async (item, transport) => {
+      let usage: TokenUsage | undefined;
+      const reply =
+        suite === "extended"
+          ? await streamGemini(
+              config,
+              item.context,
+              item.intent,
+              {
+                signal: new AbortController().signal,
+                onDelta() {},
+                onUsage: (value) => {
+                  usage = value;
+                },
+              },
+              transport,
+            )
+          : await geminiGuidance(config, item.context, item.intent, transport);
+      return { reply, usage };
+    },
+  });
   report.finishedAt = new Date().toISOString();
   await save();
   console.log(
