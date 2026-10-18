@@ -56,6 +56,7 @@ jobs:
       - run: npm run db:test:local
       - run: npm run db:types:check
       - run: npm run build
-      - run: npm run test:integration
+      # Publish failing test locations as check annotations as well as runner logs.
+      - run: npm run test:integration -- --reporter=list,github
       - if: always()
         run: npm run db:stop
