@@ -22,8 +22,8 @@ accounting RPC regression execute on a fresh runner. Cleanup runs even when an
 earlier step fails. No hosted project or repository secret is required.
 The integration command now includes Playwright's `list,github` reporters so a
 future failing run can expose the failing test location in check annotations,
-as well as detailed runner logs. This diagnostic change has not been pushed or
-verified remotely.
+as well as detailed runner logs. The updated workflow passed remotely on
+`e88b7e54ca475c7d07e5d8244fd22fa9ecdb7c57`.
 
 The integration job explicitly uses `TUTOR_MODE=scripted` and
 `LIVE_TUTOR_SMOKE=false`. The real-model smoke and live-only intercepted stream UI
@@ -66,22 +66,26 @@ must state any such execution limitations.
 
 ## Release limits
 
-The first remote run is now verified on commit `402e6a5`:
-[Actions run 38935858138](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/38935858138).
-**Code, database and browser checks passed. Local Supabase integration failed**
-at `npm run test:integration`; setup, receipt provisioning, pgTAP, type drift and
-production build passed, and cleanup completed. The public failure annotation
-only says exit code 1. The detailed log API returns 403 (admin access required),
-and branch-protection API returns 401 (authentication required). No authenticated
-GitHub admin client is configured here, so neither the failing test nor existing
-branch rules can be inferred from those responses. Do not claim CI is green or
-that protection is absent.
+Verified on **2026-10-19**: [Actions run 39126051992](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/39126051992)
+passed on the current commit `e88b7e54ca475c7d07e5d8244fd22fa9ecdb7c57`.
+Both **Code, database and browser checks** and **Local Supabase integration**
+completed successfully. Every integration-job step passed, including fresh-runner
+database setup, receipt provisioning, pgTAP, type drift, production build,
+integration tests and cleanup. The exact commit's check-runs API independently
+reports both jobs successful. This supersedes the failed run on `402e6a5` as the
+current CI result; the earlier failure's root cause remains unknown. No
+application/workflow fix or additional test run was needed for this verification.
 
-After inspecting the failure log, fix the identified test/root cause, commit and
-push the reviewed changes yourself, then verify a new run on its exact SHA.
-Re-running the local suite against the existing development stack is useful
-but is not a fresh-runner or GitHub reproduction. The workflow has no deployment
-or hosted migration step. NX-036 remains In progress.
+Required-check enforcement remains unverified. The unauthenticated
+branch-protection API returns 401; public branch-rule and ruleset endpoints return
+empty lists, which do not establish the classic branch-protection settings.
+Automatic approval review rejected a noninteractive Git credential lookup because
+credential-source access was not specifically authorised. No credentials were
+retrieved by that command and no remote settings changed. Configuring the two
+required checks below needs approval to use existing GitHub authentication with
+admin access, or an owner change in GitHub settings. Preserve existing rules.
+NX-036 remains In progress until failed checks are verified to block release.
+The workflow has no deployment or hosted migration step.
 
 ## Required checks to configure with authenticated admin access
 
