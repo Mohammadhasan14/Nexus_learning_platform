@@ -54,6 +54,23 @@ test("learning records enforce private grading, prerequisites and retry identity
       0,
       "Reading is not demonstrated skill",
     );
+    // Browser runner output has no authority to create a passing attempt.
+    await assert.rejects(
+      db.query(
+        "insert into public.attempts(user_id,exercise_id,request_id,answer,correct,feedback) values($1,$2,$3,'runner-result',true,'Passed')",
+        [a, practice, request],
+      ),
+      /permission denied/,
+    );
+    await assert.rejects(
+      submit(practice, '{"status":"completed","correct":true}', request),
+      /available option/,
+    );
+    assert.equal(
+      (await db.query("select * from public.attempts")).rows.length,
+      0,
+      "Forged runner results cannot award progress",
+    );
     const wrong = (await submit(practice, "a", request)).rows[0].result;
     assert.equal(wrong.correct, false);
     assert.deepEqual(
