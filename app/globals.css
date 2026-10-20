@@ -1677,6 +1677,29 @@ button:disabled {
   }
 }
 
+.practice-runner {
+  margin-block: 1.5rem;
+  padding-block: 1.5rem;
+  border-block: 1px solid var(--border);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.practice-runner textarea {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.practice-runner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.practice-runner pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 .tutor-panel {
   margin-block: 1.5rem;
   padding-block: 1.5rem;
