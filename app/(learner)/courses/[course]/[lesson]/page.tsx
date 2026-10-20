@@ -9,6 +9,8 @@ import { learningData, unlocked, passed } from "@/modules/learning/data";
 import { TutorPanel } from "@/components/learning/tutor-panel";
 import { tutorConfig } from "@/modules/tutor/server-only";
 import { ExerciseForm, ReadForm } from "@/components/learning/forms";
+import { PracticeRunner } from "@/components/learning/practice-runner";
+import { configuredRunnerOrigin } from "@/modules/practice/config";
 export default async function Lesson({
   params,
 }: {
@@ -108,6 +110,11 @@ export default async function Lesson({
               request={randomUUID()}
             />
           )}
+          <PracticeRunner
+            key={`runner-${lesson}`}
+            example={item.example}
+            origin={configuredRunnerOrigin(process.env.PRACTICE_RUNNER_ORIGIN)}
+          />
           <TutorPanel
             key={lesson}
             lesson={lesson}
