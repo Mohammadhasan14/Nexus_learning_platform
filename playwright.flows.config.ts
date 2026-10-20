@@ -15,6 +15,11 @@ export default defineConfig({
   },
   webServer: [
     {
+      command: "npm run runner:dev -- --app-origin http://127.0.0.1:3102",
+      url: "http://localhost:3104/frame.html",
+      reuseExistingServer: false,
+    },
+    {
       command: "node --import tsx tests/support/auth-service.ts",
       url: "http://127.0.0.1:54331/health",
       reuseExistingServer: false,
@@ -28,6 +33,7 @@ export default defineConfig({
         SUPABASE_PROJECT_ENV: "test",
         SUPABASE_URL: "http://127.0.0.1:54331",
         SUPABASE_PUBLISHABLE_KEY: "sb_publishable_test_fixture_only",
+        PRACTICE_RUNNER_ORIGIN: "http://localhost:3104",
       },
     },
   ],

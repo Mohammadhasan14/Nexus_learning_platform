@@ -1,10 +1,88 @@
 # Current progress
 
-Updated: **2026-10-19**. Read this file, [features.csv](features.csv) and
+Updated: **2026-10-20**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — remote CI passed; required-check enforcement still open
+## Current handoff — NX-016 complete locally
+
+**NX-016 Completed:** unlocked lessons now offer a JavaScript editor seeded from
+their public example, with Run/Stop, escaped console output, bounded errors and
+retained code after failures. A static runner on a separate hostname starts a
+fresh disposable browser worker for each run. Its own CSP blocks connections,
+imports and nested workers. External timeout, cancellation, output limits and
+navigation terminate execution. The runner has no save/grade API; protected
+database option grading remains the authority for saved progress. See
+[setup and execution boundaries](PRACTICE_RUNNER_SETUP.md).
+
+**Verification passed:** formatting, lint, typecheck, 38 unit tests, 30 isolated
+database tests, final production build, 11 public browser cases and all 22
+fixture-backed account/runner cases (12 existing + 10 new). These are the stages
+of `npm run check`, run as individual commands. The final browser pass used the
+final production build. The new configuration/protocol cases were rechecked
+after the last origin-validation change. Browser tests verify blocked HTTP and
+WebSocket canaries, imports/nested workers, parent DOM/storage/cookie isolation,
+loops/pending promises, cancellation/navigation cleanup, malicious messages,
+output floods/truncation, escaped rendering and retained code. A real-migration
+PGlite regression rejects forged passing attempts and grade-shaped submissions.
+Keyboard, reduced motion, axe and overflow checks pass at 320/768/1440; all three
+runner screenshots were visually reviewed. Evidence is ignored under
+`test-results/flows/` and `test-results/public/`.
+
+**Verification limits:** Node 24.19.0 and existing Chromium 1234 via
+`PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH`. Next's sandboxed build encountered the
+previously documented TypeScript subprocess restriction; the permission-enabled
+final build passed. Test/build checks used low priority and two CPU cores. No
+Docker startup, real-Supabase rerun, schema migration, external model call,
+hosted activation, dependency/framework upgrade or lockfile change. Existing
+credentials and `.env.local` are untouched. Browser workers have no hard heap
+cap; Firefox/WebKit and hosted headers remain unverified. Test servers are
+closed: ports 3100, 3102, 3104 and 54331 have no listening sockets.
+
+**Run locally:** configure the public `PRACTICE_RUNNER_ORIGIN` setting as documented
+and start `npm run runner:dev`; use the app at `http://127.0.0.1:3000` with the
+existing backend. The runner host defaults to `http://localhost:3104` and is not
+left running. Hosted execution stays unconfigured until an unrelated HTTPS
+origin and its actual CSP headers are verified. No hosted resource is provisioned.
+
+**Current register:** 77 rows (53 originals + 24 children): 50 Completed,
+9 In progress, 7 Pending, 11 Deferred. Only NX-016's status and tracking metadata
+change; its original acceptance criteria/dependencies remain intact. Work began
+clean at `3de6167`. The implementation groups are committed through `417fed2`;
+the final eight-file group records browser coverage, fixture configuration and
+the completed handoff. All groups use only the project's current Git identity,
+with no co-author trailer. No push, remote CI run or branch-setting change.
+NX-036 still needs required-check enforcement; the last
+verified remote run on `e88b7e5` remains separate from these local changes.
+
+**Next action:** owner review of this runner slice. Remaining tutor input,
+monetary controls, independent learner evidence and Phase 6 requirements remain
+open. No unrelated feature work was started.
+
+## Requested staging split — 2026-10-20 (approximately 10%)
+
+User requested 10% staged and a past-tense commit message. Verified an empty
+index and 24 changed/new files. Staged the independent origin-validation and
+bounded-protocol foundation: `modules/practice/config.ts` and
+`runner/protocol.mjs`. Two of 24 files (8.3% by file count) is the closest
+whole-file split to 10%; 22 files remain unstaged/untracked. Both staged modules
+are self-contained. Cached whitespace validation passed. No application changes,
+test rerun, commit or push for this staging-only request.
+
+Message: `feat: added runner origin validation and bounded message protocol`.
+
+## Requested commits — 2026-10-20
+
+User subsequently authorised committing successive groups with past-tense
+messages and only the current project Git identity. Foundation, regression,
+isolated runtime, local hosting, client UI and lesson/setup groups were committed
+as `c206ea0`, `1845dca`, `df77efc`, `dd0c03e`, `eecf001` and `417fed2`.
+The final request includes all eight remaining files: browser regressions,
+test fixture/configuration, README/index, decisions, progress and feature status.
+No implementation changes or test reruns for these commit requests; prior
+verification is recorded above. No push or remote setting change.
+
+## Previous handoff — remote CI passed; required-check enforcement open (2026-10-19)
 
 **NX-022.4 Completed (2026-10-17):** restored local dependencies using npm ci and the existing unchanged lockfile. Extended16-case streaming collection returned 16 live replies; individual AI-assisted editorial review found 15 Pass / 1 Needs changes. Preserved all actual replies and notes. Fixed only the exact canonical uncertainty reply's missing next-step message in both adapters; model/system prompt/prompt version unchanged. One intentional targeted live recheck passed with versioned output-policy metadata. This is 15 original passes+one corrected/rechecked case, not a second full matrix or independent human review. See [evaluation guide and reports](../tests/evaluations/README.md).
 

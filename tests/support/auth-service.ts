@@ -13,6 +13,7 @@ const sessions = new Map<
 const refreshes = new Map<string, { id: string; email: string }>();
 let unavailable = false;
 let profileOutage = false;
+let runnerLesson = false;
 const stamp = () => new Date().toISOString();
 function identity(email: string) {
   const user = {
@@ -96,11 +97,16 @@ const server = createServer(async (req, res) => {
     refreshes.clear();
     unavailable = false;
     profileOutage = false;
+    runnerLesson = false;
     return respond(200, {});
   }
   if (url.pathname === "/__test/revoke") {
     sessions.clear();
     refreshes.clear();
+    return respond(200, {});
+  }
+  if (url.pathname === "/__test/runner-lesson") {
+    runnerLesson = !!body.value;
     return respond(200, {});
   }
   if (url.pathname === "/__test/unavailable") {
@@ -179,6 +185,37 @@ const server = createServer(async (req, res) => {
       profile.updated_at = stamp();
     }
     return respond(200, profile);
+  }
+  // Minimal synthetic lesson for testing the actual runner UI without Docker.
+  if (runnerLesson && req.method === "GET") {
+    const lesson = {
+      id: "runner-test-values",
+      course_id: "runner-test",
+      position: 1,
+      title: "Runner test lesson",
+      objective: "Experiment with JavaScript values.",
+      body: "A synthetic lesson used only by the browser test fixture.",
+      example: "const minutes = 10;\nconsole.log(minutes + 5);",
+      minutes: 5,
+    };
+    if (url.pathname === "/rest/v1/lessons") return respond(200, [lesson]);
+    if (url.pathname === "/rest/v1/enrolments")
+      return respond(200, [
+        { user_id: user.id, course_id: "runner-test", enrolled_at: stamp() },
+      ]);
+    if (url.pathname === "/rest/v1/exercises")
+      return respond(200, [
+        {
+          id: "runner-test-practice",
+          lesson_id: lesson.id,
+          kind: "practice",
+          prompt: "Which value is logged?",
+          options: [
+            { id: "a", label: "15" },
+            { id: "b", label: "10" },
+          ],
+        },
+      ]);
   }
   if (
     [

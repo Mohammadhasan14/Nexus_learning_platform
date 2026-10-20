@@ -24,6 +24,7 @@ Start with the [application README](../README.md).
 - [Local live tutor](LIVE_TUTOR_SETUP.md)
 - [Token accounting and operator inspection](tutor-token-accounting.md)
 - [Projects and review scheduling](PHASE_5_SETUP.md)
+- [Isolated JavaScript practice runner](PRACTICE_RUNNER_SETUP.md)
 - [Editorial workspace and reports](EDITORIAL_REPORTING_SETUP.md)
 - [Private notes and search](NOTES_SEARCH_SETUP.md)
 - [Learning outcome definitions](OUTCOMES_SETUP.md)

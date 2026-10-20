@@ -4,6 +4,34 @@ This dated log preserves earlier implementation and staging decisions. The lates
 entry and [current progress](PROGRESS.md) describe the active repository layout;
 older references to parent-workspace files are historical.
 
+## 2026-10-20 — Isolated JavaScript practice (NX-016)
+
+User authorised the proposed NX-016 slice. Keep option-based database grading as
+the authority for saved progress. Add a temporary lesson-example editor without
+changing exercise types, grading keys, schema, projects, AI or learning evidence.
+
+Serve the small static runner outside the application on a dedicated origin;
+the development/CI host binds only to loopback. Require a different hostname,
+HTTPS outside local development, and a sandboxed frame with no parent access.
+Only its disposable worker compiles learner code. Apply a distinct worker CSP
+that denies connections, imported scripts and nested workers. The frame CSP
+allows only trusted bootstrap scripts and its worker; do not enable string
+compilation in the app or frame. Hosted activation requires an unrelated domain
+and verification of the actual response headers; no hosting is provisioned.
+
+Use a one-run MessageChannel with source/origin, protocol, request-ID and bounded
+payload validation. Results remain untrusted and have no save/grade API. Terminate
+externally after 1.5 seconds, cap output and discard the worker/frame after each
+run or navigation. Code remains available after failures. Browser workers do not
+provide hard memory limits; no authoritative arbitrary-code grading is claimed.
+
+Reuse existing Chromium, fixture-backed account flows and isolated migration
+tests. The fixture's optional synthetic lesson is test-only, with no application
+auth bypass. Keep Docker and its collector stopped; no credentials, dependency,
+lockfile, framework, hosted resource or paid provider changes. See
+[runner setup and boundaries](PRACTICE_RUNNER_SETUP.md) for configuration and
+browser/hosted verification limits.
+
 ## 2026-09-19 — Existing app and canonical register
 
 - Keep `nexus_learning_platform/`, its root `app/` router and installed Next 16.3.5 / React 19.2.8 / Tailwind 4. No framework upgrade or second app. Shared UI lives in `components/`; future business modules can use `modules/` alongside it.
