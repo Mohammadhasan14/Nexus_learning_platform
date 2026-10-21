@@ -4,6 +4,34 @@ This dated log preserves earlier implementation and staging decisions. The lates
 entry and [current progress](PROGRESS.md) describe the active repository layout;
 older references to parent-workspace files are historical.
 
+## 2026-10-21 — Request correlation, redacted application logs and health (NX-034)
+
+User authorised the proposed NX-034 slice. Generate request UUIDs in the proxy,
+replace external IDs and preserve the same ID across internal request headers,
+response headers and cookie refresh. Match application routes while excluding
+Next assets/favicon; keep Auth refresh on its existing paths so public/health
+requests do not gain session/provider work. Authorization remains at existing
+page/action boundaries.
+
+Use the installed Next.js request-error hook and the shared backend fetch
+boundary to emit a fixed structured stderr record. Allow only event/method/phase,
+request UUID, timestamp, bounded duration/status and numeric framework digest.
+Do not serialize raw errors, stacks, URLs, query strings, headers, bodies or
+learner content. Logging failure cannot replace the primary error or break
+recovery. The learner boundary displays a validated digest and uses Next 16.3's
+retry callback to re-fetch after transient failures. Disable automatic dev
+request/action/browser log forwarding. Native framework/SDK/host logs remain
+separate; no global console patch or blanket-redaction claim.
+
+Separate unconditional routing liveness from guarded, read-only Auth readiness.
+Health responses contain only status and a generated ID; require no session and
+use no-store/HEAD behavior. The fixed Auth health probe has a two-second deadline,
+rejects redirects and discards its payload without parsing. Readiness does not
+claim database/migration/storage/AI health. Provision no collector, alert,
+credential, hosted environment, migration or dependency. Keep Docker/Vector off.
+NX-035 environment separation and NX-040 operational alerting remain open.
+See [observability setup and limits](OBSERVABILITY_SETUP.md).
+
 ## 2026-10-20 — Isolated JavaScript practice (NX-016)
 
 User authorised the proposed NX-016 slice. Keep option-based database grading as

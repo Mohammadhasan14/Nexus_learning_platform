@@ -7,6 +7,11 @@ import { runLiveResponse } from "@/modules/tutor/live-response";
 import { tutorReplySchema } from "@/modules/reports/schema";
 import { tokenAllowanceSchema, tokenUsageSchema } from "@/modules/tutor/usage";
 import type { TutorEvent } from "@/modules/tutor/stream";
+import {
+  logError,
+  readRequestId,
+  REQUEST_ID_HEADER,
+} from "@/lib/observability/record";
 
 export const runtime = "nodejs";
 const headers = {
@@ -198,12 +203,19 @@ export async function POST(request: Request) {
           },
         });
       } catch {
-        if (!controller.signal.aborted)
+        if (!controller.signal.aborted) {
+          logError({
+            event: "tutor.error",
+            requestId: readRequestId(request.headers.get(REQUEST_ID_HEADER)),
+            method: "POST",
+            phase: "route",
+          });
           send({
             type: "error",
             message:
               "The reply was interrupted. Recover a saved reply or choose another guidance option. Lessons remain available.",
           });
+        }
       } finally {
         request.signal.removeEventListener("abort", abort);
         if (!controller.signal.aborted) output.close();

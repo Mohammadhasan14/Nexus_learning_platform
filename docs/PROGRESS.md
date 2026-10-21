@@ -1,10 +1,65 @@
 # Current progress
 
-Updated: **2026-10-20**. Read this file, [features.csv](features.csv) and
+Updated: **2026-10-21**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — NX-016 complete locally
+## Current handoff — NX-034 complete locally
+
+**NX-034 Completed:** application requests receive generated UUIDs in internal
+and response headers; caller-provided IDs are replaced. Structured stderr records
+correlate unexpected request errors, backend transport/5xx failures, configuration
+failures, readiness failures and non-cancelled tutor interruptions. Records omit
+raw messages/stacks, URLs, headers, cookies, bodies and learner content, using
+fixed/bounded metadata instead. Logging failure preserves normal recovery. The
+learner boundary shows a safe digest and re-fetches on retry. Automatic dev
+request/action/browser forwarding is disabled. See [observability setup and
+limits](OBSERVABILITY_SETUP.md).
+
+**Health:** GET/HEAD `/api/health` checks app routing without touching a backend.
+`/api/health/ready` validates existing environment guards and probes only the
+configured Auth health endpoint with a two-second deadline, no redirects and no
+provider-payload parsing. Responses contain only status/request ID and are
+uncached. Readiness does not claim database, storage, migrations or AI health.
+Existing Auth refresh paths and page/action authorization remain intact.
+
+**Verification passed:** formatting, lint, typecheck, 44 unit tests (six new),
+30 isolated database tests, final production build, 13 public browser cases
+(two new) and 25 fixture-backed account/observability/runner cases (three new).
+All `npm run check` stages passed as individual commands. The final browser
+suites used the final production build. New cases verify private-data omission,
+digest/getter safety, failed sinks, guarded dispatch, real timeout, ID replacement,
+uncached GET/HEAD, backend outage/recovery, matching response/log IDs, handled
+action failure and actual error-boundary retry. The real app's captured server
+log excludes the synthetic private canary in both render and action failures.
+Evidence is ignored under `test-results/observability/server.log` and the
+existing public/flows result directories.
+
+**Limits and preserved preferences:** Node 24.19.0, existing Chromium 1234 via
+the executable override, permission-enabled build/browser runs and sequential
+low-priority test/build checks on two CPU cores. No Docker/Vector start or
+configuration change, real-Supabase/hosted probe, model call, dependency upgrade,
+lockfile/schema change or credential edit. Native framework/SDK/host log sources
+remain separate from the allowlisted application stream; no blanket-redaction
+claim. Hosted environment/log routing, alerts and incident response remain
+NX-035/NX-040 work. No monitoring service or background polling is installed.
+
+**Current register:** 77 rows (53 originals + 24 children): 51 Completed,
+9 In progress, 6 Pending, 11 Deferred. Only NX-034's status/tracking metadata
+change; original acceptance criteria and dependencies are preserved. Work began
+clean at `7aa5778` after all runner groups were committed. Observability foundation,
+request correlation, readiness and health/recovery coverage were committed as
+`7c02c39`, `40fd8be`, `7504de5` and `c78eea1`. The final eight-file group records
+tutor interruption logging, development log privacy settings, setup and handoff.
+All groups use only the current project Git identity, with no co-author trailer.
+No push, remote CI run or branch-setting change. These commit requests added no
+implementation changes or test reruns; verification above remains the evidence.
+
+**Next action:** owner review of this completed local slice. Environment
+separation, required CI enforcement, monetary controls, privacy/account controls,
+release operations and learner evidence remain open; no unrelated work started.
+
+## Previous handoff — NX-016 complete locally (2026-10-20)
 
 **NX-016 Completed:** unlocked lessons now offer a JavaScript editor seeded from
 their public example, with Run/Stop, escaped console output, bounded errors and

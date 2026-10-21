@@ -29,6 +29,7 @@ Start with the [application README](../README.md).
 - [Private notes and search](NOTES_SEARCH_SETUP.md)
 - [Learning outcome definitions](OUTCOMES_SETUP.md)
 - [CI jobs, local equivalents and remaining release gates](CI.md)
+- [Error logging, request IDs and health checks](OBSERVABILITY_SETUP.md)
 
 ## Historical evidence
 

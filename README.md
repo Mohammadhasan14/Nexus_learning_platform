@@ -62,6 +62,10 @@ Apply new local migrations with `npx supabase migration up --local` without rese
 
 The canonical task register and handoff are versioned in this repository under `docs/`; see the [editorial review record](docs/PHASE_3_CONTENT_REVIEW.md) for course evidence. Parent-workspace copies are legacy snapshots. Live AI requires separate instruction.
 
+## Error logging and health
+
+Application responses include a generated `x-request-id`. Structured server error records omit private request/error content. `/api/health` checks app liveness; `/api/health/ready` checks guarded Auth reachability with a two-second deadline. Both expose only status and a request ID. See [logging and health setup](docs/OBSERVABILITY_SETUP.md) for log correlation, limits and verification.
+
 ## Phase 4 scripted tutor
 
 Run `TUTOR_MODE=scripted npm run dev -- --webpack` after applying local migrations to enable prepared guidance on reviewed v2 lessons. The tutor is clearly labelled, links to its lesson source, and makes no external AI calls. Unset the variable or use `TUTOR_MODE=disabled` for the lesson-only fallback.
