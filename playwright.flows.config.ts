@@ -25,7 +25,8 @@ export default defineConfig({
       reuseExistingServer: false,
     },
     {
-      command: "npm start -- --hostname 127.0.0.1 --port 3102",
+      command:
+        "mkdir -p test-results/observability && npm start -- --hostname 127.0.0.1 --port 3102 > test-results/observability/server.log 2>&1",
       url: "http://127.0.0.1:3102/login",
       reuseExistingServer: false,
       env: {

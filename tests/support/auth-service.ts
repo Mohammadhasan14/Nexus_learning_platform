@@ -118,6 +118,11 @@ const server = createServer(async (req, res) => {
     return respond(200, {});
   }
   if (url.pathname === "/health") return respond(200, {});
+  if (url.pathname === "/auth/v1/health")
+    return respond(unavailable ? 503 : 200, {
+      version: "private-health-canary",
+      internal: "observability-private-canary",
+    });
   if (unavailable)
     return respond(503, {
       message: "Test-only provider outage",
@@ -169,7 +174,7 @@ const server = createServer(async (req, res) => {
     if (profileOutage)
       return respond(503, {
         code: "fixture_outage",
-        message: "Test-only storage outage",
+        message: "observability-private-canary",
       });
     const profile = profiles.get(user.id)!;
     if (req.method === "PATCH") {
