@@ -3,11 +3,14 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { backendConfig } from "./config";
 import type { Database } from "./database.types";
+import { currentRequestId } from "@/lib/observability/request";
+import { observedBackendFetch } from "@/lib/observability/backend-fetch";
 
 export async function serverClient() {
   const config = backendConfig();
   if (!config) throw new Error("Accounts are not configured");
   const cookieStore = await cookies();
+  const requestId = await currentRequestId();
   return createServerClient<Database>(config.url, config.key, {
     cookieOptions: {
       name: `nexus-${config.environment}-auth`,
@@ -17,12 +20,7 @@ export async function serverClient() {
       path: "/",
     },
     global: {
-      fetch: (input, init) =>
-        fetch(input, {
-          ...init,
-          cache: "no-store",
-          signal: AbortSignal.timeout(10000),
-        }),
+      fetch: observedBackendFetch(requestId),
     },
     cookies: {
       getAll: () => cookieStore.getAll(),
