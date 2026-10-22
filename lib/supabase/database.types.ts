@@ -738,6 +738,7 @@ export type Database = {
         Returns: string;
       };
       enrol_course: { Args: { course: string }; Returns: undefined };
+      export_learner_data: { Args: never; Returns: Json };
       finish_live_tutor: {
         Args: { receipt: string; request: string; signature: string };
         Returns: boolean;
