@@ -1,11 +1,12 @@
 "use client";
-import { useActionState } from "react";
+import { useActionState, useSyncExternalStore } from "react";
 import { savePreferences } from "@/modules/profile/actions";
 import { locales } from "@/modules/profile/validation";
 import type { ActionState } from "@/lib/auth/validation";
 import type { Database } from "@/lib/supabase/database.types";
 
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
+const subscribe = () => () => {};
 export function PreferencesForm({
   profile,
   timezones,
@@ -15,6 +16,11 @@ export function PreferencesForm({
   timezones: string[];
   onboarding?: boolean;
 }) {
+  const hydrated = useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false,
+  );
   const [state, action, pending] = useActionState<ActionState, FormData>(
     savePreferences,
     {},
@@ -29,6 +35,7 @@ export function PreferencesForm({
       className="account-form preferences-form"
       aria-busy={pending}
     >
+      <noscript>Enable JavaScript to edit and save your preferences.</noscript>
       <input
         type="hidden"
         name="intent"
@@ -51,6 +58,7 @@ export function PreferencesForm({
           required
           maxLength={60}
           defaultValue={current("display_name")}
+          disabled={!hydrated}
           aria-invalid={!!state.errors?.display_name}
           aria-describedby={described("display_name")}
         />
@@ -67,6 +75,7 @@ export function PreferencesForm({
           rows={3}
           placeholder="For example, build a website for an idea I care about."
           defaultValue={current("goal")}
+          disabled={!hydrated}
           aria-invalid={!!state.errors?.goal}
           aria-describedby={described("goal")}
         />
@@ -83,6 +92,7 @@ export function PreferencesForm({
           step={5}
           required
           defaultValue={current("daily_minutes")}
+          disabled={!hydrated}
           aria-invalid={!!state.errors?.daily_minutes}
           aria-describedby="minutes-hint daily_minutes-error"
         />
@@ -100,6 +110,7 @@ export function PreferencesForm({
             id="locale"
             name="locale"
             defaultValue={current("locale")}
+            disabled={!hydrated}
             aria-invalid={!!state.errors?.locale}
             aria-describedby={described("locale")}
           >
@@ -117,6 +128,7 @@ export function PreferencesForm({
             id="timezone"
             name="timezone"
             defaultValue={current("timezone")}
+            disabled={!hydrated}
             aria-invalid={!!state.errors?.timezone}
             aria-describedby="timezone-hint timezone-error"
           >
@@ -134,7 +146,7 @@ export function PreferencesForm({
       </div>
       <button
         className="button button-primary"
-        disabled={pending}
+        disabled={!hydrated || pending}
         type="submit"
       >
         {pending

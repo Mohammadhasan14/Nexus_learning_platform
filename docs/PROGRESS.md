@@ -1,10 +1,76 @@
 # Current progress
 
-Updated: **2026-10-21**. Read this file, [features.csv](features.csv) and
+Updated: **2026-10-22**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — NX-034 complete locally
+## Current handoff — NX-039 learner export slice
+
+**Scope:** authenticated learner JSON export, the first authorised NX-039 slice.
+Settings offers a download with pending/error/retry feedback and preserves
+unsaved preference edits. No account deletion, retention control or public
+notice implementation is claimed; the parent remains **In progress**. See
+[scope, deployment and verification](PRIVACY_EXPORT_SETUP.md).
+
+**Implementation:** same-origin POST plus server-verified Auth; private/no-store
+attachment and fixed errors. The additive no-argument export RPC binds every
+collection to auth.uid(), including staff, using explicit columns and a stable
+single-statement snapshot. It includes saved profile/preferences, enrolments,
+reads, attempts, notes, project revisions, outcomes, learner reports and selected
+private tutor replies/accounting. No credentials, grading keys, staff notes,
+other learners or global usage. Original history is not page-limited; exports
+over 8 MiB fail completely rather than silently truncating. Only the new RPC
+signature was generated from the isolated migration catalog; the live-provider
+type drift check remains pending with real-provider integration.
+
+**Verification passed:** formatting, lint, typecheck, 44 unit tests, 36 isolated
+database tests and the final production build. The six new database cases cover
+anonymous/missing/unknown identities, staff isolation, every collection, more
+than 1,000 attempts, future-column/secret exclusion and oversized failure. The
+ordinary unit invocation encountered sandbox loopback EPERM; the permission-enabled
+full unit rerun passed. Heavy checks ran sequentially at low priority on two cores.
+
+**Browser evidence:** 14 public cases pass. All 30 distinct flow cases have
+passing evidence on the final build: the last full run passed 29 and exposed a
+release-helper error in the new delayed-script test. After correcting only that
+test helper, all five export cases passed in a focused rerun. The existing 25
+flow cases passed in the full run; no further production change followed. This
+is not a claim that `npm run check` was rerun as one successful command. Export
+cases verify session revocation, Origin checks, ignored owner IDs, actual JSON
+download bytes, failure/retry and unsaved values. A deterministic paused-chunk
+regression verifies that controls wait for hydration. Keyboard, reduced motion,
+axe and overflow pass at 320/768/1440, with all three screenshots visually
+reviewed under ignored `test-results/verification/privacy-export/`.
+
+**Settings recovery:** initial browser verification caught an early-input race
+that appended a saved goal to newly entered text. Preference inputs and the
+export button now follow the note editor's existing hydration guard; noscript
+guidance explains the JavaScript requirement. The previously failing handled
+action/input-retention case passes on the final build.
+
+**Provider limit:** the real Supabase integration test is prepared but has not
+been run locally. Docker/Vector remain stopped. Applying the additive migration,
+real Auth/PostgREST execution and full provider-generated type drift comparison
+remain separate from this offline evidence.
+
+**Preserved preferences:** Docker/Vector stay stopped. No dependency, lockfile,
+credential, hosted resource or existing database change. The additive
+migration is not applied to the user's stopped Supabase stack. Work began clean
+at `76a6493`. The export RPC, download endpoint and Settings interface were
+committed as `7f18a33`, `f8c888f` and `68d8061`. The final eleven-file group
+includes the preference hydration guard, test coverage, setup and handoff.
+All groups use only the current project Git identity, with no co-author trailer.
+No push or remote CI run is included. These commit requests added no application
+changes or test reruns; the verification above remains the evidence.
+
+**Current register:** 77 rows: 51 Completed, 10 In progress, 5 Pending, 11 Deferred.
+Only NX-039's status/tracking metadata change; criteria/dependencies are intact.
+
+**Next action:** review this completed local export slice. Applying the
+additive migration and real Supabase checks remain separate from offline evidence;
+account deletion, retention controls and public notices are later NX-039 slices.
+
+## Previous handoff — NX-034 complete locally (2026-10-21)
 
 **NX-034 Completed:** application requests receive generated UUIDs in internal
 and response headers; caller-provided IDs are replaced. Structured stderr records

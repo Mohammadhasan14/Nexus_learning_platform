@@ -30,6 +30,7 @@ Start with the [application README](../README.md).
 - [Learning outcome definitions](OUTCOMES_SETUP.md)
 - [CI jobs, local equivalents and remaining release gates](CI.md)
 - [Error logging, request IDs and health checks](OBSERVABILITY_SETUP.md)
+- [Learner data export and its scope](PRIVACY_EXPORT_SETUP.md)
 
 ## Historical evidence
 

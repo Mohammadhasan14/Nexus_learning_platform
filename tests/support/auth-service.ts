@@ -14,6 +14,7 @@ const refreshes = new Map<string, { id: string; email: string }>();
 let unavailable = false;
 let profileOutage = false;
 let runnerLesson = false;
+let exportOutage = false;
 const stamp = () => new Date().toISOString();
 function identity(email: string) {
   const user = {
@@ -98,6 +99,7 @@ const server = createServer(async (req, res) => {
     unavailable = false;
     profileOutage = false;
     runnerLesson = false;
+    exportOutage = false;
     return respond(200, {});
   }
   if (url.pathname === "/__test/revoke") {
@@ -115,6 +117,10 @@ const server = createServer(async (req, res) => {
   }
   if (url.pathname === "/__test/profile-outage") {
     profileOutage = !!body.value;
+    return respond(200, {});
+  }
+  if (url.pathname === "/__test/export-outage") {
+    exportOutage = !!body.value;
     return respond(200, {});
   }
   if (url.pathname === "/health") return respond(200, {});
@@ -169,6 +175,33 @@ const server = createServer(async (req, res) => {
   if (url.pathname === "/auth/v1/logout") {
     sessions.delete(token);
     return respond(204, null);
+  }
+  if (url.pathname === "/rest/v1/rpc/export_learner_data") {
+    if (exportOutage)
+      return respond(503, { message: "export-private-error-canary" });
+    if (Object.keys(body).length)
+      return respond(400, { message: "No arguments" });
+    return respond(200, {
+      format: "nexus-learner-export-v1",
+      exported_at: stamp(),
+      profile: profiles.get(user.id),
+      staff_role: null,
+      enrolments: [],
+      lesson_reads: [],
+      attempts: [],
+      project_submissions: [],
+      outcome_events: [],
+      content_reports: [],
+      tutor_requests: [],
+      daily_tutor_usage: [],
+      daily_token_usage: [],
+      lesson_notes: [
+        {
+          lesson_id: "synthetic-lesson",
+          body: `Private note for ${user.email}`,
+        },
+      ],
+    });
   }
   if (url.pathname === "/rest/v1/profiles") {
     if (profileOutage)

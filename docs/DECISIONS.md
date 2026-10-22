@@ -4,6 +4,37 @@ This dated log preserves earlier implementation and staging decisions. The lates
 entry and [current progress](PROGRESS.md) describe the active repository layout;
 older references to parent-workspace files are historical.
 
+## 2026-10-22 — Owner-only learner data export (NX-039, first slice)
+
+User authorised the proposed authenticated learner data export. Add one explicit
+download to Settings and keep account deletion, retention controls and public
+notices as separate remaining work. Preserve preference edits and offer retry
+without navigating away. The JSON file contains saved private learner records;
+explain its contents and sensitivity in the interface.
+
+Production browser verification exposed a Settings hydration race: an early
+goal edit acquired the previous saved text. Match the note editor's existing
+readiness guard for preference inputs and the download button, with noscript
+guidance. Add a regression that holds client chunks to verify editing starts
+only when ready and export leaves the exact unsaved goal intact.
+
+Use an additive, stable, no-argument database RPC for a single statement snapshot,
+including selected private tutor records unavailable through public table reads.
+Derive ownership only from auth.uid(), filter every collection even for staff,
+use explicit columns/empty search path, and revoke PUBLIC/anon execution. No
+privileged application key, arbitrary owner selector, schema reset or wider RLS
+grant. Export original records rather than silently truncating to UI/Data API
+history limits. Fail the entire synchronous export over 8 MiB; no background
+storage/job or delivery infrastructure is introduced.
+
+Require verified Auth and same-origin POST at the application boundary, return
+private/no-store JSON attachments, and exclude auth secrets, grading keys,
+staff notes, global usage and other learners. Reuse migration/browser fixtures
+and prepare real Supabase integration coverage. Generate only the new RPC type
+from its isolated migration catalog; live provider drift verification remains
+separate. Keep Docker/Vector stopped and credentials/dependencies unchanged.
+See [export scope and verification](PRIVACY_EXPORT_SETUP.md).
+
 ## 2026-10-21 — Request correlation, redacted application logs and health (NX-034)
 
 User authorised the proposed NX-034 slice. Generate request UUIDs in the proxy,
