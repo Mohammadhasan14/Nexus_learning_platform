@@ -60,3 +60,17 @@ test("confirmation refuses invalid tokens and arbitrary redirect destinations", 
   expect(response.headers().location).toBe("/login?reason=confirmation");
   expect(response.headers()["cache-control"]).toContain("no-store");
 });
+
+test("data export fails closed without a configured backend", async ({
+  request,
+  baseURL,
+}) => {
+  const response = await request.post("/api/account/export", {
+    headers: { origin: baseURL! },
+  });
+  expect(response.status()).toBe(401);
+  expect(response.headers()["cache-control"]).toContain("no-store");
+  expect(await response.json()).toEqual({
+    message: "Sign in to download your data.",
+  });
+});
