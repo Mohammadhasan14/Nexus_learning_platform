@@ -1430,6 +1430,14 @@ button:disabled {
   padding: 28px;
   background: var(--surface);
 }
+.data-export {
+  margin-top: 32px;
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+}
+.data-export h2 {
+  font-size: 1.3rem;
+}
 .form-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;

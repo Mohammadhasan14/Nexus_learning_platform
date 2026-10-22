@@ -1,6 +1,7 @@
 import { requireProfile } from "@/lib/auth/session";
 import { PreferencesForm } from "@/components/learner/preferences-form";
 import { timezoneOptions } from "@/modules/profile/timezones";
+import { DataExport } from "@/components/learner/data-export";
 export const metadata = { title: "Learning preferences — Nexus Learning" };
 export default async function Settings() {
   const { profile } = await requireProfile("/settings");
@@ -16,6 +17,7 @@ export default async function Settings() {
         profile={profile}
         timezones={timezoneOptions(profile.timezone)}
       />
+      <DataExport />
     </section>
   );
 }
