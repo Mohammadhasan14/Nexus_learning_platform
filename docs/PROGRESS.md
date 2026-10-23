@@ -1,10 +1,68 @@
 # Current progress
 
-Updated: **2026-10-23**. Read this file, [features.csv](features.csv) and
+Updated: **2026-10-24**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — NX-039 privacy controls development
+## Current handoff — NX-026 local accessibility review
+
+User authorised the critical learner-flow accessibility review. Work began clean
+at `6b7f2be`. See [review scope, confirmed issues and limits](ACCESSIBILITY_REVIEW.md).
+
+**Confirmed and fixed:** twelve baseline cases exposed generic lesson titles,
+Quick Search returning focus to the wrong invoker, and lost keyboard position
+after practice/project/note/report/tutor actions, sign-in failure, data downloads
+and retention saves. Lesson metadata now uses a descriptive title and available
+version with verified data shared only within its request. A small shared helper
+restores logical continuations and safe retries without stealing focus from
+another task. Clear and repeated deletion failures also retain useful recovery.
+Practice errors retain their alert semantics without a conflicting polite override.
+
+**Audit coverage:** populated dashboard, courses, lessons, starting checks,
+projects, reviews, report snapshots, outcomes, search and Settings at 320/768/1440.
+Check axe WCAG 2 A/AA and 2.1 AA tags, labels/available contrast checks, skip links,
+visible focus, overflow and reduced motion. Keyboard cases exercise actual
+production components/actions, dialog wrapping/return, continuations, error
+associations and retained work. Synthetic live replies/cancellation cover the
+actual live-client component with every request intercepted; no provider dispatch.
+
+**Verification passed:** formatting, lint, typecheck, final production build,
+all 53 account/learning browser cases and all 17 public browser cases (70 total).
+Eighteen new cases cover the confirmed regressions, keyboard continuations,
+cross-task focus preservation, error associations and populated three-width
+screens. A visual-review follow-up added assertions that the skip link is hidden
+again after focus moves; all three matrix cases passed in a focused recheck.
+The full suites and focused recheck use the same final production build. Lesson
+screenshots at all three widths and the desktop project focus outline were
+visually reviewed under ignored `test-results/verification/accessibility/`.
+No backend/schema changes; database tests are not repeated solely for UI focus
+changes. Baseline failures were reproduced before fixes; no observed contrast or
+motion issue prompted CSS changes. The ordinary fixture app explicitly uses
+scripted tutor mode. All temporary test servers are stopped.
+
+**Limits:** no actual NVDA/JAWS/VoiceOver, Braille, Firefox/WebKit, physical touch
+device, hosted backend or staff-editorial review. NX-026 remains In progress for
+the broader assistive-technology/device acceptance; this local review is complete
+with the local evidence above. Do not claim universal WCAG compliance.
+
+**Preserved preferences:** no Docker/Vector start, existing account/database or
+credential change, dependency/lockfile update, model call or deployment. Temporary
+test data stays in the test-only HTTP fixture. Learning-form and account/live
+focus groups were committed as `96a4116` and `6af89e9`. The final twelve-file group
+includes lesson titles, dialog navigation, fixtures, browser coverage and handoff.
+All groups use only the current project Git identity, with no co-author trailer.
+The final message uses plain past-tense wording without a conventional prefix,
+as requested. No push or remote CI run. Commit requests added no implementation
+changes or test reruns; the verification above remains the evidence.
+
+**Register:** 77 rows: 51 Completed, 10 In progress, 5 Pending, 11 Deferred.
+Only NX-026 tracking metadata changes; original criteria/dependencies remain.
+
+**Next action:** owner review of the completed local audit/fixes. Broader actual
+assistive-technology/device checks remain open; do not start the real backend or
+claim those checks from the local fixture evidence.
+
+## Previous handoff — NX-039 privacy controls development (2026-10-23)
 
 The user authorised account deletion, retention controls and truthful public
 notices. They selected default tutor reply retention until explicit removal,

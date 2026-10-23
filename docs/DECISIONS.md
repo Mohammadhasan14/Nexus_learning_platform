@@ -4,6 +4,26 @@ This dated log preserves earlier implementation and staging decisions. The lates
 entry and [current progress](PROGRESS.md) describe the active repository layout;
 older references to parent-workspace files are historical.
 
+## 2026-10-23 — Critical-flow accessibility review (NX-026)
+
+The user authorised reviewing the implemented learner flows and fixing confirmed
+issues. Start clean at `6b7f2be`; preserve the stopped Docker/Vector preference.
+Use explicit synthetic HTTP data for populated pages and intercepted responses
+for live-client states, without adding a production test route or bypassing Auth.
+Keep the normal fixture app in scripted mode and all live keys synthetic.
+
+Reproduce missing lesson titles, lost keyboard positions after asynchronous
+actions, and Quick Search returning to the wrong invoker. Share verified lesson
+data only within the current request for metadata/page rendering. Restore logical
+continuations only when focus is still in the submitting scope or has fallen to
+the document body; do not pull focus away from another task. Preserve status
+semantics and all learning/accounting/authentication behavior. Baseline contrast,
+labels and reduced motion pass, so avoid unrelated CSS or design changes.
+
+Retain automated/keyboard/visual evidence separately from actual assistive-tool
+and device checks. No fabricated screen-reader, hosted-provider or complete WCAG
+claim. See [review scope, fixes and follow-up](ACCESSIBILITY_REVIEW.md).
+
 ## 2026-10-23 — Privacy controls, deletion and public notices (NX-039)
 
 The user authorised the remaining privacy development and selected default

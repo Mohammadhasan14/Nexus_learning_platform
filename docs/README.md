@@ -32,6 +32,7 @@ Start with the [application README](../README.md).
 - [Error logging, request IDs and health checks](OBSERVABILITY_SETUP.md)
 - [Learner data export and its scope](PRIVACY_EXPORT_SETUP.md)
 - [Reply retention, account deletion and public notices](PRIVACY_CONTROLS_SETUP.md)
+- [Critical-flow accessibility review and limits](ACCESSIBILITY_REVIEW.md)
 
 ## Historical evidence
 

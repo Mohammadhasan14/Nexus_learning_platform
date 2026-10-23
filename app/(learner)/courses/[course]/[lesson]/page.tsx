@@ -11,13 +11,32 @@ import { tutorConfig } from "@/modules/tutor/server-only";
 import { ExerciseForm, ReadForm } from "@/components/learning/forms";
 import { PracticeRunner } from "@/components/learning/practice-runner";
 import { configuredRunnerOrigin } from "@/modules/practice/config";
+import { cache } from "react";
+const lessonData = cache(learningData);
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ course: string; lesson: string }>;
+}) {
+  const { course, lesson } = await params;
+  const data = await lessonData();
+  const item = data.lessons.find(
+    (l) => l.id === lesson && l.course_id === course,
+  );
+  const version = data.courses.find((c) => c.id === course)?.version;
+  return {
+    title: item
+      ? `${item.title}${version ? ` · v${version}` : ""} — Nexus Learning`
+      : "Lesson — Nexus Learning",
+  };
+}
 export default async function Lesson({
   params,
 }: {
   params: Promise<{ course: string; lesson: string }>;
 }) {
   const { course, lesson } = await params,
-    data = await learningData();
+    data = await lessonData();
   const item = data.lessons.find(
     (l) => l.id === lesson && l.course_id === course,
   );

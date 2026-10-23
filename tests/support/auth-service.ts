@@ -4,6 +4,11 @@
 import { createServer } from "node:http";
 import { randomUUID, createHmac } from "node:crypto";
 import type { Database } from "../../lib/supabase/database.types";
+import {
+  accessibilityData,
+  resetAccessibilityData,
+} from "./accessibility-data";
+let accessibility = false;
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 const profiles = new Map<string, Profile>();
 const privacy = new Map<
@@ -103,6 +108,8 @@ const server = createServer(async (req, res) => {
     : {};
   // Controls exist only inside this test process, bound to loopback.
   if (url.pathname === "/__test/reset") {
+    accessibility = false;
+    resetAccessibilityData();
     profiles.clear();
     privacy.clear();
     deletedEmails.clear();
@@ -118,6 +125,10 @@ const server = createServer(async (req, res) => {
   if (url.pathname === "/__test/revoke") {
     sessions.clear();
     refreshes.clear();
+    return respond(200, {});
+  }
+  if (url.pathname === "/__test/accessibility") {
+    accessibility = !!body.value;
     return respond(200, {});
   }
   if (url.pathname === "/__test/runner-lesson") {
@@ -301,6 +312,15 @@ const server = createServer(async (req, res) => {
     return respond(200, profile);
   }
   // Minimal synthetic lesson for testing the actual runner UI without Docker.
+  if (accessibility) {
+    const fixture = accessibilityData(
+      url.pathname,
+      req.method ?? "GET",
+      body,
+      user.id,
+    );
+    if (fixture) return respond(fixture.status, fixture.data);
+  }
   if (runnerLesson && req.method === "GET") {
     const lesson = {
       id: "runner-test-values",

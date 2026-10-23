@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { runSearch } from "@/modules/search/actions";
 import type { SearchResult } from "@/modules/search/data";
 import { SearchResults } from "./results";
@@ -7,20 +7,25 @@ export function CommandMenu() {
   const dialog = useRef<HTMLDialogElement>(null),
     input = useRef<HTMLInputElement>(null),
     trigger = useRef<HTMLButtonElement>(null),
+    opener = useRef<HTMLElement | null>(null),
     sequence = useRef(0);
   const [query, setQuery] = useState(""),
     [result, setResult] = useState<SearchResult | null>(null),
     [pending, setPending] = useState(false);
-  function open() {
+  const open = useCallback(() => {
+    opener.current =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
     dialog.current?.showModal();
     input.current?.focus();
-  }
-  function close() {
+  }, []);
+  const close = useCallback(() => {
     sequence.current++;
     setPending(false);
     dialog.current?.close();
-    trigger.current?.focus();
-  }
+    (opener.current?.isConnected ? opener.current : trigger.current)?.focus();
+  }, []);
   useEffect(() => {
     function keyboard(e: KeyboardEvent) {
       if (
@@ -31,17 +36,15 @@ export function CommandMenu() {
       ) {
         e.preventDefault();
         if (dialog.current?.open) {
-          dialog.current.close();
-          trigger.current?.focus();
+          close();
         } else {
-          dialog.current?.showModal();
-          input.current?.focus();
+          open();
         }
       }
     }
     window.addEventListener("keydown", keyboard);
     return () => window.removeEventListener("keydown", keyboard);
-  }, []);
+  }, [open, close]);
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     const id = ++sequence.current;
