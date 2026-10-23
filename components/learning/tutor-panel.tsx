@@ -3,6 +3,7 @@ import { LiveTutorPanel } from "./live-tutor-panel";
 import { ReportForm } from "@/components/reports/report-form";
 import { useActionState, useState } from "react";
 import { askTutor, type TutorState } from "@/modules/tutor/actions";
+import { useSubmissionFocus } from "@/components/ui/use-submission-focus";
 async function recover(state: TutorState, form: FormData): Promise<TutorState> {
   try {
     return await askTutor(state, form);
@@ -39,6 +40,11 @@ function PreparedTutorPanel({
   const [key, setKey] = useState(request);
   const [intent, setIntent] = useState("hint");
   const answered = state.request === key;
+  const { formRef, onSubmit } = useSubmissionFocus(
+    pending,
+    state,
+    answered ? "select" : 'button[type="submit"]',
+  );
   const enabled = mode !== "disabled";
   return (
     <section className="tutor-panel" aria-labelledby="tutor-heading">
@@ -54,6 +60,8 @@ function PreparedTutorPanel({
       {enabled && (
         <form
           action={action}
+          ref={formRef}
+          onSubmit={onSubmit}
           className="account-form"
           aria-busy={pending}
           onReset={(e) => e.preventDefault()}
@@ -79,6 +87,7 @@ function PreparedTutorPanel({
             </select>
           </div>
           <button
+            type="submit"
             className="button button-secondary"
             disabled={pending || answered}
           >

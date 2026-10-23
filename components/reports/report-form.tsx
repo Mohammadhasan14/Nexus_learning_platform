@@ -2,6 +2,7 @@
 import { useActionState, useState } from "react";
 import Link from "next/link";
 import { sendReport, type ReportState } from "@/modules/reports/actions";
+import { useSubmissionFocus } from "@/components/ui/use-submission-focus";
 async function recover(
   state: ReportState,
   form: FormData,
@@ -27,6 +28,11 @@ export function ReportForm({
   const [state, action, pending] = useActionState(recover, {});
   const [text, setText] = useState(""),
     [key, setKey] = useState(request);
+  const { formRef, onSubmit } = useSubmissionFocus(
+    pending,
+    state,
+    state.success ? 'a[href="/reports"]' : 'button[type="submit"]',
+  );
   return (
     <details className="report-form">
       <summary>
@@ -34,6 +40,8 @@ export function ReportForm({
       </summary>
       <form
         action={action}
+        ref={formRef}
+        onSubmit={onSubmit}
         className="account-form"
         onReset={(e) => e.preventDefault()}
         aria-busy={pending}
@@ -66,6 +74,7 @@ export function ReportForm({
           no passwords or other private details. Up to ten reports per UTC day.
         </p>
         <button
+          type="submit"
           className="button button-secondary"
           disabled={pending || state.success}
         >

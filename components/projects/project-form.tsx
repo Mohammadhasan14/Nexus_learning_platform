@@ -2,6 +2,7 @@
 import { useActionState, useState } from "react";
 import { submitProject, type ProjectState } from "@/modules/projects/actions";
 import type { ProjectWork } from "@/modules/projects/schema";
+import { useSubmissionFocus } from "@/components/ui/use-submission-focus";
 async function recover(
   state: ProjectState,
   form: FormData,
@@ -32,9 +33,16 @@ export function ProjectForm({
   const [work, setWork] = useState(initial);
   const [key, setKey] = useState(request);
   const saved = state.success && state.request === key;
+  const { formRef, onSubmit, focusAfterRender } = useSubmissionFocus(
+    pending,
+    state,
+    saved ? "[data-continue]" : 'button[type="submit"]',
+  );
   return (
     <form
       action={action}
+      ref={formRef}
+      onSubmit={onSubmit}
       className="account-form"
       aria-busy={pending}
       onReset={(e) => e.preventDefault()}
@@ -65,7 +73,11 @@ export function ProjectForm({
         Private revision · up to 4,000 characters per milestone. Code is stored
         as text, not executed. Keep a local copy of unsaved work.
       </p>
-      <button className="button button-primary" disabled={pending || saved}>
+      <button
+        type="submit"
+        className="button button-primary"
+        disabled={pending || saved}
+      >
         {pending
           ? "Saving revision…"
           : saved
@@ -75,9 +87,11 @@ export function ProjectForm({
       {saved && (
         <button
           type="button"
+          data-continue
           className="button button-secondary"
           onClick={() => {
             setKey(crypto.randomUUID());
+            focusAfterRender("textarea");
           }}
         >
           Start next revision

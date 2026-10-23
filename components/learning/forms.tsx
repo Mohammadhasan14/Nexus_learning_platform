@@ -1,5 +1,6 @@
 "use client";
 import { useActionState, useState } from "react";
+import { useSubmissionFocus } from "@/components/ui/use-submission-focus";
 import {
   enrol,
   markRead,
@@ -58,10 +59,17 @@ export function ExerciseForm({
   const [attempt, setAttempt] = useState(request);
   const [answer, setAnswer] = useState("");
   const saved = state.success && state.request === attempt;
+  const { formRef, onSubmit, focusAfterRender } = useSubmissionFocus(
+    pending,
+    state,
+    saved ? "[data-continue]" : 'button[type="submit"]',
+  );
   return (
     <form
       action={action}
       className="account-form exercise-form"
+      ref={formRef}
+      onSubmit={onSubmit}
       aria-busy={pending}
       onReset={(event) => event.preventDefault()}
     >
@@ -84,11 +92,15 @@ export function ExerciseForm({
         ))}
       </fieldset>
       {!saved && (
-        <button className="button button-primary" disabled={pending || !answer}>
+        <button
+          type="submit"
+          className="button button-primary"
+          disabled={pending || !answer}
+        >
           {pending ? "Checking…" : "Check answer"}
         </button>
       )}
-      <div role={state.success ? "status" : "alert"} aria-live="polite">
+      <div role={state.success ? "status" : "alert"}>
         {saved && <strong>{state.correct ? "Correct. " : "Not yet. "}</strong>}
         {(!state.success || saved) && state.message}
       </div>
@@ -99,6 +111,7 @@ export function ExerciseForm({
           onClick={() => {
             setAttempt(crypto.randomUUID());
             setAnswer("");
+            focusAfterRender('input[type="radio"]');
           }}
         >
           Start a new attempt
@@ -107,10 +120,12 @@ export function ExerciseForm({
       {saved && (
         <button
           type="button"
+          data-continue
           className="button button-secondary"
           onClick={() => {
             setAttempt(crypto.randomUUID());
             setAnswer("");
+            focusAfterRender('input[type="radio"]');
           }}
         >
           Try again

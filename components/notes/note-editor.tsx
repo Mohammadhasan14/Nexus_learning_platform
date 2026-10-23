@@ -1,6 +1,7 @@
 "use client";
 import { useActionState, useState, useSyncExternalStore } from "react";
 import { saveNote, type NoteState } from "@/modules/notes/actions";
+import { useSubmissionFocus } from "@/components/ui/use-submission-focus";
 const subscribe = () => () => {};
 export function NoteEditor({
   lesson,
@@ -41,6 +42,11 @@ export function NoteEditor({
     },
     {},
   );
+  const { formRef, onSubmit } = useSubmissionFocus(
+    pending,
+    state,
+    state.success ? "textarea" : 'button[type="submit"]',
+  );
   return (
     <section className="card note-editor" aria-labelledby="private-note-title">
       <h2 id="private-note-title">Private lesson note</h2>
@@ -52,6 +58,8 @@ export function NoteEditor({
       <noscript>Enable JavaScript to edit and save your private note.</noscript>
       <form
         action={action}
+        ref={formRef}
+        onSubmit={onSubmit}
         aria-busy={pending}
         onReset={(e) => e.preventDefault()}
       >
@@ -79,6 +87,7 @@ export function NoteEditor({
           {body === saved ? "No unsaved changes" : "Unsaved changes"}
         </p>
         <button
+          type="submit"
           className="button button-secondary"
           disabled={!hydrated || pending || body === saved}
         >
