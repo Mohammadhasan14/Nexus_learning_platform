@@ -53,6 +53,7 @@ jobs:
       - run: npm run db:reset
       - run: npm run db:env
       - run: npm run tutor:receipts:setup
+      - run: npm run privacy:deletion:setup
       - run: npm run db:test:local
       - run: npm run db:types:check
       - run: npm run build

@@ -31,6 +31,7 @@ Start with the [application README](../README.md).
 - [CI jobs, local equivalents and remaining release gates](CI.md)
 - [Error logging, request IDs and health checks](OBSERVABILITY_SETUP.md)
 - [Learner data export and its scope](PRIVACY_EXPORT_SETUP.md)
+- [Reply retention, account deletion and public notices](PRIVACY_CONTROLS_SETUP.md)
 
 ## Historical evidence
 

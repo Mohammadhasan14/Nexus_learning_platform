@@ -2,6 +2,7 @@
 import { useActionState } from "react";
 import { loginAction, registerAction } from "@/app/auth/actions";
 import type { ActionState } from "@/lib/auth/validation";
+import Link from "next/link";
 
 export function AuthForm({
   mode,
@@ -18,6 +19,12 @@ export function AuthForm({
   return (
     <form action={action} className="account-form" aria-busy={pending}>
       <input type="hidden" name="next" value={next} />
+      {signup && (
+        <p>
+          Read the <Link href="/privacy">privacy notice</Link> and{" "}
+          <Link href="/terms">terms of use</Link> before creating an account.
+        </p>
+      )}
       {state.message && (
         <p
           className={state.success ? "form-success" : "form-message"}

@@ -112,8 +112,10 @@ against the daily request allowance. **Recover saved reply** retrieves a complet
 reply with the same request identity without a second AI call. Incomplete replies
 are discarded; provider failures return labelled prepared guidance. Completed
 private receipts support **Report this tutor response**, with the exact server-saved
-quote. Account deletion removes receipts; submitted report snapshots keep their
-existing staff-review retention policy.
+quote. Tutor retention/clearing removes ordinary receipt text while submitted
+report copies remain separately available for review. The account deletion
+control removes owned reports as well as private receipts and learning data.
+See [privacy controls and setup](docs/PRIVACY_CONTROLS_SETUP.md).
 
 Other providers still need adapters; adding a key alone does not enable them.
 See [setup and limitations](docs/LIVE_TUTOR_SETUP.md). Scripted mode remains
@@ -133,3 +135,14 @@ calling a provider. `npm run eval:tutor -- --live` explicitly evaluates the
 configured local Gemini model using up to 16 synthetic requests. Collection
 success is not semantic approval; see the
 [evaluation rubric, archived reviews and limits](tests/evaluations/README.md).
+
+## Privacy controls
+
+Settings provides private data export, saved tutor reply retention (until removed,
+30 days or 90 days), explicit reply clearing and password-confirmed permanent
+account deletion. `/privacy` and `/terms` describe the implemented controls and
+their limits; the user-approved privacy contact is `hello.farzain@gmail.com`.
+The reviewed privacy migration and separate scoped deletion-key setup must be
+applied deliberately before using deletion against a real environment. No Docker
+startup, real-account deletion or hosted provisioning is part of the code change.
+See [setup, maintenance and verification](docs/PRIVACY_CONTROLS_SETUP.md).

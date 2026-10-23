@@ -38,7 +38,14 @@ Lesson reports capture title, objective, text, example and course version. Tutor
 
 Staff can set a report to Open, Reviewing, Resolved or Dismissed and provide an update visible to the reporter. Updates reject stale revisions and append an audit record. The original report snapshot never changes during triage or publishing. Private profile/account data is not included in the staff view.
 
-Account deletion removes private tutor receipts through the existing cascade and unlinks the report's account reference while preserving its submitted description/context. Report/audit retention, deletion policy and pagination beyond the displayed latest 100 reports/50 audit events remain pre-beta operational work. Do not imply this is a complete account erasure workflow.
+The application account-deletion control now removes the learner's filed reports
+and their report audits before the Auth cascade removes private learning/tutor
+records. Ordinary tutor reply clearing/expiry preserves copies already submitted
+in reports. Direct operator deletion of an Auth row still follows the legacy
+report SET NULL FK; operators must follow the reviewed erasure workflow rather
+than assume that raw Auth deletion removes submitted text. See
+[privacy controls and remaining environment gates](PRIVACY_CONTROLS_SETUP.md).
+Pagination beyond the latest 100 reports/50 audit events remains separate work.
 
 ## Verification
 

@@ -4,6 +4,38 @@ This dated log preserves earlier implementation and staging decisions. The lates
 entry and [current progress](PROGRESS.md) describe the active repository layout;
 older references to parent-workspace files are historical.
 
+## 2026-10-23 — Privacy controls, deletion and public notices (NX-039)
+
+The user authorised the remaining privacy development and selected default
+retention until explicit removal, with 30-day/90-day choices and clear now.
+Keep the existing app, all learning evidence, atomic quota rules and stopped
+Docker/Vector preference. No real account is deleted during implementation.
+
+Add private preferences and reply saved/removed timestamps. Expire only reply
+text at guarded read/export/report/settings boundaries; provide a restricted
+operator prune function without provisioning a scheduler. Clear pending claims
+with tombstones so late signed receipts cannot resurrect content. Keep trusted
+token reconciliation even when the reply is no longer stored. Report snapshots
+have a separately explained lifecycle; account deletion removes owned reports.
+
+Recheck the current password against Auth using an isolated publishable-key
+client and issue a separate 60-second owner/action-bound HMAC proof. The database
+requires that capability as well as auth.uid(); no Auth hash access or broad
+service-role application key. Delete owned reports/audits, then the Auth row,
+atomically under existing FKs. Preserve global usage and published editorial
+history, unlinking direct staff identities. Clear cookies only on confirmed
+success; preserve explicit uncertain-outcome language for network failures.
+
+Provide a guarded local-only key setup command and wire it into the disposable
+CI stack; do not run it against the user's stopped database or edit credentials.
+Privacy/terms pages describe actual code and limits, including open tabs,
+reports, logs, providers, backups and absent scheduled maintenance. Operator
+name/contact are configurable; never publish the Git email by inference. The
+user explicitly supplied hello.farzain@gmail.com as the public privacy contact;
+use it as the default, with no inferred operator name. No
+operator identity, jurisdictional approval or provider retention policy is
+invented. Hosted rollout and real-provider acceptance remain separate.
+
 ## 2026-10-22 — Owner-only learner data export (NX-039, first slice)
 
 User authorised the proposed authenticated learner data export. Add one explicit

@@ -228,9 +228,11 @@ export default function Home() {
               Nexus Learning is being built for adult and college learners,
               beginning with JavaScript. The examples above are illustrative,
               not live courses or learner results. Accounts require a connected
-              environment. There are no payments, analytics, or AI requests.
-              Public privacy notices and support channels will be reviewed
-              before beta.
+              environment. The public preview sends no tutor requests. Connected
+              accounts store learning activity; local live tutor testing can
+              send selected lesson context to an AI provider. No payments are
+              implemented. Read the privacy notice and terms for the current
+              boundaries.
             </p>
           </details>
         </section>
@@ -240,6 +242,8 @@ export default function Home() {
         <nav aria-label="Footer navigation">
           <a href="#about">About this preview</a>
           <a href="#availability">Availability</a>
+          <a href="/privacy">Privacy notice</a>
+          <a href="/terms">Terms of use</a>
           <a href="#main-content">Back to top ↑</a>
         </nav>
         <small>

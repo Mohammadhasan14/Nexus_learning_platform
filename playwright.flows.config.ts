@@ -30,6 +30,7 @@ export default defineConfig({
       url: "http://127.0.0.1:3102/login",
       reuseExistingServer: false,
       env: {
+        ACCOUNT_DELETION_SIGNING_KEY: "d".repeat(64),
         APP_ENV: "test",
         SUPABASE_PROJECT_ENV: "test",
         SUPABASE_URL: "http://127.0.0.1:54331",

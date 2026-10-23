@@ -82,6 +82,8 @@ export function LearnerShell({
           >
             Outcomes
           </Link>
+          <Link href="/privacy">Privacy notice</Link>
+          <Link href="/terms">Terms of use</Link>
           {staff && (
             <Link
               href="/admin"

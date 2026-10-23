@@ -1,10 +1,84 @@
 # Current progress
 
-Updated: **2026-10-22**. Read this file, [features.csv](features.csv) and
+Updated: **2026-10-23**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — NX-039 learner export slice
+## Current handoff — NX-039 privacy controls development
+
+The user authorised account deletion, retention controls and truthful public
+notices. They selected default tutor reply retention until explicit removal,
+with 30-day/90-day alternatives and clear now, and supplied
+**hello.farzain@gmail.com** as the public privacy contact. No operator name was
+inferred. See [privacy controls and environment setup](PRIVACY_CONTROLS_SETUP.md).
+
+**Implemented:** Settings retention/clear controls preserve learning evidence
+and quota charges, with owner-derived private RPCs. Expired replies are removed
+at guarded boundaries; a private operator prune function is ready for scheduling.
+Reply tombstones prevent pending receipts or scripted retries restoring cleared
+text while normal trusted usage reconciliation remains intact. Reports retain
+their separately disclosed submitted copy. Export includes privacy preferences.
+
+**Deletion:** same-origin bounded requests require the current password and
+explicit DELETE confirmation. Isolated Auth password verification issues a
+separate 60-second owner/action-bound HMAC proof. The database checks it before
+atomically removing owned reports/audits and the Auth user with existing private
+data cascades. Global usage and published editorial history remain; direct staff
+links are cleared. Confirmed success clears cookies and returns to sign-in.
+Failures preserve honest uncertain-outcome language. No service-role app key or
+Auth hash access. The scoped local setup command is prepared but not run here.
+
+**Public notices:** `/privacy` and `/terms` describe current data use, Auth cookies,
+live/scripted guidance, retention timing, report copies, export/deletion limits,
+providers, operational logs, backups and remaining operator rollout details.
+They work without JavaScript and are linked from registration, homepage and
+learner navigation. Contact defaults to the user-approved public email, with an
+environment override; operator name remains configurable.
+
+**Verification passed:** formatting, lint/typecheck, 46 unit tests, all 44
+isolated database tests, final production build, all 35 account/learning browser
+cases and all 17 public browser cases (142 tests total). The final browser runs
+use the final build including the approved contact. All `npm run check` stages
+passed as individual commands. New database cases prove ownership, expiry,
+tombstones, accounting invariants, proof forgery/owner/action/lifetime, rollback
+on a provider FK and actual cascades. Browser cases prove password rejection
+preserves the current session, confirmed deletion clears cookies/rejects later
+sign-in, retention persists/retries safely, and explicit confirmation/origin/
+revocation/input bounds hold. The synthetic password canary is absent from the
+captured application log. No-JavaScript notice checks and JavaScript-based axe
+scans are separate; the initial combined test helper timed out and the corrected
+full public suite passes. Three-width keyboard/reduced-motion/axe/overflow checks
+pass, with all Settings screenshots visually reviewed at 320/768/1440.
+
+**Provider limits:** real Supabase integration coverage is prepared and the
+disposable CI setup is wired, but neither is claimed run. Actual migration/key
+setup, Auth/PostgREST verification, provider type drift and operator scheduling
+remain separate from this isolated/fixture evidence. Screenshots/results stay
+ignored under `test-results/verification/privacy-controls/` and the existing
+public/flows directories. No persistent test servers are left running.
+
+**Preserved preferences:** work began clean at `6b03775`. No Docker/Vector start,
+real database migration/deletion, credential or dependency/lockfile change,
+provider call or hosted job. Only synthetic isolated/fixture records are removed
+by tests. New RPC signatures come from the isolated migration catalog; actual
+provider type drift remains separate. Foundation/database coverage and runtime
+controls/notices were committed as `8d2e014` and `681ed46`. The final 22-file
+group includes navigation, key setup, CI wiring, remaining tests and documentation.
+All groups use only the current project Git identity, with no co-author trailer.
+No push or remote CI run. These commit requests added no application changes or
+test reruns; verification above remains the evidence.
+
+**Register:** 77 rows: 51 Completed, 10 In progress, 5 Pending, 11 Deferred.
+NX-039 remains In progress for actual migration/key setup, provider verification,
+scheduled maintenance and deployment-specific notice/owner details. These are
+not a claim that the broader project is ready for deployment.
+
+**Next action:** owner review of the completed privacy development slice. Apply
+the reviewed migration/key setup and verify the actual provider only in a later
+authorised environment step; preserve the stopped-stack preference. No unrelated
+feature development has been started.
+
+## Previous handoff — NX-039 learner export slice (2026-10-22)
 
 **Scope:** authenticated learner JSON export, the first authorised NX-039 slice.
 Settings offers a download with pending/error/retry feedback and preserves
