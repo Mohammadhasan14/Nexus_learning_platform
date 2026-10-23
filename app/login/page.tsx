@@ -12,6 +12,8 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 const messages: Record<string, string> = {
+  deleted:
+    "Your account was deleted. You can create a new account if you wish.",
   session:
     "Your session has ended or could not be verified. Sign in to continue.",
   "signed-out": "You’re signed out on this browser.",

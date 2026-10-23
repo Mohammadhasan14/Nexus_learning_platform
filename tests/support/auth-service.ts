@@ -6,6 +6,16 @@ import { randomUUID, createHmac } from "node:crypto";
 import type { Database } from "../../lib/supabase/database.types";
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 const profiles = new Map<string, Profile>();
+const privacy = new Map<
+  string,
+  {
+    tutor_retention_days: number | null;
+    replies_cleared_at: string | null;
+    updated_at: string | null;
+  }
+>();
+const deletedEmails = new Set<string>();
+let privacyOutage = false;
 const sessions = new Map<
   string,
   { id: string; email: string; expires: number }
@@ -94,6 +104,9 @@ const server = createServer(async (req, res) => {
   // Controls exist only inside this test process, bound to loopback.
   if (url.pathname === "/__test/reset") {
     profiles.clear();
+    privacy.clear();
+    deletedEmails.clear();
+    privacyOutage = false;
     sessions.clear();
     refreshes.clear();
     unavailable = false;
@@ -123,6 +136,10 @@ const server = createServer(async (req, res) => {
     exportOutage = !!body.value;
     return respond(200, {});
   }
+  if (url.pathname === "/__test/privacy-outage") {
+    privacyOutage = !!body.value;
+    return respond(200, {});
+  }
   if (url.pathname === "/health") return respond(200, {});
   if (url.pathname === "/auth/v1/health")
     return respond(unavailable ? 503 : 200, {
@@ -146,6 +163,7 @@ const server = createServer(async (req, res) => {
     }
     if (
       body.password !== "Nexus-test-password-2026" ||
+      deletedEmails.has(body.email) ||
       !body.email?.endsWith("@example.test")
     )
       return respond(400, {
@@ -176,6 +194,63 @@ const server = createServer(async (req, res) => {
     sessions.delete(token);
     return respond(204, null);
   }
+  const ownPrivacy = () =>
+    privacy.get(user.id) ?? {
+      tutor_retention_days: null,
+      replies_cleared_at: null,
+      updated_at: null,
+    };
+  if (
+    [
+      "get_privacy_settings",
+      "set_tutor_retention",
+      "clear_tutor_replies",
+      "delete_learner_account",
+    ].some((name) => url.pathname === `/rest/v1/rpc/${name}`)
+  ) {
+    if (privacyOutage)
+      return respond(503, { message: "privacy-private-error-canary" });
+    if (url.pathname.endsWith("/get_privacy_settings"))
+      return respond(200, ownPrivacy());
+    if (url.pathname.endsWith("/set_tutor_retention")) {
+      if (![0, 30, 90].includes(body.days)) return respond(400, {});
+      const next = {
+        ...ownPrivacy(),
+        tutor_retention_days: body.days || null,
+        updated_at: stamp(),
+      };
+      privacy.set(user.id, next);
+      return respond(200, next);
+    }
+    if (url.pathname.endsWith("/clear_tutor_replies")) {
+      if (body.confirmation !== "CLEAR") return respond(400, {});
+      privacy.set(user.id, {
+        ...ownPrivacy(),
+        replies_cleared_at: stamp(),
+        updated_at: stamp(),
+      });
+      return respond(200, true);
+    }
+    const expected = createHmac("sha256", "d".repeat(64))
+      .update(body.proof ?? "")
+      .digest("hex");
+    const proof = JSON.parse(body.proof ?? "{}");
+    if (
+      expected !== body.signature ||
+      proof.owner !== user.id ||
+      proof.action !== "delete-account-v1" ||
+      proof.expires <= Date.now() / 1000
+    )
+      return respond(403, {});
+    profiles.delete(user.id);
+    privacy.delete(user.id);
+    deletedEmails.add(user.email);
+    for (const [token, current] of sessions)
+      if (current.id === user.id) sessions.delete(token);
+    for (const [token, current] of refreshes)
+      if (current.id === user.id) refreshes.delete(token);
+    return respond(200, true);
+  }
   if (url.pathname === "/rest/v1/rpc/export_learner_data") {
     if (exportOutage)
       return respond(503, { message: "export-private-error-canary" });
@@ -185,6 +260,7 @@ const server = createServer(async (req, res) => {
       format: "nexus-learner-export-v1",
       exported_at: stamp(),
       profile: profiles.get(user.id),
+      privacy_preferences: ownPrivacy(),
       staff_role: null,
       enrolments: [],
       lesson_reads: [],

@@ -1438,6 +1438,51 @@ button:disabled {
 .data-export h2 {
   font-size: 1.3rem;
 }
+.privacy-controls {
+  border-top: 1px solid var(--border);
+  margin-top: 32px;
+  padding-top: 24px;
+}
+.privacy-controls h2 {
+  font-size: 1.3rem;
+}
+.privacy-controls p {
+  margin-block: 0.75rem;
+}
+.privacy-controls a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.privacy-controls .account-form {
+  margin-block: 1rem;
+}
+.privacy-controls summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding-block: 0.75rem;
+}
+.account-deletion {
+  border-top-color: #ac748a;
+}
+.policy-page {
+  max-width: 780px;
+  padding-block: 40px;
+  overflow-wrap: anywhere;
+}
+.policy-page h1 {
+  font-size: clamp(2rem, 5vw, 3rem);
+}
+.policy-page h2 {
+  font-size: 1.35rem;
+  margin-top: 2rem;
+}
+.policy-page p {
+  margin-block: 1rem;
+}
+.policy-page a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .form-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
