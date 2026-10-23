@@ -4,6 +4,7 @@ import { ReportForm } from "@/components/reports/report-form";
 import { tutorEvents } from "@/modules/tutor/stream";
 import type { TokenUsage, TokenAllowance } from "@/modules/tutor/usage";
 import type { TutorReply } from "@/modules/tutor/adapter";
+import { useSubmissionFocus } from "@/components/ui/use-submission-focus";
 
 type State = {
   message?: string;
@@ -26,11 +27,17 @@ export function LiveTutorPanel({
   const [state, setState] = useState<State>({});
   const [pending, setPending] = useState(false);
   const active = useRef<AbortController | null>(null);
+  const { formRef, onSubmit: rememberSubmission } = useSubmissionFocus(
+    pending,
+    state,
+    state.reply ? "select" : 'button[type="submit"]',
+  );
   useEffect(() => () => active.current?.abort(), []);
 
   async function ask(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (active.current || state.reply) return;
+    rememberSubmission();
     const controller = new AbortController();
     active.current = controller;
     setPending(true);
@@ -101,7 +108,12 @@ export function LiveTutorPanel({
         Completed guidance is saved privately for response reports and removed
         with your account. A submitted report keeps a copy for staff review.
       </p>
-      <form onSubmit={ask} className="account-form" aria-busy={pending}>
+      <form
+        ref={formRef}
+        onSubmit={ask}
+        className="account-form"
+        aria-busy={pending}
+      >
         <div className="field">
           <label htmlFor="tutor-intent">What would help?</label>
           <select
@@ -121,6 +133,7 @@ export function LiveTutorPanel({
           </select>
         </div>
         <button
+          type="submit"
           className="button button-secondary"
           disabled={pending || !!state.reply}
         >

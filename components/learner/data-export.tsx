@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useState, useSyncExternalStore } from "react";
+import { useSubmissionFocus } from "@/components/ui/use-submission-focus";
 
 const subscribe = () => () => {};
 
@@ -12,8 +13,11 @@ export function DataExport() {
   const active = useRef(false);
   const [pending, setPending] = useState(false);
   const [state, setState] = useState({ message: "", error: false });
+  const { formRef: sectionRef, onSubmit: rememberSubmission } =
+    useSubmissionFocus<HTMLElement>(pending, state, "button");
   async function download() {
     if (active.current) return;
+    rememberSubmission();
     active.current = true;
     setPending(true);
     setState({ message: "Preparing your download…", error: false });
@@ -57,7 +61,11 @@ export function DataExport() {
     }
   }
   return (
-    <section className="data-export" aria-labelledby="data-export-title">
+    <section
+      ref={sectionRef}
+      className="data-export"
+      aria-labelledby="data-export-title"
+    >
       <h2 id="data-export-title">Download your learning data</h2>
       <p id="data-export-description">
         Get a JSON file with your saved account details, preferences, learning

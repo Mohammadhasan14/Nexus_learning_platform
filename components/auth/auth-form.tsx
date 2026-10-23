@@ -3,6 +3,7 @@ import { useActionState } from "react";
 import { loginAction, registerAction } from "@/app/auth/actions";
 import type { ActionState } from "@/lib/auth/validation";
 import Link from "next/link";
+import { useSubmissionFocus } from "@/components/ui/use-submission-focus";
 
 export function AuthForm({
   mode,
@@ -16,8 +17,19 @@ export function AuthForm({
     {},
   );
   const signup = mode === "register";
+  const { formRef, onSubmit } = useSubmissionFocus(
+    pending,
+    state,
+    'button[type="submit"]',
+  );
   return (
-    <form action={action} className="account-form" aria-busy={pending}>
+    <form
+      ref={formRef}
+      onSubmit={onSubmit}
+      action={action}
+      className="account-form"
+      aria-busy={pending}
+    >
       <input type="hidden" name="next" value={next} />
       {signup && (
         <p>

@@ -1,6 +1,7 @@
 "use client";
 import { useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
+import { useSubmissionFocus } from "@/components/ui/use-submission-focus";
 import {
   privacySettings,
   type PrivacySettings,
@@ -22,12 +23,21 @@ export function PrivacyControls({
   const [pending, setPending] = useState(false);
   const active = useRef(false);
   const [status, setStatus] = useState({ message: "", error: false });
+  const [operation, setOperation] = useState("retention");
+  const { formRef: sectionRef, onSubmit: rememberSubmission } =
+    useSubmissionFocus<HTMLElement>(
+      pending,
+      status,
+      operation === "clear" ? ".privacy-clear > summary" : "select",
+    );
   async function change(
     input:
       | { intent: "retention"; days: number }
       | { intent: "clear"; confirmation: string },
   ) {
     if (active.current) return;
+    rememberSubmission();
+    setOperation(input.intent);
     active.current = true;
     setPending(true);
     setStatus({ message: "", error: false });
@@ -77,6 +87,7 @@ export function PrivacyControls({
   }
   return (
     <section
+      ref={sectionRef}
       className="privacy-controls"
       aria-labelledby="privacy-controls-title"
     >
@@ -189,6 +200,11 @@ export function DeleteAccount({ available }: { available: boolean }) {
   const [pending, setPending] = useState(false);
   const active = useRef(false);
   const [message, setMessage] = useState("");
+  const { formRef, onSubmit: rememberDeletion } = useSubmissionFocus(
+    pending,
+    message,
+    'input[name="password"]',
+  );
   return (
     <section
       className="privacy-controls account-deletion"
@@ -220,11 +236,13 @@ export function DeleteAccount({ available }: { available: boolean }) {
         )}
         <noscript>Enable JavaScript to delete your account.</noscript>
         <form
+          ref={formRef}
           className="account-form"
           aria-busy={pending}
           onSubmit={async (event) => {
             event.preventDefault();
             if (active.current) return;
+            rememberDeletion();
             const form = event.currentTarget;
             const values = new FormData(form);
             active.current = true;
