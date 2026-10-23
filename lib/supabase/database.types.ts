@@ -732,10 +732,15 @@ export type Database = {
         Args: { intent: string; lesson: string; request: string };
         Returns: Json;
       };
+      clear_tutor_replies: { Args: { confirmation: string }; Returns: boolean };
       content_review_material: { Args: { draft: string }; Returns: Json };
       create_content_draft: {
         Args: { request: string; source: string };
         Returns: string;
+      };
+      delete_learner_account: {
+        Args: { proof: string; signature: string };
+        Returns: boolean;
       };
       enrol_course: { Args: { course: string }; Returns: undefined };
       export_learner_data: { Args: never; Returns: Json };
@@ -743,6 +748,7 @@ export type Database = {
         Args: { receipt: string; request: string; signature: string };
         Returns: boolean;
       };
+      get_privacy_settings: { Args: never; Returns: Json };
       get_tutor_usage: { Args: never; Returns: Json };
       is_content_staff: { Args: never; Returns: boolean };
       mark_lesson_read: { Args: { lesson: string }; Returns: undefined };
@@ -791,6 +797,7 @@ export type Database = {
           title: string;
         }[];
       };
+      set_tutor_retention: { Args: { days: number }; Returns: Json };
       submit_attempt: {
         Args: { exercise: string; request: string; submitted: string };
         Returns: Json;

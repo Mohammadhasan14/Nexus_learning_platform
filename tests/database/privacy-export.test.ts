@@ -196,7 +196,7 @@ test("learner export enforces ownership, explicit fields and complete snapshot d
           pronargs: 0,
           typname: "jsonb",
           prosecdef: true,
-          provolatile: "s",
+          provolatile: "v",
           proconfig: ['search_path=""'],
         },
       ]);
