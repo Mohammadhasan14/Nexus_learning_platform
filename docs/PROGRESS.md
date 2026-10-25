@@ -1,10 +1,62 @@
 # Current progress
 
-Updated: **2026-10-24**. Read this file, [features.csv](features.csv) and
+Updated: **2026-10-25**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — NX-026 local accessibility review
+## Current handoff — NX-028 mobile and tablet review
+
+User authorised reviewing mobile/tablet learner flows and fixing confirmed
+issues. Work began clean at `bde76a9`. See [scope and limits](MOBILE_REVIEW.md).
+
+**Confirmed and fixed:** long identifiers/titles/URLs overflowed at all five
+reviewed widths (320/390/768/1024/1440); compact sign-out was 38px high on mobile.
+Two scoped CSS declarations allow learner content to wrap and give sign-out a
+44px minimum height. Code examples retain their own horizontal scrolling.
+No redesign or learning/accounting/authentication behavior change.
+
+**Coverage:** eighteen new cases check populated routes at five widths, optional
+long synthetic content, touch practice/notes/runner/prepared tutor, project drafts
+and revision history, short-viewport Quick Search and synthetic live tutor
+cancellation/recovery at 320/768. Viewport changes preserve unsaved work. Width
+assertions use layout clientWidth, since mobile innerWidth can expand with
+overflow. All live tutor requests are intercepted; no provider calls.
+
+**Verification passed:** formatting, lint, types and production build; all
+71 account/learner cases and 17 public cases (88 distinct cases). The full learner
+run passed 69 cases; two new sign-out assertions missed the existing confirmation
+query string. Corrected only those assertions, then both passed in a targeted
+rerun against the same build. Do not describe this as a second full 71-case run.
+The complete public suite passed seventeen cases. All eighteen new cases have
+passing evidence. Visually reviewed final long-content lessons at
+320/768/1024/1440 and the 390px project; fifteen final screenshots cover all five
+widths. No unit/database rerun solely for CSS and browser-fixture changes.
+Temporary test servers are stopped.
+
+**Limits:** Chromium emulation does not verify physical phones/tablets, mobile
+Safari, other browser engines, OS keyboards or device text scaling. Native
+select-picker interaction is not exercised. NX-028 remains In progress for
+broader device/browser acceptance; NX-026 assistive-tool checks remain separate.
+
+**Preserved preferences:** Docker/Vector stay stopped; no real account/database,
+credential, schema, dependency or lockfile change. The user requested a 20–30%
+commit: `7bec92f` committed the two long-content fixture files (2 of 9, 22.2%)
+using only the project Git identity and no co-author. The next request committed
+the layout fixes and browser cases as `b6e9a62` (2 of the remaining 7, 28.6%),
+with the same identity and no co-author. The user then requested committing all
+five remaining documentation files as the final group, with the same identity,
+no co-author and a plain past-tense message. No push or deployment; no application
+changes or test reruns for these commit requests.
+Screenshots and logs remain ignored under `test-results/verification/mobile/`.
+
+**Register:** 77 rows: 51 Completed, 10 In progress, 5 Pending, 11 Deferred.
+Only NX-028 tracking metadata changes; original criteria/dependencies remain.
+
+**Next action:** owner review of the completed local fixes/coverage. Physical
+device/browser acceptance remains open. The next proposed development slice is
+NX-029 measured performance/asset budgets; it has not been started here.
+
+## Previous handoff — NX-026 local accessibility review
 
 User authorised the critical learner-flow accessibility review. Work began clean
 at `6b7f2be`. See [review scope, confirmed issues and limits](ACCESSIBILITY_REVIEW.md).

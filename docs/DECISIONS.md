@@ -4,6 +4,25 @@ This dated log preserves earlier implementation and staging decisions. The lates
 entry and [current progress](PROGRESS.md) describe the active repository layout;
 older references to parent-workspace files are historical.
 
+## 2026-10-25 — Mobile and tablet learner review (NX-028)
+
+The user authorised the proposed mobile/tablet review and confirmed-issue fixes.
+Begin clean at `bde76a9`. Reuse the populated synthetic backend and production
+browser harness; add opt-in long content without changing normal fixtures.
+Use touch-enabled mobile contexts and browser taps, five layout widths and
+retained-draft checks across viewport changes. Intercept every live tutor request
+and keep all keys synthetic. Preserve the stopped Docker/Vector preference.
+
+Baseline evidence confirms long-content overflow and a 38px compact sign-out
+control. Allow learner prose/navigation to wrap and give that control a 44px
+minimum height. Preserve locally scrollable code lines; do not clip content or
+redesign already-working flows. Measure the layout viewport with `clientWidth`,
+because mobile `innerWidth` can expand with overflow and hide a failure.
+
+Keep Chromium emulation, viewport resizing and native-select API checks separate
+from physical-device, OS-keyboard and mobile-Safari acceptance. NX-028 remains
+In progress for that broader evidence. See [review scope](MOBILE_REVIEW.md).
+
 ## 2026-10-23 — Critical-flow accessibility review (NX-026)
 
 The user authorised reviewing the implemented learner flows and fixing confirmed
