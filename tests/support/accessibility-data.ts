@@ -78,6 +78,7 @@ export function accessibilityData(
   method: string,
   body: Record<string, unknown>,
   owner: string,
+  longContent = false,
 ) {
   const stamp = new Date().toISOString();
   if (method === "GET") {
@@ -157,6 +158,24 @@ export function accessibilityData(
       ],
     };
     const table = path.replace("/rest/v1/", "");
+    // Deliberately unbroken identifiers/URLs exercise reflow without altering
+    // the ordinary keyboard fixture or any production content.
+    if (longContent) {
+      const identifier = "currentRecommendation".repeat(8);
+      records.course_versions = [{ ...course, title: identifier }];
+      records.lessons = lessons.map((lesson) => ({
+        ...lesson,
+        title: `${lesson.title}: ${identifier}`,
+        body: `${lesson.body}\n\nReference: https://example.test/${identifier}`,
+        example: `console.log("${identifier}");`,
+      }));
+      records.exercises = exercises.map((exercise) => ({
+        ...exercise,
+        prompt: `${exercise.prompt} Trace ${identifier}.`,
+        options: [exercise.options[0], { id: "b", label: identifier }],
+      }));
+      records.project_versions = [{ ...project, title: identifier }];
+    }
     if (Object.hasOwn(records, table))
       return { status: 200, data: records[table] };
   }

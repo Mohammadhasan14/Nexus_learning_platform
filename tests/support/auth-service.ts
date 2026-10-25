@@ -9,6 +9,7 @@ import {
   resetAccessibilityData,
 } from "./accessibility-data";
 let accessibility = false;
+let longContent = false;
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 const profiles = new Map<string, Profile>();
 const privacy = new Map<
@@ -109,6 +110,7 @@ const server = createServer(async (req, res) => {
   // Controls exist only inside this test process, bound to loopback.
   if (url.pathname === "/__test/reset") {
     accessibility = false;
+    longContent = false;
     resetAccessibilityData();
     profiles.clear();
     privacy.clear();
@@ -129,6 +131,7 @@ const server = createServer(async (req, res) => {
   }
   if (url.pathname === "/__test/accessibility") {
     accessibility = !!body.value;
+    longContent = !!body.longContent;
     return respond(200, {});
   }
   if (url.pathname === "/__test/runner-lesson") {
@@ -318,6 +321,7 @@ const server = createServer(async (req, res) => {
       req.method ?? "GET",
       body,
       user.id,
+      longContent,
     );
     if (fixture) return respond(fixture.status, fixture.data);
   }
