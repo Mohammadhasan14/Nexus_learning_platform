@@ -1,7 +1,7 @@
 "use client";
 import { useActionState, useSyncExternalStore } from "react";
 import { savePreferences } from "@/modules/profile/actions";
-import { locales } from "@/modules/profile/validation";
+import { locales } from "@/modules/profile/locales";
 import type { ActionState } from "@/lib/auth/validation";
 import type { Database } from "@/lib/supabase/database.types";
 

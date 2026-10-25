@@ -1,11 +1,6 @@
 import { z } from "zod";
 
-export const locales = {
-  en: "English",
-  "en-IN": "English (India)",
-  "en-US": "English (United States)",
-  "en-GB": "English (United Kingdom)",
-} as const;
+export { locales } from "./locales";
 export function isTimezone(value: string) {
   if (value !== "UTC" && !value.includes("/")) return false;
   try {
