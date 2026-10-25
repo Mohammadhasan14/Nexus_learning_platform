@@ -1,4 +1,4 @@
-import { requireProfile } from "@/lib/auth/session";
+import { requireRenderProfile as requireProfile } from "@/lib/auth/render-session";
 import { PreferencesForm } from "@/components/learner/preferences-form";
 import { timezoneOptions } from "@/modules/profile/timezones";
 import { DataExport } from "@/components/learner/data-export";

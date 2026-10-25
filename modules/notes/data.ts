@@ -1,5 +1,5 @@
 import "server-only";
-import { requireUser } from "@/lib/auth/session";
+import { requireRenderUser as requireUser } from "@/lib/auth/render-session";
 export async function lessonNote(lesson: string) {
   const { client, user } = await requireUser("/courses");
   const { data, error } = await client

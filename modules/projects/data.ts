@@ -1,5 +1,5 @@
 import "server-only";
-import { requireProfile } from "@/lib/auth/session";
+import { requireRenderProfile as requireProfile } from "@/lib/auth/render-session";
 import { redirect } from "next/navigation";
 export async function projectData() {
   const { client, user, profile } = await requireProfile("/projects");
