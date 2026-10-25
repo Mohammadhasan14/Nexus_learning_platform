@@ -4,6 +4,33 @@ This dated log preserves earlier implementation and staging decisions. The lates
 entry and [current progress](PROGRESS.md) describe the active repository layout;
 older references to parent-workspace files are historical.
 
+## 2026-10-25 — Measured production performance (NX-029)
+
+The user prioritised performance and authorised the proposed measurements,
+confirmed bottleneck fixes and regression budgets. Begin clean at `3c16c56`.
+Use the production webpack build, cold browser contexts, three samples per key
+route and explicit Chromium CPU/network settings; keep the backend synthetic and
+Docker/Vector stopped. Record timings as lab diagnostics, separate from field
+p75 LCP/INP/CLS and large-account/hosted evidence.
+
+Baseline counters prove repeated verified identity/profile reads across render
+loaders. Share those promises only through React's request-scoped cache in
+explicit render helpers. Preserve mutation/API verification and independent
+proxy checks. Verify simultaneous learner isolation and new-request revocation.
+
+Move runner control, live stream validation and Settings response validation to
+their point of use; keep immediate SSR controls and all original validators.
+Separate locale labels from profile validation to remove an accidental initial
+Zod dependency. Make waiting for optional code abortable, prove cancellation
+before loading cannot dispatch a tutor request, and retain safe failure/retry.
+
+Gate deterministic payloads, backend counts and deferred-loading behavior through
+`npm run test:performance`, included in `check`. Report noisy timings without a
+wall-clock CI assertion. Track expected cancelled speculative prefetches
+separately from missing required assets. Add no dependency, telemetry collection,
+real-provider call, schema change or hosted resource. See
+[performance measurements, budgets and limits](PERFORMANCE_REVIEW.md).
+
 ## 2026-10-25 — Mobile and tablet learner review (NX-028)
 
 The user authorised the proposed mobile/tablet review and confirmed-issue fixes.

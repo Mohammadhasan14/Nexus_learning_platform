@@ -4,7 +4,7 @@ export default defineConfig({
   outputDir: "test-results/public",
   testDir: "./tests",
   testMatch: "**/*.spec.ts",
-  testIgnore: ["**/integration/**", "**/flows/**"],
+  testIgnore: ["**/integration/**", "**/flows/**", "**/performance/**"],
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,

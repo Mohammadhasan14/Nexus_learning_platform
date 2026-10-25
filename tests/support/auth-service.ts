@@ -10,6 +10,7 @@ import {
 } from "./accessibility-data";
 let accessibility = false;
 let longContent = false;
+const requestCounts: Record<string, number> = {};
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 const profiles = new Map<string, Profile>();
 const privacy = new Map<
@@ -108,7 +109,15 @@ const server = createServer(async (req, res) => {
     ? JSON.parse(Buffer.concat(chunks).toString())
     : {};
   // Controls exist only inside this test process, bound to loopback.
+  if (url.pathname === "/__test/request-counts") {
+    if (req.method === "POST")
+      for (const key of Object.keys(requestCounts)) delete requestCounts[key];
+    return respond(200, requestCounts);
+  }
+  if (url.pathname.startsWith("/auth/") || url.pathname.startsWith("/rest/"))
+    requestCounts[url.pathname] = (requestCounts[url.pathname] ?? 0) + 1;
   if (url.pathname === "/__test/reset") {
+    for (const key of Object.keys(requestCounts)) delete requestCounts[key];
     accessibility = false;
     longContent = false;
     resetAccessibilityData();

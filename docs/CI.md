@@ -11,7 +11,11 @@ Git credentials are not persisted, and superseded runs are cancelled.
 **Code, database and browser checks** installs the locked dependencies and
 Playwright Chromium, then runs `npm run check`: formatting, ESLint, route/type
 generation, unit tests, isolated migration/policy tests, production build, public
-browser tests and fixture-backed account flows. PGlite auth shims and the account
+browser tests, fixture-backed account flows and production performance budgets.
+The performance suite checks initial payloads, duplicate render reads and safe
+on-demand loading. Timings are recorded, while deterministic bytes and behavior
+gate CI. See [scope and limits](PERFORMANCE_REVIEW.md). No remote run of this new
+step is claimed. PGlite auth shims and the account
 HTTP fixture do not replace the real-provider integration job.
 
 **Local Supabase integration** starts an ephemeral Docker-backed stack, resets

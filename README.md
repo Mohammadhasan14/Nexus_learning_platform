@@ -35,7 +35,9 @@ npx playwright install chromium
 npm run check
 ```
 
-`check` runs formatting, lint, TypeScript, unit tests, isolated PostgreSQL policy/content tests, production build, public browser tests and account-flow tests. `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` can select a preinstalled Chromium binary.
+`check` runs formatting, lint, TypeScript, unit tests, isolated PostgreSQL policy/content tests, production build, public browser tests, account-flow tests and production performance budgets. `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` can select a preinstalled Chromium binary.
+
+After a production build, `npm run test:performance` measures five key routes and checks payload sizes, duplicate backend reads and deferred feature loading with synthetic accounts. See [measurements, budgets and limits](docs/PERFORMANCE_REVIEW.md). Lab timings do not establish real-user performance.
 
 The flow suite uses an explicitly test-only HTTP provider on port 54331 and app port 3102. It tests the real app's SSR forms/cookies/UI; it is not evidence of live Supabase compatibility. `test:db` uses PGlite with minimal Supabase auth shims to execute real migration SQL. No fixture is imported by application code.
 

@@ -4,7 +4,70 @@ Updated: **2026-10-25**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — NX-028 mobile and tablet review
+## Current handoff — NX-029 production performance
+
+The user prioritised performance and authorised production measurements,
+confirmed fixes and repeatable budgets. Work began clean at `3c16c56`. See
+[method, results and limits](PERFORMANCE_REVIEW.md).
+
+**Confirmed and fixed:** the dashboard made five Auth calls and three profile
+reads per document. Render-only request memoization reduces those to two and one,
+keeping independent proxy verification and uncached mutation/API checks.
+Lessons/projects also avoid repeated identity/profile reads. Live validation,
+runner control and Settings response validation load at use; locale labels no
+longer import profile validation. Immediate SSR controls, validation, worker/CSP
+boundaries, learning behavior and quota accounting are preserved.
+
+**Coverage:** a separate production performance suite measures three cold-browser
+samples for homepage/dashboard/lesson/projects/Settings, with a 390px mobile
+viewport and explicit Chromium CPU/network configuration. Fixed byte budgets,
+backend read counts, deferred-loading/cancellation/recovery and simultaneous
+learner/revocation behavior form eleven checks. `npm run check` includes the new
+suite; public test discovery excludes its separate fixture-dependent directory.
+
+**Measured:** lesson encoded JavaScript fell 173,299 → 145,509 bytes (16.0%);
+Settings fell 170,996 → 144,008 bytes (15.8%). The shared split-chunk mappings add
+105 bytes on the other three measured routes. Dashboard backend requests fell
+19 → 14, with Auth calls 5 → 2 and profile reads 3 → 1. Timing changes are mixed;
+record all three samples and medians rather than claiming a uniform speedup.
+
+**Verification passed:** formatting, lint/types, 46 unit tests and optimized
+production build; all 71 account/learner, 17 public and 11 performance cases
+(145 tests including units). Full browser suites use build `lkCmYcZggpzBZQYMyiJhl`.
+The byte budget exposed the locale-label dependency; the final harness separately
+records Next's normal cancelled speculative prefetches. All final suites pass.
+No SQL/RPC/schema/policy change, so database tests were not repeated. Raw evidence
+includes fifteen cold-load samples and three isolated document request counters.
+Temporary test servers are stopped. No remote CI execution is claimed.
+
+**Limits:** no real-user p75/INP/session-window CLS, physical low-end device,
+mobile Safari, hosted database/CDN or large-history/catalogue performance claim.
+Lab timings are reported without flaky CI thresholds. NX-029 remains In progress
+for broader measured acceptance. No production telemetry collection is added.
+
+**Preserved preferences:** no Docker/Vector start, real account/database,
+credential, schema, dependency or lockfile change; no provider call, push or
+deployment. The user requested a 20–30% commit: `5de4343` committed the seven
+render-session/read-integration files (7 of 26, 26.9%), using only the project Git
+identity and no co-author. The next request committed the four optional-loading
+and cancellation files as `2201f46` (4 of the remaining 19, 21.1%), with the same
+identity and no co-author. The following request committed the three locale-label
+files as `81a5de6` (3 of the remaining 15, 20%), with the same identity and no
+co-author. The user then requested committing all twelve remaining files: the
+performance suite, fixture counters, command/config wiring and documentation.
+The final group uses the same identity, no co-author and a plain past-tense
+message. No application changes or test reruns for these commit requests.
+Temporary data uses the test-only backend and intercepted live calls. Raw results
+stay ignored under `test-results/verification/performance/`.
+
+**Register:** 77 rows: 51 Completed, 10 In progress, 5 Pending, 11 Deferred.
+Only NX-029 tracking metadata changes; original criteria/dependencies remain.
+
+**Next action:** owner review of the completed local performance fixes/budgets.
+Broader device, hosted/large-data and real-user performance evidence remains open;
+no additional implementation or environment operation has been started.
+
+## Previous handoff — NX-028 mobile and tablet review
 
 User authorised reviewing mobile/tablet learner flows and fixing confirmed
 issues. Work began clean at `bde76a9`. See [scope and limits](MOBILE_REVIEW.md).

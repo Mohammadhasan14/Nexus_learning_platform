@@ -34,6 +34,7 @@ Start with the [application README](../README.md).
 - [Reply retention, account deletion and public notices](PRIVACY_CONTROLS_SETUP.md)
 - [Critical-flow accessibility review and limits](ACCESSIBILITY_REVIEW.md)
 - [Mobile/tablet touch and layout review](MOBILE_REVIEW.md)
+- [Production performance measurements and regression budgets](PERFORMANCE_REVIEW.md)
 
 ## Historical evidence
 
