@@ -2,10 +2,7 @@
 import { useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { useSubmissionFocus } from "@/components/ui/use-submission-focus";
-import {
-  privacySettings,
-  type PrivacySettings,
-} from "@/modules/privacy/schema";
+import type { PrivacySettings } from "@/modules/privacy/schema";
 const subscribe = () => () => {};
 
 export function PrivacyControls({
@@ -61,6 +58,7 @@ export function PrivacyControls({
         return;
       }
       if (input.intent === "retention") {
+        const { privacySettings } = await import("@/modules/privacy/schema");
         const checked = privacySettings.parse((await response.json()).settings);
         setSaved(String(checked.tutor_retention_days ?? 0));
         setStatus({

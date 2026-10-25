@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ReportForm } from "@/components/reports/report-form";
-import { tutorEvents } from "@/modules/tutor/stream";
 import type { TokenUsage, TokenAllowance } from "@/modules/tutor/usage";
 import type { TutorReply } from "@/modules/tutor/adapter";
 import { useSubmissionFocus } from "@/components/ui/use-submission-focus";
+import { abortable } from "@/lib/browser/abortable";
 
 type State = {
   message?: string;
@@ -45,6 +45,12 @@ export function LiveTutorPanel({
     const timer = setTimeout(() => controller.abort(), 35000);
     let feedback = "The reply was interrupted or could not be loaded.";
     try {
+      const { tutorEvents } = await abortable(
+        import("@/modules/tutor/stream"),
+        controller.signal,
+      );
+      // Cancelling while the validator loads must not dispatch an AI request.
+      if (controller.signal.aborted) throw new Error("Guidance stopped");
       const response = await fetch("/api/tutor", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { MAX_CODE, PROTOCOL, type Result } from "../../runner/protocol.mjs";
-import { runPractice } from "@/modules/practice/client";
+import { abortable } from "@/lib/browser/abortable";
 
 export function PracticeRunner({
   example,
@@ -30,6 +30,10 @@ export function PracticeRunner({
     setRunning(true);
     setResult(null);
     try {
+      const { runPractice } = await abortable(
+        import("@/modules/practice/client"),
+        controller.signal,
+      );
       const reply = await runPractice(code, origin, controller.signal);
       if (active.current === controller) setResult(reply);
     } catch {
@@ -38,10 +42,11 @@ export function PracticeRunner({
           protocol: PROTOCOL,
           type: "result",
           id: "00000000-0000-0000-0000-000000000000",
-          status: "unavailable",
+          status: controller.signal.aborted ? "cancelled" : "unavailable",
           lines: [],
-          message:
-            "JavaScript could not start in this browser. Your code is kept.",
+          message: controller.signal.aborted
+            ? "Run stopped. Your code is kept."
+            : "JavaScript could not start in this browser. Your code is kept.",
         });
     } finally {
       if (active.current === controller) {
