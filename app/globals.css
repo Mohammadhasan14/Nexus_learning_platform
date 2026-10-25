@@ -1298,6 +1298,7 @@ button:disabled {
   width: min(1260px, 100%);
   padding: 36px;
   margin-inline: auto;
+  overflow-wrap: anywhere;
 }
 .dashboard-heading {
   display: flex;
@@ -1563,7 +1564,7 @@ button:disabled {
   .sidebar-bottom .button {
     padding: 7px 12px;
     font-size: 0.75rem;
-    min-height: 38px;
+    min-height: 44px;
   }
   .workspace-header {
     padding: 18px 24px;
