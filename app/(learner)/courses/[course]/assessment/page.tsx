@@ -5,7 +5,7 @@ import { z } from "zod";
 import { learningData } from "@/modules/learning/data";
 import { diagnosticEvidence, recommendation } from "@/modules/learning/rules";
 import { ExerciseForm } from "@/components/learning/forms";
-export const metadata = { title: "Starting check — Nexus Learning" };
+export const metadata = { title: "Starting check — Farzain Learning" };
 export default async function Assessment({
   params,
 }: {

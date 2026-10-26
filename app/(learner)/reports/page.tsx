@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/auth/session";
 import { reportSnapshotSchema } from "@/modules/reports/schema";
-export const metadata = { title: "My reports — Nexus Learning" };
+export const metadata = { title: "My reports — Farzain Learning" };
 export default async function Reports() {
   const { client, user } = await requireUser("/reports");
   const { data, error } = await client

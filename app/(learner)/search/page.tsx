@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { searchData } from "@/modules/search/data";
 import { SearchResults } from "@/components/search/results";
-export const metadata: Metadata = { title: "Search — Nexus Learning" };
+export const metadata: Metadata = { title: "Search — Farzain Learning" };
 export default async function SearchPage({
   searchParams,
 }: {

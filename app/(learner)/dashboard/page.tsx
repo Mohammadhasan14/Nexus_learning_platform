@@ -4,7 +4,7 @@ import { learningData } from "@/modules/learning/data";
 import { recommendation } from "@/modules/learning/rules";
 
 import { Badge, ButtonLink, Card } from "@/components/ui";
-export const metadata = { title: "Today — Nexus Learning" };
+export const metadata = { title: "Today — Farzain Learning" };
 export default async function Dashboard() {
   const [data, review, projects] = await Promise.all([
     learningData(),

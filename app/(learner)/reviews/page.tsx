@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { reviewData } from "@/modules/review/data";
-export const metadata = { title: "Reviews — Nexus Learning" };
+export const metadata = { title: "Reviews — Farzain Learning" };
 export default async function Reviews() {
   const { reviews, profile } = await reviewData();
   return (

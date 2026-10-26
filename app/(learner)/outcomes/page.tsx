@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { outcomeData } from "@/modules/outcomes/data";
-export const metadata = { title: "Learning outcomes — Nexus Learning" };
+export const metadata = { title: "Learning outcomes — Farzain Learning" };
 function rate(passed: number, total: number) {
   return total
     ? `${passed} / ${total} passed (${Math.round((passed / total) * 100)}%)`

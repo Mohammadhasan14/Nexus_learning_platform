@@ -3,7 +3,7 @@ import Link from "next/link";
 import { learningData, passed } from "@/modules/learning/data";
 import { Card, Badge } from "@/components/ui";
 import { EnrolForm } from "@/components/learning/forms";
-export const metadata = { title: "Courses — Nexus Learning" };
+export const metadata = { title: "Courses — Farzain Learning" };
 export default async function Courses() {
   const data = await learningData();
   return (

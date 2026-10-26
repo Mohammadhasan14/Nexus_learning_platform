@@ -9,7 +9,7 @@ import {
 } from "@/modules/projects/schema";
 import { visibleCourses } from "@/modules/learning/rules";
 import { ProjectForm } from "@/components/projects/project-form";
-export const metadata = { title: "Projects — Nexus Learning" };
+export const metadata = { title: "Projects — Farzain Learning" };
 export default async function Projects() {
   const [data, learning] = await Promise.all([projectData(), learningData()]);
   return (

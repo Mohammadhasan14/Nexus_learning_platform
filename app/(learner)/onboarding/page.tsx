@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { requireProfile } from "@/lib/auth/session";
 import { PreferencesForm } from "@/components/learner/preferences-form";
 import { timezoneOptions } from "@/modules/profile/timezones";
-export const metadata = { title: "Your starting point — Nexus Learning" };
+export const metadata = { title: "Your starting point — Farzain Learning" };
 export default async function Onboarding() {
   const { profile } = await requireProfile("/onboarding");
   if (profile.onboarding_completed_at) redirect("/dashboard");
