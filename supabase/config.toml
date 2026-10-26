@@ -415,5 +415,5 @@ enabled = true
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":180,\"commaStyle\":\"trailing\"}"
 
 [auth.email.template.confirmation]
-subject = "Confirm your Nexus Learning account"
+subject = "Confirm your Farzain Learning account"
 content_path = "./supabase/templates/confirmation.html"

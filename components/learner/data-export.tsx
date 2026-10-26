@@ -43,7 +43,7 @@ export function DataExport() {
       const url = URL.createObjectURL(await response.blob());
       const link = document.createElement("a");
       link.href = url;
-      link.download = "nexus-learning-data.json";
+      link.download = "farzain-learning-data.json";
       document.body.append(link);
       link.click();
       link.remove();

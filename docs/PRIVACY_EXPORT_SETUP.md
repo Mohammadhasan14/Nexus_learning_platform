@@ -1,7 +1,7 @@
 # Learner data export (NX-039)
 
 Settings offers **Download my data** to authenticated learners, including before
-onboarding. It downloads `nexus-learning-data.json` without navigating away or
+onboarding. It downloads `farzain-learning-data.json` without navigating away or
 saving/resetting preference edits. Pending and error messages support retry.
 The file contains private learner content; the interface explains this before
 the download. No export file is stored by the application or uploaded elsewhere.

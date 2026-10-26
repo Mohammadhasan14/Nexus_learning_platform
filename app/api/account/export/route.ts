@@ -55,7 +55,7 @@ export async function POST(request: Request) {
         ...headers,
         "Content-Type": "application/json; charset=utf-8",
         "Content-Disposition":
-          'attachment; filename="nexus-learning-data.json"',
+          'attachment; filename="farzain-learning-data.json"',
       },
     });
   } catch {

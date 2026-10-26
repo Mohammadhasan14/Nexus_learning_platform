@@ -59,7 +59,7 @@ test("Settings downloads private JSON and ignores caller-supplied owners", async
     .getByRole("button", { name: "Download my data", exact: true })
     .click();
   const download = await ready;
-  expect(download.suggestedFilename()).toBe("nexus-learning-data.json");
+  expect(download.suggestedFilename()).toBe("farzain-learning-data.json");
   const file = await download.path();
   const result = JSON.parse(await readFile(file!, "utf8"));
   expect(result.account.email).toBe("export-a@example.test");
