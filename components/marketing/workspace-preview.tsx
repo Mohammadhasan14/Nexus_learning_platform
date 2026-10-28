@@ -20,7 +20,7 @@ export function WorkspacePreview() {
         <figcaption>
           <span>
             <span className="mini-logo" aria-hidden="true">
-              N
+              F
             </span>{" "}
             Learning workspace
           </span>

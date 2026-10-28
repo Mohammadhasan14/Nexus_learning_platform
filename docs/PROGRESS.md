@@ -1,10 +1,53 @@
 # Current progress
 
-Updated: **2026-10-25**. Read this file, [features.csv](features.csv) and
+Updated: **2026-10-26**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — NX-029 production performance
+## Current handoff — Farzain Learning site name
+
+The user requested renaming the site from Nexus Learning to **Farzain Learning**.
+Work began clean at `748dd69` after the local performance changes were committed.
+
+**Updated:** shared visible/accessible brand, homepage copy and preview monogram,
+all public/account/learner/staff titles, root description, privacy/terms copy,
+confirmation-email subject/template source and repository display heading.
+Monograms now use F. A small static SVG browser icon replaces the starter favicon.
+Downloads are named `farzain-learning-data.json` in both the server attachment and
+browser control; the setup guide and existing assertion match.
+
+**Compatibility:** keep session cookies, export format/schema marker, runner
+protocol, project/package/database identifiers and log service IDs. Preserve
+published lesson examples, historical reports/evaluations/planning evidence and
+the user-approved privacy contact. No inferred operator identity, schema change,
+account/session reset, dependency/lockfile update or design overhaul.
+
+**Verification passed:** formatting, lint, types and production build; 17 focused
+account/export cases, one dynamic lesson-title case, all 17 public cases and five
+cold-load budget cases (40 distinct browser cases). Visual review caught the
+longer name wrapping the Menu button at 320px; a 12px narrow-header column gap
+keeps both on one row. After that scoped CSS fix, the final build passed all
+public/budget cases again and direct header geometry/icon/overflow checks at
+320/390/768/1440. Final 320px homepage/login and F icon screenshots were visually
+reviewed. No extra test cases were added solely for the name change; existing
+title/filename expectations were updated. Unit/database suites were not repeated
+for display copy, icons, filenames and the scoped header spacing.
+
+Rename measurements/screenshots/logs stay ignored under
+`test-results/verification/branding/`. The prior NX-029 performance report was
+restored byte for byte after recording the rename's fifteen fresh load samples
+separately, so the historical measurements retain their original provenance.
+Temporary test servers are stopped.
+
+**Preserved preferences:** Docker/Vector remain stopped. The confirmation email
+source is updated without changing an existing Auth provider or sending emails.
+No real account/database, credentials, hosted settings, commit, push or deployment.
+The feature register's 77 rows and statuses/criteria remain unchanged.
+
+**Next action:** owner review of the completed Farzain Learning branding change.
+The broader device, real-user and hosted acceptance limits recorded below remain.
+
+## Previous handoff — NX-029 production performance
 
 The user prioritised performance and authorised production measurements,
 confirmed fixes and repeatable budgets. Work began clean at `3c16c56`. See

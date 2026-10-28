@@ -1,0 +1,26 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="40"
+  height="40"
+  viewBox="0 0 40 40"
+>
+  <title>Farzain Learning</title>
+  <defs>
+    <linearGradient
+      id="brand"
+      x1="6"
+      y1="34"
+      x2="33"
+      y2="8"
+      gradientUnits="userSpaceOnUse"
+    >
+      <stop stop-color="#70e9ff" />
+      <stop offset="1" stop-color="#ac8bff" />
+    </linearGradient>
+  </defs>
+  <rect width="40" height="40" rx="9" fill="#080f1e" />
+  <path
+    d="M12 8h21l-1.2 6H18l-1.1 6h12l-1.1 6H15.8l-2.2 10H6.8z"
+    fill="url(#brand)"
+  />
+</svg>

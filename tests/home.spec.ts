@@ -12,7 +12,7 @@ for (const width of [320, 390, 768, 1440]) {
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
       "Understand deeply.",
     );
-    await expect(page).toHaveTitle(/Nexus Learning/);
+    await expect(page).toHaveTitle(/Farzain Learning/);
     expect(
       await page.evaluate(
         () => document.documentElement.scrollWidth <= innerWidth,

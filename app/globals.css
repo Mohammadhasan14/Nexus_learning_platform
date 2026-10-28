@@ -948,6 +948,9 @@ details p {
   .container {
     width: calc(100% - 36px);
   }
+  .header-inner {
+    column-gap: 12px;
+  }
   .section {
     padding-block: 28px;
   }

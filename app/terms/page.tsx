@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Brand } from "@/components/ui";
-export const metadata = { title: "Terms of use — Nexus Learning" };
+export const metadata = { title: "Terms of use — Farzain Learning" };
 export default function Terms() {
   return (
     <div className="container policy-page">
@@ -14,16 +14,17 @@ export default function Terms() {
       <main id="main-content">
         <h1>Terms of use</h1>
         <p>
-          Updated 23 October 2026. These describe the current development
+          Updated 26 October 2026. These describe the current development
           service and are not a paid-service contract or a promise of production
           availability.
         </p>
         <h2>Use for learning</h2>
         <p>
-          Use Nexus Learning to study and practise with content you are entitled
-          to submit. Keep your sign-in details private. Do not attempt to access
-          another learner’s data, bypass quotas or grading controls, or use the
-          practice runner to attack the application or other services.
+          Use Farzain Learning to study and practise with content you are
+          entitled to submit. Keep your sign-in details private. Do not attempt
+          to access another learner’s data, bypass quotas or grading controls,
+          or use the practice runner to attack the application or other
+          services.
         </p>
         <h2>Guidance and saved work</h2>
         <p>

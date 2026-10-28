@@ -7,7 +7,7 @@ import { AuthForm } from "@/components/auth/auth-form";
 import { accountsAvailable } from "@/lib/supabase/config";
 export const dynamic = "force-dynamic";
 export const metadata = {
-  title: "Create account — Nexus Learning",
+  title: "Create account — Farzain Learning",
   robots: { index: false, follow: false },
 };
 export default function Register() {

@@ -33,11 +33,11 @@ export function Card({
 }
 export function Brand() {
   return (
-    <Link href="/" className="brand" aria-label="Nexus Learning home">
+    <Link href="/" className="brand" aria-label="Farzain Learning home">
       <span className="brand-mark" aria-hidden="true">
-        N
+        F
       </span>
-      <span>Nexus Learning</span>
+      <span>Farzain Learning</span>
     </Link>
   );
 }

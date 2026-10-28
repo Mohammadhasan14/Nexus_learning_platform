@@ -225,7 +225,7 @@ export default function Home() {
           <details>
             <summary>About this preview</summary>
             <p>
-              Nexus Learning is being built for adult and college learners,
+              Farzain Learning is being built for adult and college learners,
               beginning with JavaScript. The examples above are illustrative,
               not live courses or learner results. Accounts require a connected
               environment. The public preview sends no tutor requests. Connected

@@ -1,4 +1,4 @@
-# Nexus Learning
+# Farzain Learning
 
 Next.js learning platform with a public homepage, accounts, onboarding, learner dashboard, versioned lessons, protected grading and saved progress. The introductory course has an explicitly AI-assisted editorial review. Prepared guidance and an opt-in local Gemini tutor are available; payments remain future work.
 

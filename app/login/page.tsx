@@ -8,7 +8,7 @@ import { accountsAvailable } from "@/lib/supabase/config";
 import { safeDestination } from "@/lib/auth/validation";
 export const dynamic = "force-dynamic";
 export const metadata = {
-  title: "Sign in — Nexus Learning",
+  title: "Sign in — Farzain Learning",
   robots: { index: false, follow: false },
 };
 const messages: Record<string, string> = {
@@ -42,7 +42,8 @@ export default async function Login({
           )}
           <AuthForm mode="login" next={safeDestination(params.next)} />
           <p className="account-switch">
-            New to Nexus? <Link href="/register">Create an account</Link>
+            New to Farzain Learning?{" "}
+            <Link href="/register">Create an account</Link>
           </p>
         </>
       ) : (

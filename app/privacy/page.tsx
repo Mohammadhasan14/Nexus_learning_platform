@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Brand } from "@/components/ui";
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Privacy notice — Nexus Learning" };
+export const metadata = { title: "Privacy notice — Farzain Learning" };
 export default function Privacy() {
   const operator = process.env.PRIVACY_OPERATOR_NAME?.trim().slice(0, 120);
   const candidate =
@@ -23,7 +23,7 @@ export default function Privacy() {
       <main id="main-content">
         <h1>Privacy notice</h1>
         <p>
-          Updated 23 October 2026. This notice describes the current Nexus
+          Updated 26 October 2026. This notice describes the current Farzain
           Learning application and its controls. Hosting, backups and AI
           provider settings depend on the environment you use.
         </p>
@@ -44,11 +44,12 @@ export default function Privacy() {
         <h2>Account and learning information</h2>
         <p>
           Connected account services store your email and authentication
-          information. Nexus stores your display name, learning goal, language,
-          timezone and study schedule; enrolments, reading acknowledgements,
-          exercise answers, feedback and outcomes; private lesson notes and
-          saved project revisions. These support sign-in, preferences, progress,
-          reviews and the learning tools you choose to use.
+          information. Farzain Learning stores your display name, learning goal,
+          language, timezone and study schedule; enrolments, reading
+          acknowledgements, exercise answers, feedback and outcomes; private
+          lesson notes and saved project revisions. These support sign-in,
+          preferences, progress, reviews and the learning tools you choose to
+          use.
         </p>
         <p>
           Learning outcomes record activity such as practice results and

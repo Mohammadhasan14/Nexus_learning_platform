@@ -4,6 +4,31 @@ This dated log preserves earlier implementation and staging decisions. The lates
 entry and [current progress](PROGRESS.md) describe the active repository layout;
 older references to parent-workspace files are historical.
 
+## 2026-10-26 — Farzain Learning site name
+
+The user requested changing the site name from Nexus Learning to Farzain
+Learning. Update visible branding, accessible home-link labels, static/dynamic
+page titles, descriptions, public notices, confirmation-email template source
+and learner download filenames. Use F for the shared/preview monogram and a
+small code-native SVG browser icon in the existing cyan/violet palette.
+The longer name wrapped the Menu button at 320px in visual review; reduce only
+the narrow homepage header's column gap to 12px and verify a shared row without
+shrinking text or touch controls.
+
+Preserve session cookie names, the export schema identifier, runner protocol,
+database/project/package identifiers and operational service IDs. These are
+compatibility identifiers rather than display branding. Keep immutable lesson
+versions, saved report snapshots and historical evaluation/planning records as
+recorded. Do not infer a legal operator name from the new brand. Keep the approved
+privacy contact and existing learning/accounting/security behavior.
+
+Read the installed Next metadata/icon documentation before changing icon files.
+Replace the starter favicon with `app/icon.svg`; avoid a raster dependency or
+an added runtime image endpoint. Verify existing account/export/title/public
+checks and payload budgets. Email source changes do not apply themselves to a
+running/hosted Auth provider; do not start Docker/Vector or modify credentials.
+No commit, push or deployment is included in this naming request.
+
 ## 2026-10-25 — Measured production performance (NX-029)
 
 The user prioritised performance and authorised the proposed measurements,
