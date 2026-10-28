@@ -7,7 +7,7 @@ import {
   DeleteAccount,
 } from "@/components/learner/privacy-controls";
 import { privacySettings } from "@/modules/privacy/schema";
-export const metadata = { title: "Learning preferences — Nexus Learning" };
+export const metadata = { title: "Learning preferences — Farzain Learning" };
 export default async function Settings() {
   const { client, profile } = await requireProfile("/settings");
   const result = await client.rpc("get_privacy_settings");

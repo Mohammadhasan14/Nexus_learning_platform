@@ -7,7 +7,7 @@ import {
 } from "@/modules/admin/schema";
 import { reportSnapshotSchema } from "@/modules/reports/schema";
 import { StaffForm, DraftEditor } from "@/components/admin/forms";
-export const metadata = { title: "Editorial workspace — Nexus Learning" };
+export const metadata = { title: "Editorial workspace — Farzain Learning" };
 export default async function Admin({
   searchParams,
 }: {

@@ -26,8 +26,8 @@ export async function generateMetadata({
   const version = data.courses.find((c) => c.id === course)?.version;
   return {
     title: item
-      ? `${item.title}${version ? ` · v${version}` : ""} — Nexus Learning`
-      : "Lesson — Nexus Learning",
+      ? `${item.title}${version ? ` · v${version}` : ""} — Farzain Learning`
+      : "Lesson — Farzain Learning",
   };
 }
 export default async function Lesson({

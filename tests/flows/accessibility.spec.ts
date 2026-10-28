@@ -30,10 +30,10 @@ test("lesson navigation supplies distinct descriptive document titles", async ({
   page,
 }) => {
   await page.goto(lesson);
-  await expect(page).toHaveTitle(/Fixture values/);
+  await expect(page).toHaveTitle(/Fixture values.*Farzain Learning/);
   const first = await page.title();
   await page.getByRole("link", { name: /2\. Fixture functions/ }).click();
-  await expect(page).toHaveTitle(/Fixture functions/);
+  await expect(page).toHaveTitle(/Fixture functions.*Farzain Learning/);
   expect(await page.title()).not.toBe(first);
 });
 test("keyboard quick search returns to its invoking field and traps focus", async ({
