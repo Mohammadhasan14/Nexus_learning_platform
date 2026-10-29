@@ -1,10 +1,98 @@
 # Current progress
 
-Updated: **2026-10-26**. Read this file, [features.csv](features.csv) and
+Updated: **2026-10-29**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — Farzain Learning site name
+## Current handoff — System Design Studio M1 started, then paused
+
+The user authorised NX-046.1–4 on 2026-10-29 with desktop/narrow-screen UI
+references, then explicitly postponed implementation and requested commits.
+Do not resume feature work until instructed. The planning documents were
+committed as `0d133d3`; this commit group records the remaining planning and
+initial estimator work using only the current project Git identity.
+
+**Implemented so far:** versioned campus event scenario, worksheet/input schemas,
+inline terminology, defaults and a pure deterministic capacity estimator under
+`modules/system-design/`. Three focused unit cases passed for the golden fixture,
+meaningful zeros/boundaries, invalid inputs, unsupported versions and precision
+limits. Formatting was corrected before committing. The new unit file is not yet
+wired into the package test script. NX-046.1 remains In progress: this is an
+initial contract, not completed milestone acceptance.
+
+**Not implemented:** migrations, generated database types, persistence, course
+entry/routing, worksheet UI, save/recovery and combined browser/performance
+acceptance. NX-046.2–4 remain Pending. The workshop is not available to learners.
+No Docker/Vector, real database, credentials, dependency, provider or deployment
+change. Three estimator cases do not replace type/lint/build/browser/provider
+verification, which remain outstanding for this initial code.
+
+**Curriculum clarification:** the planned beginner-to-advanced journey begins
+with a short foundations module before the workshop: clients/servers/APIs,
+databases, requests/responses, latency/throughput and read/write workloads, using
+simple examples and guided practice. Track this deferred work as NX-046.22;
+implement none of it in M1 and do not gate today's workshop on missing content.
+The initial scenario explains unfamiliar terms inline and does not claim to be
+a complete course. The register now has 103 rows: 51 Completed, 11 In progress,
+8 Pending and 33 Deferred. Later editor/simulator milestones remain Deferred.
+
+**Next action when resumed:** review and finish NX-046.1 contracts and verification,
+then proceed sequentially through NX-046.2–4 using the supplied references and
+`system-design/NEXT_IMPLEMENTATION.md`. Stop after M1. Preserve the existing
+planning work and JavaScript/Auth/privacy behavior.
+
+## Previous handoff — System Design Studio audit and planning only
+
+The user requested inspection and an incremental implementation plan, explicitly
+excluding feature implementation in this session. Began clean at `1456834`.
+Farzain Learning is the current site name; Nexus remains in repository/history
+identifiers. The rename was fully committed before this audit, including
+`ecfbbda`, `149f556`, `d5cec94` and final `1456834`; older handoffs below preserve
+their original session scope.
+
+**Findings:** checked-in seeds provide JavaScript foundations v1/v2, not multiple
+implemented subject courses. Homepage AI/web paths and workspace output are
+illustrative. No system-design worksheet/calculator, canvas, graph, simulator,
+failure/comparison UI or scenario-specific coaching exists. Versioned enrolment,
+protected attempts, Auth/RLS, private revisions, tutoring, outcomes, UI patterns
+and tests can be reused. Current catalogue/lesson/starting-check/project/tutor
+assumptions need explicit Studio adaptation; see the
+[evidence-based inventory](system-design/AUDIT.md).
+
+**Planning:** [six-milestone approach](system-design/PLAN.md) covers requirements/
+capacity → editor → simulation/traces → failure investigation/comparison →
+assessment/coaching/mastery → advanced challenges/portfolio/collaboration. It
+defines ownership, versioned persistence/models, bounded deterministic compute,
+accessible graph alternatives and performance safeguards. No competing tracker:
+`features.csv` retains every original ID/status/criterion and adds 25 scoped
+tasks under NX-046/NX-048/NX-047/NX-050. There are now **102 rows: 51 Completed,
+10 In progress, 9 Pending, 32 Deferred**. The four Pending tasks are unstarted
+M1 work; all later Studio delivery stays Deferred. No Studio feature is Completed.
+
+**Fresh checks passed:** four existing security unit cases and three migration
+test files (content/learning/policies) in isolated PGlite with Auth shims. Existing
+SQL is applied only in memory; no application database was migrated or queried.
+Final gates passed: repository formatting, CSV IDs/dependencies/statuses and
+preserved original rows, 58 new-document file links,
+`git -c core.whitespace=cr-at-eol diff --check` (preserving CSV CRLF) and a
+seven-file documentation-only worktree audit with an empty index.
+No build, browser, full suite, real provider
+or remote CI rerun; older evidence below is historical.
+
+**Next implementation:** M1 / NX-046.1–4, one private requirements-and-capacity
+workshop with a fictional campus event directory, explicit assumptions/units,
+transparent formulas, explanation and save/resume. See the bounded
+[next prompt](system-design/NEXT_IMPLEMENTATION.md). Obtain desktop/narrow-screen
+worksheet references for visual matching; do not begin the editor or simulator.
+No product answer blocks local model/contracts. Real-provider acceptance needs
+an authorised test environment; hosted/device gates retain their existing scope.
+
+**Stop:** documentation only, uncommitted. No application code, schema, package,
+lockfile, environment, credential, real account, running service, AI call, push or
+deployment changed. Docker/Vector remain stopped. Do not execute the prepared
+next prompt without a later implementation instruction.
+
+## Previous handoff — Farzain Learning site name
 
 The user requested renaming the site from Nexus Learning to **Farzain Learning**.
 Work began clean at `748dd69` after the local performance changes were committed.

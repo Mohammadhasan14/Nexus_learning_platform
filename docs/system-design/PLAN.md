@@ -4,6 +4,18 @@ Date: **2026-10-28**. Planning only; implementation is not authorised in this
 session. See [audited state and evidence](AUDIT.md) and the bounded
 [next implementation prompt](NEXT_IMPLEMENTATION.md).
 
+## Curriculum clarification — 2026-10-29
+
+The intended beginner-to-advanced student journey starts with a short foundations
+module before the capacity workshop. NX-046.22 records clients, servers, APIs,
+databases, requests versus responses, latency versus throughput and read/write
+workloads, taught through simple examples and guided practice. This module is
+Deferred and excluded from M1 implementation. Keep the current workshop scope,
+explain unfamiliar terms inline and do not present it as the whole course or
+block access on the unimplemented prerequisite. The user supplied M1 UI references
+and authorised its implementation, then paused it; use the current handoff and
+canonical tracker for present status rather than the original audit snapshot.
+
 ## One tracker and delivery order
 
 [docs/features.csv](../features.csv) remains the **only task tracker**. Existing

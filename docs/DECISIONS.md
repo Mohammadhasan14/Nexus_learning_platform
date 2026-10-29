@@ -4,6 +4,44 @@ This dated log preserves earlier implementation and staging decisions. The lates
 entry and [current progress](PROGRESS.md) describe the active repository layout;
 older references to parent-workspace files are historical.
 
+## 2026-10-28 — System Design Studio audit and incremental roadmap
+
+The user requested repository inspection and planning/task documentation only.
+Inspect the actual app at `1456834`, beginning with a clean worktree. Current
+branding is Farzain Learning; preserve Nexus repository/history identifiers.
+No environment-file values, feature code, schema, dependency, running service,
+provider, hosted configuration, commit or deployment changes are authorised here.
+
+The checked-in course seeds implement only JavaScript foundations v1/v2, not
+the other illustrative homepage paths. No Studio, requirements workshop,
+architecture graph or traffic simulation was found. Reuse existing versioned
+enrolments, Auth/RLS, revisions and test infrastructure, but explicitly adapt the
+JavaScript-specific catalogue/lesson/assessment/tutor assumptions rather than
+claiming they already support this course.
+
+Keep `docs/features.csv` as the only tracker and `docs/PROGRESS.md` as the current
+handoff. Preserve all 77 existing IDs/statuses/criteria; decompose the expansion
+under NX-046.1–21, NX-048.1, NX-047.1 and NX-050.1–2. Four first-milestone tasks
+are Pending, later tasks and original expansion parents remain Deferred. This
+records a roadmap, not authority to begin implementation. Store evidence/approach
+in [the audit](system-design/AUDIT.md) and [plan](system-design/PLAN.md).
+
+The smallest useful next slice is one private, versioned requirements/capacity
+worksheet with transparent deterministic formulas and explicit save/resume.
+Assume a fictional campus event directory and English-first copy; no product
+question blocks local contracts/logic. UI references arrive with the later
+implementation prompt. Add Studio-specific experience routing and persistence
+deliberately; do not fabricate JS attempts, completion, simulation metrics or
+mastery. Keep deterministic feedback separate from optional later AI coaching.
+Reviewed models, bounded compute, keyboard/non-drag alternatives, reduced motion
+and precise evidence provenance are prerequisites as the roadmap grows.
+
+Fresh verification is limited to four existing security unit cases and three
+isolated migration test files, followed by documentation integrity checks. No
+browser, real-provider, hosted or broad application acceptance is inferred.
+Stop after documentation; [the next prompt](system-design/NEXT_IMPLEMENTATION.md)
+is for a separate implementation session.
+
 ## 2026-10-26 — Farzain Learning site name
 
 The user requested changing the site name from Nexus Learning to Farzain

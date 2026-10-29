@@ -9,6 +9,10 @@ The original spreadsheet does not synchronise with the feature register.
 - [Current progress and next action](PROGRESS.md)
 - [Canonical feature register](features.csv)
 - [Architecture decisions](DECISIONS.md), with dated entries retained as history
+- [System Design Studio audit](system-design/AUDIT.md),
+  [incremental approach](system-design/PLAN.md) and
+  [next implementation prompt](system-design/NEXT_IMPLEMENTATION.md) — planning
+  only; tasks stay in the canonical feature register
 - [Original build guide](BUILD_GUIDE.md), a historical requirements proposal
 - [Archived handoff through 2026-10-14](PROGRESS_ARCHIVE_2026-10-14.md)
 
