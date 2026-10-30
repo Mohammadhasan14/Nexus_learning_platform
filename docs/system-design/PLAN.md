@@ -1,7 +1,7 @@
 # System Design Studio incremental implementation plan
 
-Date: **2026-10-28**. Planning only; implementation is not authorised in this
-session. See [audited state and evidence](AUDIT.md) and the bounded
+Plan baseline: **2026-10-28**. M1 was authorised and resumed on **2026-10-29**;
+implementation evidence and remaining gates are in the current handoff. See [audited state and evidence](AUDIT.md) and the bounded
 [next implementation prompt](NEXT_IMPLEMENTATION.md).
 
 ## Curriculum clarification — 2026-10-29
@@ -13,8 +13,9 @@ workloads, taught through simple examples and guided practice. This module is
 Deferred and excluded from M1 implementation. Keep the current workshop scope,
 explain unfamiliar terms inline and do not present it as the whole course or
 block access on the unimplemented prerequisite. The user supplied M1 UI references
-and authorised its implementation, then paused it; use the current handoff and
-canonical tracker for present status rather than the original audit snapshot.
+and authorised its implementation, then paused and later resumed M1; use the
+current handoff and canonical tracker for present status rather than the original
+audit snapshot.
 
 ## One tracker and delivery order
 
@@ -25,10 +26,10 @@ describes their approach, not a second set of independently maintained statuses.
 [docs/PROGRESS.md](../PROGRESS.md) remains the only current handoff. Do not create
 parallel `TASKS.md` or per-course `PROGRESS.md` files.
 
-Milestone 1 tasks are Pending: defined, unstarted and awaiting a later
-implementation instruction. Milestones 2–6 are Deferred roadmap work. The
-original expansion parents stay Deferred; authorising an audit does not activate
-their delivery or complete their acceptance. Tasks may move through the existing
+The original audit defined M1 without authorising delivery. Its implementation
+was later authorised; present task statuses live in the canonical register.
+Milestones 2–6 remain Deferred roadmap work. Active M1 work does not complete
+the broader expansion parent's acceptance. Tasks may move through the existing
 Pending / In progress / In review / Blocked / Completed / Deferred conventions.
 Completion requires the recorded acceptance checks, not just a route or file.
 

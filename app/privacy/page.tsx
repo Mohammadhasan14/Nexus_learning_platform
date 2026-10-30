@@ -23,7 +23,7 @@ export default function Privacy() {
       <main id="main-content">
         <h1>Privacy notice</h1>
         <p>
-          Updated 26 October 2026. This notice describes the current Farzain
+          Updated 29 October 2026. This notice describes the current Farzain
           Learning application and its controls. Hosting, backups and AI
           provider settings depend on the environment you use.
         </p>
@@ -42,6 +42,13 @@ export default function Privacy() {
           )}
         </p>
         <h2>Account and learning information</h2>
+        <p>
+          System Design Studio stores your private worksheet inputs,
+          assumptions, explanations and saved revision history. Nothing is saved
+          until you choose Save worksheet. These records are included in account
+          export and removed by account deletion; they are not shared with the
+          tutor.
+        </p>
         <p>
           Connected account services store your email and authentication
           information. Farzain Learning stores your display name, learning goal,

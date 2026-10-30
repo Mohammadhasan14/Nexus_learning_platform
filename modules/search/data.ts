@@ -38,7 +38,8 @@ export async function searchData(raw: string): Promise<SearchResult> {
     },
     {
       title: "Courses",
-      detail: "Enrol or resume learning; open a lesson to write private notes",
+      detail:
+        "Enrol or resume learning, including System Design Studio; open a lesson to write private notes",
       href: "/courses",
     },
     { title: "Reviews", detail: "Due practice reminders", href: "/reviews" },

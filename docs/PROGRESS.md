@@ -4,7 +4,73 @@ Updated: **2026-10-29**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — System Design Studio M1 started, then paused
+## Current handoff — System Design Studio M1 implemented locally
+
+The user resumed NX-046.1–4 on 2026-10-29. Started clean at `094ce55`, reusing the
+committed scenario/estimator. Stop after M1: no editor, simulation, coaching,
+sharing or foundations implementation is included. New work remains uncommitted.
+
+**Open:** `/courses/system-design-studio-v1/studio/campus-events-v1`, after
+sign-in/onboarding and enrolment through Courses, once the additive migration
+is applied on an authorised environment. No real database was changed here.
+The course entry and usable workshop ship together in this source change.
+
+**Implemented:** versioned brief/inline teaching/defaults/ranges and transparent
+pure formulas; owner-only worksheet heads/immutable revisions; enrolment checks,
+expected revisions and payload-bound idempotent retries; server recomputation,
+account export and deletion lifecycle. Catalogue/dashboard route Studio separately
+from JS lessons and show actual saved work. The responsive UI uses existing
+navigation/tokens, all seven inputs/six formula disclosures, requirements/targets/
+assumptions/explanation, explicit save, review/rebase conflict recovery and
+same-account session reauthentication without losing edits. Nothing awards grades,
+mastery or completion. No localStorage, autosave, new package or provider call.
+
+**Checks passed:** repository formatting, lint, route/types and production build;
+**49 unit and 52 isolated database checks**. Full production suites passed
+**85 learner/account, 17 public and 11 performance cases** on build
+`h0RCN6nwjz4lIqmO-5grZ`. A reproduced collapsed-section validation failure was
+then fixed: invalid sections open before their field receives focus. On final
+build `WWQYrv_K0f1xXG0NTbrSi`, **all 15 workshop cases** (the original 14 plus that regression)
+and **all five existing cold-load route budgets** passed again. This covers
+**86 distinct learner/account cases** across full/focused runs, not a claim that
+every suite ran again on the final UI-only correction. Existing backend-count,
+deferred-loading/cancellation and owner memoization cases passed in the full
+performance run; their implementation did not change in the final UI correction.
+Screenshots and keyboard/axe/reduced-motion/reflow cover 320/390/768/1440px.
+The final screenshots are refreshed from the page top to avoid capture artifacts.
+
+**Measured:** three cold 390×844 workshop samples at 4× Chromium CPU slowdown,
+150 ms latency, 200,000/93,750 bytes/s configured down/up. See ignored
+`test-results/verification/studio/performance.json` for exact payload and input
+round-trip values. Timings include automation and are diagnostic, not INP or a
+modest-device guarantee. Existing route budgets remain unchanged. Prior NX-029
+performance JSON was preserved byte for byte; this milestone's full/final reports
+are archived separately. [Implementation guide](system-design/IMPLEMENTATION.md)
+records contracts, recovery, review provenance and verification boundaries.
+
+**Task status:** NX-046.1 Completed; NX-046.2 In review; NX-046.3 Completed;
+NX-046.4 In review. Local implementation/available checks are finished; provider
+acceptance is deliberately unclaimed. The register has 103 rows: 53 Completed,
+11 In progress, 5 Pending, 2 In review, 32 Deferred. NX-046 remains In progress
+for the broader course; NX-046.22 and M2–6 remain Deferred.
+
+**Outstanding gate:** migration was applied only to isolated PGlite with Auth
+shims. M1 database type additions were generated from that catalog, preserving
+existing provider declarations; actual Supabase full generation/drift is unrun.
+Twelve pgTAP assertions and real Auth/PostgREST concurrency/isolation/browser/
+Auth-cascade integration are prepared but unrun. Docker/Vector remain stopped;
+no credentials, real accounts, hosted resources, remote CI, push or deployment
+changed. Synthetic HTTP browser fixtures do not prove real-provider compatibility.
+No physical-device, Firefox/WebKit or actual screen-reader acceptance is claimed.
+
+**Next:** review M1 locally, then verify the migration/types/pgTAP/integration on
+an authorised disposable Supabase stack. A sensible next teaching slice is the
+already planned foundations module NX-046.22 (clients/servers/APIs/databases,
+requests/responses, latency/throughput and read/write workloads) before M2.
+Do not implement either automatically; current M1 access has no missing-module
+or JavaScript practice prerequisite.
+
+## Previous handoff — System Design Studio M1 started, then paused
 
 The user authorised NX-046.1–4 on 2026-10-29 with desktop/narrow-screen UI
 references, then explicitly postponed implementation and requested commits.
