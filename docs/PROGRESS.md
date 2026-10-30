@@ -1,10 +1,61 @@
 # Current progress
 
-Updated: **2026-10-29**. Read this file, [features.csv](features.csv) and
+Updated: **2026-10-31**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — System Design Studio M1 implemented locally
+## Current handoff — M1 provider acceptance awaiting disposable runtime
+
+Resumed the provider-acceptance request and the interrupted inspection. The
+working tree was clean at `b69e40b`; prior M1 implementation is fully committed.
+The historical statement below that implementation is uncommitted is outdated.
+This session's provider-test/documentation preparation is uncommitted, as
+requested. No application features, migrations, generated types or UI changed.
+
+**Environment:** read-only checks found installed Docker 26.1.5, dockerd and
+Supabase CLI 2.117.0, but no Docker socket/process, Vector process or provider
+listeners. Retained `/var/lib/docker` is not disposable. No secret values or
+ignored environment contents were read. No authorised disposable backend has
+been established, so no startup, migration or provider mutation was attempted.
+The [provider guide](system-design/PROVIDER_ACCEPTANCE.md) prepares a separate
+temporary daemon/storage/socket and source copy, analytics/Vector disabled,
+synthetic accounts only, and scoped cleanup. User authorisation is required
+before starting it; never fall back to the retained project or reset its data.
+
+**Prepared:** 33 Studio pgTAP assertions; expanded actual-provider RPC isolation,
+grants/direct-write/version/retry checks; a real browser enrol/save/exact resume,
+two-tab conflict and cookie-session-loss recovery journey with retained v1
+learning records; worksheet inclusion in signed password-confirmed deletion.
+The SQL test helper now derives the active project container from its validated
+configuration instead of hard-coding the retained project. All these provider
+cases remain unrun. No actual-provider screenshots were produced.
+
+**Fresh preparation checks:** lint and route/type generation + TypeScript pass;
+all **49 unit checks** and **8 focused isolated Studio database checks** pass.
+The first unit attempt hit sandbox `listen EPERM`; rerunning with permitted
+temporary synthetic loopback servers passed. No Docker/provider was involved.
+Provider-suite discovery collected **17 tests in 15 files** using a temporary
+discovery-only config with no backend startup; collection is not execution.
+The prepared pgTAP plan matches 33 assertions, not a SQL pass. Tracker integrity
+confirms 103 existing rows/IDs/statuses, with only NX-046.2/.4 notes updated.
+Final formatting/whitespace results are recorded in the provider guide.
+Previous broad browser/build counts remain historical; they were not repeated
+as provider proof. No app code changed during this preparation.
+
+**Status:** NX-046.1 Completed; NX-046.2 In review; NX-046.3 Completed;
+NX-046.4 In review. The target migration remains
+`202610290001_studio_workshop.sql`; actual replay, full schema generation/drift,
+pgTAP and provider/browser acceptance remain outstanding. No hosted/remote-CI,
+forced provider-side JWT-expiry, physical-device or screen-reader claim.
+
+**Open once verified:** sign in, use Courses → System Design Studio → enrol →
+Open workshop, or `/courses/system-design-studio-v1/studio/campus-events-v1`.
+No Docker/Supabase/application services were started or left running; no provider
+cleanup was necessary. Temporary discovery configuration was removed.
+Stop at the runtime authorisation boundary. NX-046.22 and later milestones
+remain Deferred; no commit, push, deployment or foundations implementation.
+
+## Previous handoff — System Design Studio M1 implemented locally
 
 The user resumed NX-046.1–4 on 2026-10-29. Started clean at `094ce55`, reusing the
 committed scenario/estimator. Stop after M1: no editor, simulation, coaching,

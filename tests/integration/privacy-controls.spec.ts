@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { randomUUID } from "node:crypto";
 import { localSupabase } from "../../scripts/local-supabase";
 import type { Database } from "../../lib/supabase/database.types";
+import { defaultWorksheet } from "../../modules/system-design/content";
 test("real Auth/PostgREST retention and password-confirmed deletion isolate two learners", async ({
   page,
   context,
@@ -80,6 +81,33 @@ test("real Auth/PostgREST retention and password-confirmed deletion isolate two 
     expect(exported.data).toMatchObject({
       tutor_requests: [{ response_snapshot: null }],
     });
+    // Exercise the real password-confirmed deletion path with Studio evidence,
+    // while another synthetic owner's worksheet must survive.
+    for (const client of [learner, other]) {
+      expect(
+        (
+          await client.rpc("enrol_course", {
+            course: "system-design-studio-v1",
+          })
+        ).error,
+      ).toBeNull();
+      expect(
+        (
+          await client.rpc("save_studio_worksheet", {
+            scenario: "campus-events-v1",
+            expected: 0,
+            request: randomUUID(),
+            document: defaultWorksheet,
+          })
+        ).error,
+      ).toBeNull();
+    }
+    expect((await learner.rpc("export_learner_data")).data).toMatchObject({
+      studio_worksheets: [{ revision: 1 }],
+      studio_worksheet_revisions: [
+        { revision: 1, worksheet: defaultWorksheet },
+      ],
+    });
     const token = (await learner.auth.getSession()).data.session!.access_token;
     expect(
       (
@@ -108,6 +136,20 @@ test("real Auth/PostgREST retention and password-confirmed deletion isolate two 
       .click();
     await expect(page).toHaveURL(/\/login\?reason=deleted$/);
     removed = true;
+    for (const table of [
+      "studio_worksheets",
+      "studio_worksheet_revisions",
+    ] as const) {
+      const deleted = await admin
+        .from(table)
+        .select("revision")
+        .eq("user_id", ids[0]);
+      expect(deleted.error).toBeNull();
+      expect(deleted.data).toEqual([]);
+      const retained = await other.from(table).select("revision");
+      expect(retained.error).toBeNull();
+      expect(retained.data).toEqual([{ revision: 1 }]);
+    }
     expect(
       (await context.cookies()).some((cookie) =>
         cookie.name.startsWith("nexus-local-auth"),
