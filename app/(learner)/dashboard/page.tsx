@@ -41,21 +41,26 @@ export default async function Dashboard() {
       <div className="dashboard-grid">
         <Card className="next-step-card">
           <p className="eyebrow">YOUR NEXT STEP</p>
-          <h2>{step?.lesson?.title ?? "Make room for your first lesson."}</h2>
+          <h2>
+            {step?.title ??
+              step?.lesson?.title ??
+              "Make room for your first lesson."}
+          </h2>
           <p>
             {step?.reason ??
               "Choose a course and enrol to save your learning progress."}
           </p>
           <ButtonLink
             href={
-              step?.lesson
+              step?.href ??
+              (step?.lesson
                 ? `/courses/${enrolled!.id}/${step.lesson.id}`
-                : "/courses"
+                : "/courses")
             }
           >
             {step?.complete
               ? "Revisit course"
-              : step?.lesson
+              : step?.href || step?.lesson
                 ? "Continue learning"
                 : "Open my courses"}{" "}
             <span aria-hidden="true">→</span>

@@ -27,7 +27,24 @@ export async function learningData() {
     throw new Error("Learning data could not be loaded. Please retry.");
   const [courses, lessons, exercises, enrolments, reads, attempts, evidence] =
     results;
+  const hasStudio = courses.data!.some(
+    (c) =>
+      c.experience_kind === "studio" &&
+      enrolments.data!.some((n) => n.course_id === c.id),
+  );
+  const heads = hasStudio
+    ? await client
+        .from("studio_worksheets")
+        .select("scenario_id,revision")
+        .eq("user_id", user.id)
+        .limit(20)
+    : { data: [], error: null };
+  if (heads.error)
+    throw new Error(
+      "Your saved workshop state could not be loaded. Please retry.",
+    );
   return {
+    worksheets: heads.data!,
     profile,
     courses: courses.data!,
     lessons: lessons.data!,

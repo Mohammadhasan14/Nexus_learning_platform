@@ -17,6 +17,31 @@ export default async function Courses() {
             enrolled = data.enrolments.some((n) => n.course_id === c.id);
           const step = recommendation(data, c.id);
           const next = step.lesson;
+          if (c.experience_kind === "studio")
+            return (
+              <Card key={c.id}>
+                <Badge>Workshop pilot · v{c.version}</Badge>
+                <h2>{c.title}</h2>
+                <p>{c.summary}</p>
+                <p>
+                  1 requirements &amp; capacity workshop · private worksheet
+                </p>
+                <p>
+                  Foundations and later design tools are planned. This is not
+                  the complete course.
+                </p>
+                {enrolled && step.href ? (
+                  <>
+                    <Link className="button button-primary" href={step.href}>
+                      Open workshop
+                    </Link>
+                    <p>{step.reason}</p>
+                  </>
+                ) : (
+                  <EnrolForm course={c.id} />
+                )}
+              </Card>
+            );
           return (
             <Card key={c.id}>
               <Badge>

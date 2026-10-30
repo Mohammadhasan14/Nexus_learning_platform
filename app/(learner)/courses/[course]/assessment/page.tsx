@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
+import { studioHref } from "@/modules/system-design/links";
 import { learningData } from "@/modules/learning/data";
 import { diagnosticEvidence, recommendation } from "@/modules/learning/rules";
 import { ExerciseForm } from "@/components/learning/forms";
@@ -15,6 +16,8 @@ export default async function Assessment({
   const data = await learningData();
   const item = data.courses.find((c) => c.id === course);
   if (!item) notFound();
+  if (item.experience_kind === "studio")
+    redirect(studioHref(course) ?? "/courses");
   if (!data.enrolments.some((n) => n.course_id === course))
     return (
       <>

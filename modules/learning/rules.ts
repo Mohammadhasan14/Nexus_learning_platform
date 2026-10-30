@@ -1,4 +1,5 @@
 import type { LearningData } from "./data";
+import { studioHref } from "@/modules/system-design/links";
 
 export function passed(data: LearningData, lesson: string) {
   return data.evidence.some(
@@ -32,6 +33,21 @@ export function diagnosticEvidence(data: LearningData, lesson: string) {
   return data.evidence.find((e) => e.exercise_id === exercise?.id);
 }
 export function recommendation(data: LearningData, course: string) {
+  if (data.courses.find((c) => c.id === course)?.experience_kind === "studio") {
+    const href = studioHref(course);
+    const revision = data.worksheets.find(
+      (w) => w.scenario_id === "campus-events-v1",
+    )?.revision;
+    return {
+      lesson: undefined,
+      href,
+      title: "Campus event directory",
+      complete: false,
+      reason: revision
+        ? `Worksheet revision ${revision} saved. Continue your work; saving is not a grade or course completion.`
+        : "Open the requirements and capacity workshop. Save private work without a JavaScript practice prerequisite.",
+    };
+  }
   const lessons = data.lessons
     .filter((l) => l.course_id === course)
     .sort((a, b) => a.position - b.position);
