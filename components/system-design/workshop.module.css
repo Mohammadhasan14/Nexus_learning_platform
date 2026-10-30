@@ -1,0 +1,362 @@
+.studio {
+  max-width: 1500px;
+  margin-inline: auto;
+  color: var(--foreground);
+}
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--muted);
+  margin-bottom: 22px;
+  font-size: 0.9rem;
+}
+.breadcrumb a {
+  color: var(--violet);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.heading {
+  margin-bottom: 24px;
+}
+.heading h1 {
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  line-height: 1.2;
+  margin-block: 8px;
+  letter-spacing: -0.03em;
+}
+.heading > p:last-child {
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+.sections {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.sections a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+}
+.sections a[aria-current] {
+  border-color: var(--violet);
+  color: var(--foreground);
+}
+.sections a > span {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  font-size: 0.8rem;
+}
+.sections a[aria-current] > span {
+  background: var(--violet);
+  color: var(--background);
+}
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.layout > noscript {
+  grid-column: 1/-1;
+}
+.main {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+}
+.panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--surface), var(--background));
+  min-width: 0;
+  overflow-wrap: anywhere;
+  scroll-margin-top: 20px;
+}
+.panel > summary {
+  padding: 18px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  list-style: none;
+  min-height: 56px;
+}
+.panel > summary::after {
+  content: "⌄";
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+.panel[open] > summary::after {
+  content: "⌃";
+}
+.panel h2 {
+  font-size: 1.16rem;
+  letter-spacing: 0;
+  line-height: 1.4;
+  margin: 0;
+}
+.panel > summary > span {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-left: auto;
+}
+.body {
+  padding: 0 22px 22px;
+  display: grid;
+  gap: 16px;
+}
+.body p {
+  font-size: 0.94rem;
+}
+.body details > summary,
+.versions > summary {
+  color: var(--violet);
+  padding-block: 8px;
+  min-height: 44px;
+}
+.teaching {
+  display: grid;
+  gap: 14px;
+  padding-top: 12px;
+}
+.teaching h3,
+.formula h3 {
+  font-size: 0.95rem;
+  margin-bottom: 8px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.field label {
+  color: var(--foreground);
+  font-size: 0.92rem;
+}
+.field label > span {
+  color: var(--muted);
+}
+.field input,
+.field textarea {
+  border: 1px solid #52658b;
+  color: var(--foreground);
+  background: var(--surface-raised);
+  border-radius: 7px;
+  padding: 10px 12px;
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  font: inherit;
+  font-size: 0.94rem;
+}
+.field textarea {
+  resize: vertical;
+}
+.field input[aria-invalid="true"],
+.field textarea[aria-invalid="true"] {
+  border-color: #ffb8b8;
+}
+.field small,
+.muted {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.targets,
+.workload {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 22px;
+}
+.payload {
+  border-top: 1px solid var(--border);
+  padding-top: 4px;
+}
+.payload .workload {
+  padding-top: 12px;
+}
+.estimates {
+  padding: 22px;
+}
+.estimates > h2 {
+  margin-bottom: 8px;
+}
+.metric {
+  border-bottom: 1px solid var(--border);
+}
+.metric > summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  min-height: 78px;
+  padding-block: 18px;
+  cursor: pointer;
+  list-style: none;
+}
+.metric > summary > span {
+  font-size: 0.9rem;
+}
+.metric strong {
+  font-size: 1.18rem;
+  white-space: normal;
+  text-align: right;
+}
+.metric[open] {
+  border: 1px solid var(--violet);
+  border-radius: 9px;
+  margin-block: 10px;
+}
+.metric[open] > summary {
+  padding: 14px;
+}
+.formula {
+  margin: 0 12px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+.formula code {
+  display: block;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  padding: 10px;
+  background: var(--surface-raised);
+  border-radius: 6px;
+  font-size: 0.78rem;
+  line-height: 1.7;
+}
+.formula p {
+  padding-top: 12px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.estimates > p {
+  margin-block: 12px;
+}
+.versions {
+  margin-top: 14px;
+  font-size: 0.8rem;
+}
+.versions p {
+  margin-block: 8px;
+}
+.saveArea {
+  grid-column: 1/-1;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  background: var(--surface);
+  display: grid;
+  gap: 14px;
+}
+.saveSummary {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  flex-wrap: wrap;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.saveSummary > button {
+  margin-left: auto;
+}
+.unsaved {
+  color: #ffc368;
+}
+.saved {
+  color: var(--success);
+}
+.error {
+  color: #ffb8b8;
+  font-size: 0.9rem;
+}
+.choices {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 12px;
+}
+.comparison pre {
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  padding: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+  background: var(--background);
+  margin-top: 14px;
+}
+.saveArea a {
+  color: var(--violet);
+  text-decoration: underline;
+}
+@media (max-width: 1100px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .estimates {
+    grid-row: 2;
+  }
+}
+@media (max-width: 600px) {
+  .heading h1 {
+    font-size: 1.75rem;
+  }
+  .sections {
+    gap: 0;
+    justify-content: space-between;
+  }
+  .sections a {
+    font-size: 0.78rem;
+    padding: 8px 4px;
+    gap: 4px;
+  }
+  .sections a > span {
+    display: none;
+  }
+  .targets,
+  .workload {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .panel > summary {
+    padding: 16px;
+    flex-wrap: wrap;
+  }
+  .panel > summary > span {
+    margin-left: 0;
+  }
+  .body {
+    padding: 0 16px 18px;
+  }
+  .estimates {
+    padding: 16px;
+  }
+  .metric > summary {
+    min-height: 64px;
+  }
+  .metric strong {
+    font-size: 1rem;
+  }
+  .saveArea {
+    padding: 16px;
+  }
+  .saveSummary {
+    gap: 10px;
+  }
+  .saveSummary > button {
+    width: 100%;
+    margin-left: 0;
+  }
+}
