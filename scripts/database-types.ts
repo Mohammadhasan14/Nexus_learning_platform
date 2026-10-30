@@ -11,7 +11,7 @@ async function main() {
     { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
   );
   const output = await format(
-    "// Generated from local Supabase. Run npm run db:types; do not hand-edit.\n" +
+    "// Generated database types. Run npm run db:types; do not hand-edit.\n" +
       generated,
     { parser: "typescript" },
   );

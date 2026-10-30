@@ -34,7 +34,11 @@ test("local learner enrols, retries practice and reloads saved evidence", async 
     await page.getByRole("button", { name: "Sign in", exact: true }).click();
     await expect(page).toHaveURL(/\/dashboard$/);
     await page.goto("/courses");
-    await page.getByRole("button", { name: "Enrol in this version" }).click();
+    await page
+      .locator("article.card")
+      .filter({ hasText: "Reviewed course" })
+      .getByRole("button", { name: "Enrol in this version" })
+      .click();
     await page.goto("/courses/javascript-foundations-v2/js-v2-functions");
     await expect(
       page.getByRole("heading", { name: "One step at a time." }),

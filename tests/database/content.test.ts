@@ -68,7 +68,7 @@ test("versioned content has aligned objectives, bounded choices and technically 
       review_status: string;
       review_record: string | null;
     }>(
-      "select id,supersedes_id,review_status,review_record from public.course_versions order by version",
+      "select id,supersedes_id,review_status,review_record from public.course_versions where experience_kind = 'lessons' order by version",
     );
     assert.equal(versions.rows[0].review_status, "preview");
     assert.equal(versions.rows[1].supersedes_id, versions.rows[0].id);

@@ -1,4 +1,4 @@
-// Generated from local Supabase. Run npm run db:types; do not hand-edit.
+// Generated database types. Run npm run db:types; do not hand-edit.
 export type Json =
   | string
   | number
@@ -192,6 +192,7 @@ export type Database = {
       };
       course_versions: {
         Row: {
+          experience_kind: string;
           id: string;
           review_record: string | null;
           review_status: string;
@@ -201,6 +202,7 @@ export type Database = {
           version: number;
         };
         Insert: {
+          experience_kind?: string;
           id: string;
           review_record?: string | null;
           review_status: string;
@@ -210,6 +212,7 @@ export type Database = {
           version: number;
         };
         Update: {
+          experience_kind?: string;
           id?: string;
           review_record?: string | null;
           review_status?: string;
@@ -646,6 +649,114 @@ export type Database = {
         };
         Relationships: [];
       };
+      studio_scenario_versions: {
+        Row: {
+          course_id: string;
+          formula_version: string;
+          id: string;
+          review_record: string;
+          schema_version: string;
+          title: string;
+        };
+        Insert: {
+          course_id: string;
+          formula_version: string;
+          id: string;
+          review_record: string;
+          schema_version: string;
+          title: string;
+        };
+        Update: {
+          course_id?: string;
+          formula_version?: string;
+          id?: string;
+          review_record?: string;
+          schema_version?: string;
+          title?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "studio_scenario_versions_course_id_fkey";
+            columns: ["course_id"];
+            isOneToOne: false;
+            referencedRelation: "course_versions";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      studio_worksheet_revisions: {
+        Row: {
+          base_revision: number;
+          formula_version: string;
+          request_id: string;
+          revision: number;
+          saved_at: string;
+          scenario_id: string;
+          schema_version: string;
+          user_id: string;
+          worksheet: Json;
+        };
+        Insert: {
+          base_revision: number;
+          formula_version: string;
+          request_id: string;
+          revision: number;
+          saved_at?: string;
+          scenario_id: string;
+          schema_version: string;
+          user_id: string;
+          worksheet: Json;
+        };
+        Update: {
+          base_revision?: number;
+          formula_version?: string;
+          request_id?: string;
+          revision?: number;
+          saved_at?: string;
+          scenario_id?: string;
+          schema_version?: string;
+          user_id?: string;
+          worksheet?: Json;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "studio_worksheet_revisions_user_id_scenario_id_fkey";
+            columns: ["user_id", "scenario_id"];
+            isOneToOne: false;
+            referencedRelation: "studio_worksheets";
+            referencedColumns: ["user_id", "scenario_id"];
+          },
+        ];
+      };
+      studio_worksheets: {
+        Row: {
+          revision: number;
+          scenario_id: string;
+          updated_at: string;
+          user_id: string;
+        };
+        Insert: {
+          revision: number;
+          scenario_id: string;
+          updated_at?: string;
+          user_id: string;
+        };
+        Update: {
+          revision?: number;
+          scenario_id?: string;
+          updated_at?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "studio_worksheets_scenario_id_fkey";
+            columns: ["scenario_id"];
+            isOneToOne: false;
+            referencedRelation: "studio_scenario_versions";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
     };
     Views: {
       exercise_evidence: {
@@ -749,6 +860,10 @@ export type Database = {
         Returns: boolean;
       };
       get_privacy_settings: { Args: never; Returns: Json };
+      get_studio_workshop: {
+        Args: { course: string; scenario: string };
+        Returns: Json;
+      };
       get_tutor_usage: { Args: never; Returns: Json };
       is_content_staff: { Args: never; Returns: boolean };
       mark_lesson_read: { Args: { lesson: string }; Returns: undefined };
@@ -783,6 +898,15 @@ export type Database = {
           expected: number;
           lesson: string;
           request: string;
+        };
+        Returns: Json;
+      };
+      save_studio_worksheet: {
+        Args: {
+          document: Json;
+          expected: number;
+          request: string;
+          scenario: string;
         };
         Returns: Json;
       };

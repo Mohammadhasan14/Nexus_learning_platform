@@ -146,7 +146,7 @@ test("lesson search filters enrolment and prerequisites, treats wildcard input l
     assert.equal((await search("functions"))[0].lesson_id, "js-v2-functions");
     const older = (
       await db.query<{ id: string }>(
-        "select id from public.course_versions where version=1 limit 1",
+        "select id from public.course_versions where id='javascript-foundations-v1'",
       )
     ).rows[0].id;
     await db.query("select public.enrol_course($1)", [older]);
