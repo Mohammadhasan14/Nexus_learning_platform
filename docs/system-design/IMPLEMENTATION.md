@@ -125,7 +125,8 @@ command use a neutral generation header; full generation remains
 Supabase stack. The isolated generator does **not** establish real PostgREST
 metadata compatibility or provider type drift. Do not count those as passed.
 
-`supabase/tests/studio.sql` prepares twelve real-provider pgTAP assertions.
+`supabase/tests/studio.sql` originally prepared twelve real-provider pgTAP assertions;
+the provider-acceptance preparation now expands this to 33.
 `tests/integration/system-design.spec.ts` prepares real Auth/PostgREST concurrency,
 owner/staff isolation, browser resume and synthetic-account deletion/cascade.
 They are unrun while Docker/Supabase remain stopped. The existing CI integration
@@ -170,3 +171,32 @@ Physical modest-computer/touch, Firefox/WebKit, actual screen-reader, real
 Supabase, hosted environment and remote-CI acceptance are not established by
 synthetic browser/PGlite evidence. No production readiness or mastery claim.
 M2 and the deferred foundations module remain outside this implementation.
+
+## Provider-acceptance preparation — 31 October 2026
+
+Reconciled the repository against clean HEAD `b69e40b`: all prior M1 source is
+committed, despite the earlier handoff saying otherwise. Task statuses remain
+NX-046.1/.3 Completed and NX-046.2/.4 In review.
+
+No authorised disposable provider was found. The original Docker state contains
+retained data; the presence of a local `.env.local` is not disposal permission.
+No secret values were read, no service started and no real database changed.
+The [disposable-provider execution guide](PROVIDER_ACCEPTANCE.md) records the
+proposed separate daemon/storage/socket, fresh source copy and synthetic-only
+database, including cleanup. Startup requires the user's environment-boundary
+authorisation before execution.
+
+Prepared additional provider tests for true separate learner/staff accounts,
+enrolment eligibility, rejected owner/result injection and direct writes, exact
+versioned round-trip, browser enrol/save/sign-in resume, changed-input revision,
+two-tab conflict/rebase, real missing-session recovery and retained v1 learning
+records. The password-confirmed deletion integration now includes worksheets
+for two owners. SQL assertions additionally inspect grants, RLS, composite
+revision ownership and cascades. Fixed test-only SQL container selection to use
+the current project ID, allowing the fresh project to remain isolated.
+
+These provider assertions are prepared, not passed. Cookie-session removal is
+distinct from forcing provider-side token expiry; existing Auth refresh evidence
+must also be reported precisely. Full provider types remain unchanged and drift
+remains unrun. Current preparation checks and outstanding gates are recorded in
+the canonical handoff; no application feature, migration or UI was changed.

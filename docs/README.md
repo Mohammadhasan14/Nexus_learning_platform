@@ -41,6 +41,7 @@ Start with the [application README](../README.md).
 - [Production performance measurements and regression budgets](PERFORMANCE_REVIEW.md)
 
 - [System Design Studio M1 contracts, setup and evidence](system-design/IMPLEMENTATION.md)
+- [System Design Studio disposable-provider acceptance](system-design/PROVIDER_ACCEPTANCE.md)
 
 ## Historical evidence
 
