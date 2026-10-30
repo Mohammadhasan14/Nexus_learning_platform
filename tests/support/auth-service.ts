@@ -1,6 +1,13 @@
 /** Test-only HTTP double for Supabase Auth/PostgREST. Never imported by the application.
  * Exercises SSR cookies, forms and error UI; it does NOT prove real Supabase integration or RLS.
  */
+import {
+  configureStudio,
+  resetStudio,
+  deleteStudio,
+  studioData,
+  studioExport,
+} from "./studio-data";
 import { createServer } from "node:http";
 import { randomUUID, createHmac } from "node:crypto";
 import type { Database } from "../../lib/supabase/database.types";
@@ -121,6 +128,7 @@ const server = createServer(async (req, res) => {
     accessibility = false;
     longContent = false;
     resetAccessibilityData();
+    resetStudio();
     profiles.clear();
     privacy.clear();
     deletedEmails.clear();
@@ -131,6 +139,10 @@ const server = createServer(async (req, res) => {
     profileOutage = false;
     runnerLesson = false;
     exportOutage = false;
+    return respond(200, {});
+  }
+  if (url.pathname === "/__test/studio") {
+    configureStudio(body);
     return respond(200, {});
   }
   if (url.pathname === "/__test/revoke") {
@@ -265,6 +277,7 @@ const server = createServer(async (req, res) => {
       proof.expires <= Date.now() / 1000
     )
       return respond(403, {});
+    deleteStudio(user.id);
     profiles.delete(user.id);
     privacy.delete(user.id);
     deletedEmails.add(user.email);
@@ -280,6 +293,7 @@ const server = createServer(async (req, res) => {
     if (Object.keys(body).length)
       return respond(400, { message: "No arguments" });
     return respond(200, {
+      ...studioExport(user.id),
       format: "nexus-learner-export-v1",
       exported_at: stamp(),
       profile: profiles.get(user.id),
@@ -324,16 +338,25 @@ const server = createServer(async (req, res) => {
     return respond(200, profile);
   }
   // Minimal synthetic lesson for testing the actual runner UI without Docker.
-  if (accessibility) {
-    const fixture = accessibilityData(
-      url.pathname,
-      req.method ?? "GET",
-      body,
-      user.id,
-      longContent,
-    );
-    if (fixture) return respond(fixture.status, fixture.data);
-  }
+  const existingFixture = accessibility
+    ? accessibilityData(
+        url.pathname,
+        req.method ?? "GET",
+        body,
+        user.id,
+        longContent,
+      )
+    : undefined;
+  const studioFixture = studioData(
+    url.pathname,
+    req.method ?? "GET",
+    body,
+    user.id,
+    existingFixture,
+  );
+  if (studioFixture) return respond(studioFixture.status, studioFixture.data);
+  if (existingFixture)
+    return respond(existingFixture.status, existingFixture.data);
   if (runnerLesson && req.method === "GET") {
     const lesson = {
       id: "runner-test-values",
