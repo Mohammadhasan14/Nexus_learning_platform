@@ -4,7 +4,56 @@ Updated: **2026-10-31**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — M1 provider acceptance awaiting disposable runtime
+## Current handoff — M1 remote CI prepared, not executed
+
+The current request supersedes local-daemon authorisation: no Docker, Supabase,
+heavy local service or image download on this computer. The interrupted RAM/disk
+inspection started no services. Began this preparation clean on `main` at
+`34b95e8`; the prior provider preparation was committed through `d52009e` and
+`34b95e8`. Current CI/support/documentation edits remain uncommitted.
+
+**Prepared remote jobs:** retain both existing checks on standard GitHub-hosted
+`ubuntu-24.04`, rejecting local/self-hosted provider execution. The disposable
+Supabase job uses a run-specific synthetic database with Vector disabled, full
+migration replay/ledger through `202610290001`, pgTAP, full actual-provider type
+generation and a pre-generation committed drift gate, build and the complete
+integration/browser suite. Required M1/privacy/JS checks cannot pass by skipping.
+Scoped cleanup runs in `finally` and an `always()` fallback; no shared prune.
+
+**Sanitised evidence:** only fixed stage outcomes, type hashes/schema declarations
+and file/line/status/duration case records are published. Raw CLI/Auth/assertion
+output, errors, DOM, credentials, cookies, environment files, traces and storage
+state are excluded. Seven-day artifacts include masked 390/1440px screenshots
+only after all gates pass. Child processes cannot inherit hosted credentials,
+URLs or a remote Docker context. See the
+[provider guide](system-design/PROVIDER_ACCEPTANCE.md) and [CI guide](CI.md).
+
+**Local preparation validation:** four new lightweight guard/redaction/required-
+case unit checks pass. Ordinary local invocation of the CI wrapper refuses
+before any service command. Full TypeScript `tsc --noEmit`, targeted ESLint,
+repository formatting and CRLF-aware diff checks pass. YAML structure checks
+verify hosted runner labels, existing triggers, read-only permissions, action
+SHA pins and the five explicit artifact paths; this is not GitHub execution.
+Tracker integrity preserves 103 rows/IDs/statuses, changing only NX-046.2/.4
+notes. No new build, full suite, provider run or screenshot.
+
+**Publication boundary:** no commit, push, PR, workflow trigger, billing change
+or service startup. Source configuration supports the existing Actions setup;
+account-side policies, hosted-runner allowance and artifact availability remain
+unverified. No additional secrets are required. Check owner billing usage and
+hard-stop budgets before a later authorised run. Proposed review branch:
+`ci/studio-m1-provider-acceptance` from `34b95e8` plus these edits, then PR to
+`main`; pushing that branch alone does not trigger the workflow.
+
+**Status:** NX-046.1/.3 Completed; NX-046.2/.4 In review. Actual migration replay,
+full provider types/drift, pgTAP and provider/browser acceptance remain unrun.
+M1 deployment remains blocked. Foundations NX-046.22 stays Deferred; independent
+foundations can be separately authorised while M1 acceptance remains pending.
+No editor, simulation or AI work begins here. No local cleanup is needed because
+no services/images/test database were created. Existing application configuration,
+learner data, Docker resources and hosted environments were untouched.
+
+## Previous handoff — M1 provider acceptance awaiting disposable runtime
 
 Resumed the provider-acceptance request and the interrupted inspection. The
 working tree was clean at `b69e40b`; prior M1 implementation is fully committed.

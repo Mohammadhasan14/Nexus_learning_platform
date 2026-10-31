@@ -200,3 +200,21 @@ distinct from forcing provider-side token expiry; existing Auth refresh evidence
 must also be reported precisely. Full provider types remain unchanged and drift
 remains unrun. Current preparation checks and outstanding gates are recorded in
 the canonical handoff; no application feature, migration or UI was changed.
+
+## Remote CI preparation supersedes local startup
+
+The user subsequently prohibited heavy local services and image downloads.
+No daemon or container was started during the interrupted resource inspection.
+The prior temporary-daemon recipe is superseded by the
+[GitHub-hosted provider guide](PROVIDER_ACCEPTANCE.md). Current HEAD `34b95e8`
+includes the prior preparation commits; new CI/support/documentation edits are
+uncommitted. No workflow was triggered and no provider result is claimed.
+
+The existing Supabase CI job now prepares fresh-runner migration replay/ledger,
+pgTAP, full type generation with a pre-generation committed drift gate, real
+integration/browser acceptance, scoped cleanup and sanitised artifact upload.
+Hosted-runner and child-environment guards prevent ordinary local/hosted-project
+execution. Reports omit private values, and successful desktop/mobile captures
+mask editable worksheet data. Only lightweight targeted validation runs locally.
+NX-046.2/.4 remain In review and deployment is blocked pending actual acceptance.
+No foundations, architecture, simulation or AI implementation is included.

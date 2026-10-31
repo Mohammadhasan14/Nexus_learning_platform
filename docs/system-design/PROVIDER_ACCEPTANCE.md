@@ -1,129 +1,158 @@
-# M1 disposable-provider acceptance
+# M1 provider acceptance on GitHub-hosted CI
 
-Preparation inspected on 31 October 2026, starting from clean commit `b69e40b`.
-This is an execution guide and evidence record; task status remains only in
-`../features.csv` and the current handoff in `../PROGRESS.md`.
+Prepared on 31 October 2026 from clean `34b95e8`. This guide is not a tracker;
+statuses remain in `../features.csv` and the handoff in `../PROGRESS.md`.
+**Prepared, not executed: NX-046.2 and NX-046.4 remain In review.**
 
-## Environment decision
+## Execution boundary
 
-No authorised disposable provider is currently available. Read-only inspection
-found Docker 26.1.5, `/usr/sbin/dockerd` and installed Supabase CLI 2.117.0.
-No Docker socket, running Docker/Vector process or listener on the documented
-provider ports was found. The existing `/var/lib/docker` contains retained
-project state; neither that state nor the configured application backend has
-been identified as disposable. The ignored `.env.local` exists; its contents
-were not read or printed. No Docker/Supabase/application service, migration or
-provider test was started.
+The user superseded temporary local-Docker authorisation with a remote-CI-only
+instruction. Do not start Docker, a temporary daemon, Supabase or heavy local
+services, and do not download images onto their computer. The interrupted
+resource inspection started no services and changed no databases/configuration.
+No hosted/shared Supabase project, real learner, production secret or deployment
+is part of this approach. Do not commit, push or trigger CI during preparation.
 
-The existing provider workflow is documented in [CI](../CI.md),
-[account setup](../PHASE_2_SETUP.md) and
-[privacy controls](../PRIVACY_CONTROLS_SETUP.md). Its loopback URL check prevents
-remote use but does not prove a local database is disposable. The CI reset
-command is appropriate only to that job's fresh runner. Do not run it against
-the retained local project.
+Reuse `.github/workflows/ci.yml` and its existing `local-supabase` job. “Local”
+means Supabase inside the disposable **GitHub-hosted** VM, not this computer.
+Both jobs use standard `ubuntu-24.04` and reject non-GitHub-hosted execution.
+The provider wrapper also validates Linux, workspace, run ID/attempt and SHA
+before any service command. It refuses ordinary local invocation.
 
-**Proposed environment, pending explicit startup authorisation:** a separate
-temporary Docker daemon with a fresh data root, execution root, PID file,
-containerd state and Unix socket under a new `/tmp/nexus-studio-m1-*` directory.
-Use an empty daemon configuration and an isolated socket via `DOCKER_HOST` for
-every Docker/Supabase/setup/test command. Never start the system Docker service,
-open `/var/lib/docker`, change restart policies or change boot configuration.
-If permissions or networking cannot support that daemon, stop and report the
-specific failure; do not fall back to the retained runtime.
+## Remote jobs
 
-Create a temporary source copy from tracked files plus current tracked edits,
-excluding `.env*`, `.git`, local Supabase state and ignored artifacts. Reuse the
-installed dependencies without installing packages. In that copy alone, set
-`project_id = "nexus_studio_m1_acceptance"` and disable analytics. Keep the
-documented loopback ports 54321–54324 and application port 3103 after checking
-they remain free; the existing email integration tests use port 54324. Run
-`supabase start -x vector,logflare,studio,edge-runtime,realtime,storage-api,imgproxy,supavisor`
-to retain PostgreSQL 17, Auth, gateway, PostgREST, Mailpit and metadata tooling.
-Vector stays off. Missing container images may need downloading into fresh
-temporary storage. This uses local CPU/memory/disk and temporary Docker network
-rules. It provisions no hosted service and never connects an existing database.
+**Code, database and browser checks** retains `npm run check`: formatting, lint,
+types, units, isolated database checks, build, public/fixture browser flows and
+unchanged performance budgets. Raw fixture output is withheld. This independent
+job has a 15-minute cap and is not proof of provider acceptance.
 
-## Execution after authorisation
+**Local Supabase integration** reuses the locked CLI/dependencies and Chromium,
+with a 35-minute cap. `scripts/ci-provider-acceptance.ts` prepares:
 
-1. Record the temporary directory, daemon PID/socket and project identity.
-   Verify all runtime calls target that socket and its empty inventory; record
-   that the original daemon remains stopped. Do not print raw CLI status,
-   tokens, signing keys, passwords, cookie values or environment contents.
-2. Start the fresh Supabase project. Apply the complete migration chain with
-   `supabase migration up --local`, through
-   `202610290001_studio_workshop.sql`. A fresh CLI startup may already replay
-   migrations; record its migration ledger and the subsequent no-op result.
-   Never use `db:reset` against the existing project.
-3. Use `npm run db:env`, `npm run tutor:receipts:setup` and
-   `npm run privacy:deletion:setup` **only inside the fresh copy**. These generate
-   temporary local configuration/signing capabilities without printing them.
-   Preserve the original application's configuration byte for byte.
-4. Run `npm run db:test:local`. Studio now prepares 33 pgTAP assertions, covering
-   the published scenario association, grants/RLS, composite ownership FK,
-   retries/conflicts, supplied-result rejection, staff/learner export isolation
-   and synthetic Auth-deletion cascades. All pgTAP changes roll back.
-5. Run `npm run db:types` in the copy, compare the **entire** generated public
-   schema with `lib/supabase/database.types.ts`, and resolve genuine drift in
-   the source repository without broad casts. Repeat full generation and
-   `npm run db:types:check`. The isolated catalog generator is not a substitute.
-6. Build the copy with `npm run build`. Run the complete existing integration
-   suite with `TUTOR_MODE=scripted LIVE_TUTOR_SMOKE=false`, the existing Chromium
-   override if needed, and the isolated `DOCKER_HOST`. No model call is needed.
-   Tests create UUID-named synthetic Auth users and clean them in `finally`.
-   `tests/support/local-sql.ts` derives its container from the current copy's
-   validated project ID, rather than selecting the retained project by name.
-7. Record the actual provider/browser results separately from HTTP fixtures.
-   Studio coverage includes concurrent identical saves; conflicting keys;
-   unenrolled, anonymous, cross-learner and unrelated-staff restrictions;
-   forbidden direct writes; version/course associations; exact inputs and
-   pinned versions; Courses enrolment; sign-out/sign-in resume; a changed
-   workload and new revision; two real browser tabs and explicit rebase; real
-   browser-cookie session loss and same-account recovery. Cookie removal tests
-   a missing session, **not forced provider-side JWT expiry**. The existing
-   Auth test separately covers refresh after an expired cookie timestamp.
-   If provider-side expiry/revocation needs separate acceptance, record it as
-   outstanding rather than calling cookie removal equivalent.
-8. The privacy integration test saves worksheets for two synthetic owners and
-   uses the actual password-confirmed application deletion flow. Verify both
-   deleted heads/revisions disappear, the other owner's records remain, export
-   includes revisions, and existing tutor retention behavior still passes.
-   Existing JavaScript version, practice and tutor tests remain required; the
-   new Studio journey also preserves a pre-existing v1 enrolment/read record.
-9. Capture actual-provider workshop screenshots at 390 and 1440 px under
-   `test-results/verification/studio-provider/`. Existing synthetic responsive,
-   keyboard, reduced-motion and payload evidence remains separately labelled.
-   Fix only demonstrated M1 defects, then repeat affected checks and required
-   repository gates. Transfer relevant source/type fixes and sanitised evidence
-   back to the repository; never transfer temporary credentials or Auth state.
+1. Fresh-checkout guards: no environment files, linked Supabase state or previous
+   acceptance output. Create a run-specific project/private temporary directory;
+   change only the runner's disposable config and disable analytics.
+2. Start PostgreSQL 17, Auth, PostgREST, gateway, Mailpit and metadata tooling.
+   Exclude Vector/logflare, Studio, edge runtime, realtime, storage, imgproxy and
+   the pooler. Use the runner's Docker runtime, with no custom daemon or hosted
+   Supabase project.
+3. Replay the pre-Studio chain with `db reset --local --version` **only on that
+   fresh project**. Insert a synthetic SQL JavaScript learner/enrolment/read
+   fixture, apply the Studio migration with `migration up --local`, and verify
+   those legacy records survive. This is an SQL upgrade fixture, distinct from
+   real Auth/browser tests. Compare the full ledger with tracked migrations
+   through `202610290001`, then repeat `migration up --local`. Never reset an
+   existing database. Later migration files require a scope review first.
+4. Generate temporary local configuration and synthetic-test receipt/deletion
+   signing capabilities using the existing setup scripts. Run all pgTAP files,
+   including the 33 prepared Studio assertions.
+5. Check the committed full database types **before** generation; generate full
+   public-schema types using `db:types`, compare original/generated hashes, then
+   repeat `db:types:check`. Drift keeps acceptance failed even after successful
+   regeneration. The isolated catalog generator is not provider evidence.
+6. Build using generated types and run the complete integration suite (currently
+   17 cases in 15 files). The tutor remains scripted, with no AI key/model call.
+   Only the explicit live-model and live-only stream UI cases may skip. Required
+   Studio/privacy/Auth/token-accounting/JavaScript checks cannot pass by skipping.
+7. Stop only the run-specific project with `--no-backup`, inspect its labelled
+   containers/volumes/networks, remove generated secrets and raw browser failure
+   contexts, and restore checkout configuration. An `always()` step retries
+   cleanup. Never prune shared resources or delete pre-existing images. GitHub
+   discards the entire ephemeral runner VM/image cache after the job.
 
-## Cleanup
+The wrapper can gather further evidence after pgTAP/drift failures, but every
+failed stage keeps acceptance failed. Cancellation, missing evidence or failed
+cleanup cannot pass. No workflow step updates task statuses or commits files.
 
-Always stop the temporary application and only this fresh Supabase project with
-`supabase stop --project-id nexus_studio_m1_acceptance --no-backup`, using the
-isolated socket. Confirm its containers, network and volumes are gone; never
-use `--all`, global prune or an unqualified Docker context. Stop the recorded
-temporary daemon, confirm its processes/mounts/network rules are released, then
-remove only its recorded fresh storage/source directory and generated secrets.
-Keep sanitised verification artifacts. If cleanup cannot finish, report exact
-remaining resources. Leave the original Docker/Vector services and data alone.
+## Reports and confidentiality
 
-## Current acceptance result
+Raw CLI/Auth/SQL/build/browser output is captured in memory and discarded,
+never printed or uploaded. Only fixed stage labels/outcomes are logged. Child
+processes receive an allowlisted environment, excluding inherited hosted URLs,
+database credentials, Supabase access tokens, GitHub tokens and remote Docker
+contexts. Backend keys originate only from the fresh loopback CLI project.
+No Supabase login/link, `db push` or production/repository secret is used.
 
-Independent preparation checks passed: repository lint; route/type generation
-and TypeScript; all 49 unit checks; eight focused isolated Studio database
-checks. The first sandboxed unit attempt could not bind its synthetic loopback
-servers (`EPERM`); the permitted rerun passed. Discovery-only Playwright loaded
-17 provider tests in 15 files with no backend or browser execution. The pgTAP
-plan/statement count matches 33; this does not verify SQL execution. Tracker
-integrity preserved all 103 rows/IDs/statuses and untouched rows byte for byte.
-Repository `format:check` and CRLF-aware `git diff --check` both pass.
-No application production build, provider tests or browser gates were repeated
-on this preparation-only change. Earlier broad local evidence stays historical.
+`tests/support/provider-reporter.ts` records only file/line, statuses and duration.
+It omits error/assertion values, titles, stdout/stderr, source, DOM, attachments
+and Auth storage. Traces, videos and automatic screenshots are off. This
+deliberately omits raw failure messages: use stage/file/line and reviewed schema
+declarations to investigate, without turning on secret-bearing verbose output.
 
-**Not run: blocked on authorising the disposable runtime.** No actual migration,
-full provider type generation/drift, pgTAP, provider integration, browser journey
-or provider screenshot is claimed. NX-046.2 and NX-046.4 remain In review;
-NX-046.1 and NX-046.3 remain Completed on their recorded local evidence.
-The existing M1 implementation is committed through `b69e40b`; this session's
-test/documentation preparation is uncommitted. Foundations NX-046.22 and all
-later milestones remain deferred.
+One artifact, `studio-m1-provider-<run>-<attempt>`, has **seven-day retention**.
+Five exact paths are uploaded, with no recursive test-results glob:
+
+- `acceptance.json`: commit/run identity, actual migration ledger, stage results,
+  type hashes/drift, available pgTAP counts and overall acceptance.
+- `browser.json`: allowlisted case outcomes if the reporter was reached.
+- `public-schema.types.ts`: actual generated schema declarations, without rows,
+  dumps or secrets. Review genuine drift in a later authorised step; do not
+  weaken types to make the gate green.
+- `workshop-390.png` and `workshop-1440.png`: only after every provider, drift,
+  browser and cleanup gate passes. Capture the known synthetic workshop after
+  its JS regression, masking editable values/private preformatted content. The
+  learner shell exposes no account email or token/cookie value.
+
+Other screenshots, `.env*`, logs, storage state, dumps, traces, failure contexts,
+`.next` and hidden files are excluded. Upload is pinned to reviewed
+`actions/upload-artifact` v7.0.0 SHA
+`bbbca2ddaa5d8feaa63e36b76fdaad77386f024f`. An artifact alone is not acceptance:
+inspect `acceptance.json` and both job conclusions. Missing reports identify
+gates not reached. Synthetic screenshots are not physical-device evidence.
+
+## Repository support, permissions and cost
+
+The repository has both jobs, Node 24/locked dependencies, Chromium, migrations,
+types tooling and synthetic provider suites. Existing triggers stay **pull
+requests** and **pushes to main**. No dispatch/self-hosted/deployment/billing
+action is added. `contents: read` plus the automatic scoped artifact capability
+suffice; no PAT, Supabase/AI credential or additional secret is requested.
+Checkout still disables persisted credentials. Actions and hosted runners must
+be enabled and policies must allow the pinned checkout/setup-node/upload-artifact
+actions; fork PRs may require ordinary workflow approval. These account-side
+settings and current runner/allowance availability remain unverified.
+
+The 15/35-minute caps bound one attempt to about **50 total runner minutes**,
+not a prediction of charges. Retries consume more time. Public standard hosted
+compute is free; private usage draws from the owner's included allowance and
+can incur overage. Artifacts also use storage. Before authorising execution,
+the owner should inspect account/organisation **Settings → Billing → Usage**
+and **Budgets and alerts**, including hard-stop settings, plus repository
+**Settings → Actions → General**. No visibility, allowance, billing method or
+budget was accessed or changed here. An alert alone need not block spending.
+
+Primary references checked:
+[Actions billing](https://docs.github.com/en/actions/concepts/billing-and-usage),
+[included allowances](https://docs.github.com/en/billing/reference/product-usage-included),
+[budget controls](https://docs.github.com/en/billing/how-tos/set-up-budgets),
+[hosted runners](https://docs.github.com/en/actions/how-tos/write-workflows/choose-where-workflows-run/choose-the-runner-for-a-job),
+[artifact release](https://github.com/actions/upload-artifact/releases/tag/v7.0.0).
+
+## Exact publication boundary
+
+Preparation remains uncommitted on local `main` at `34b95e8`. After a separate
+publication instruction, create a review branch such as
+`ci/studio-m1-provider-acceptance` from that HEAD plus these edits and open a PR
+to `main`. **Pushing that branch alone does not trigger this workflow**; opening
+or updating its PR does. A push to `main` also triggers both jobs. No branch,
+commit, push, PR or remote workflow is created during this preparation.
+
+Include together: `.github/workflows/ci.yml`, `package.json`,
+`playwright.integration.config.ts`, `scripts/ci-provider-{acceptance,policy}.ts`,
+`tests/support/provider-reporter.ts`, `tests/unit/ci-provider.test.ts`, masked
+captures in `tests/integration/system-design.spec.ts`, and the canonical tracker,
+handoff and relevant CI/decision/implementation/provider documentation. Exclude
+ignored artifacts, environment files and generated credentials.
+
+## Remaining gate
+
+No remote migration, full provider types/drift, pgTAP, browser result or new
+screenshot is claimed. Local lightweight checks are recorded in the handoff.
+Real cookie-session loss and expired-cookie refresh do not establish forced
+provider-side JWT expiry/revocation. Physical-device/screen-reader acceptance
+also remains separate.
+
+NX-046.2/.4 stay In review and M1 deployment stays blocked until actual provider
+criteria pass and evidence is reviewed. Independent foundations work may be
+separately authorised while this gate remains open. NX-046.22 is still Deferred;
+no foundations/editor/simulation/AI implementation begins in this preparation.

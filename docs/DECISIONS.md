@@ -4,6 +4,27 @@ This dated log preserves earlier implementation and staging decisions. The lates
 entry and [current progress](PROGRESS.md) describe the active repository layout;
 older references to parent-workspace files are historical.
 
+## 2026-10-31 — M1 provider acceptance runs only on GitHub-hosted CI
+
+The user superseded local temporary-daemon authorisation with a prohibition on
+heavy local services and image downloads. No service was started. Reuse the
+existing disposable Supabase GitHub Actions job on standard hosted Ubuntu;
+reject local/self-hosted execution and inherited hosted credentials/URLs.
+Keep Vector off, use synthetic accounts only, and reset only the fresh runner's
+run-specific project. Do not connect shared/production Supabase or deploy.
+
+Check committed provider types before full generation and retain drift as a
+failed gate. Execute migration replay, pgTAP and real provider/browser suites
+remotely. Use allowlisted result reports and masked successful workshop images;
+never upload raw logs, errors, DOM, traces, cookies, environment or Auth state.
+Keep seven-day artifact retention, read-only repository permissions and scoped
+cleanup, with no global prune. Preparation must not commit, push, trigger a
+workflow or enable billing. Account-side quota/action policies are unverified.
+
+Keep NX-046.2/.4 In review until actual criteria and reviewed evidence pass.
+Independent foundations work can be separately authorised without clearing the
+M1 deployment gate; no foundations or later feature starts during preparation.
+
 ## 2026-10-28 — System Design Studio audit and incremental roadmap
 
 The user requested repository inspection and planning/task documentation only.

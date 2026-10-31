@@ -467,16 +467,6 @@ test("real provider enrolment, exact resume, two-tab conflict and lost-session r
       ],
       attempts: [],
     });
-    await mkdir("test-results/verification/studio-provider", {
-      recursive: true,
-    });
-    for (const width of [390, 1440]) {
-      await page.setViewportSize({ width, height: 900 });
-      await page.screenshot({
-        path: `test-results/verification/studio-provider/workshop-${width}.png`,
-        fullPage: true,
-      });
-    }
     await page.goto("/courses/javascript-foundations-v1/js-v1-values");
     await expect(
       page.getByRole("heading", { name: "Values and bindings", exact: true }),
@@ -487,6 +477,24 @@ test("real provider enrolment, exact resume, two-tab conflict and lost-session r
     const resumedReads = await learner.from("lesson_reads").select("*");
     expect(resumedReads.error).toBeNull();
     expect(resumedReads.data).toEqual(oldReads.data);
+    await page.goto(path);
+    await expect(
+      page.getByText("Last saved: revision 4", { exact: true }),
+    ).toBeVisible();
+    await mkdir("test-results/verification/studio-provider", {
+      recursive: true,
+    });
+    for (const width of [390, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.screenshot({
+        path: `test-results/verification/studio-provider/workshop-${width}.png`,
+        fullPage: true,
+        // Only this known synthetic workshop is published. Hide editable private values.
+        mask: [page.locator("input, textarea, pre")],
+        maskColor: "#18243b",
+      });
+    }
   } finally {
     expect((await admin.auth.admin.deleteUser(id)).error).toBeNull();
   }

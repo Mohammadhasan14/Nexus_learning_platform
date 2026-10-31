@@ -10,6 +10,8 @@ export default defineConfig({
   use: {
     baseURL: "http://127.0.0.1:3103",
     trace: "off",
+    video: "off",
+    screenshot: "off",
     launchOptions: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH
       ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH }
       : {},

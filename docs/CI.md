@@ -18,16 +18,25 @@ gate CI. See [scope and limits](PERFORMANCE_REVIEW.md). No remote run of this ne
 step is claimed. PGlite auth shims and the account
 HTTP fixture do not replace the real-provider integration job.
 
-**Local Supabase integration** starts an ephemeral Docker-backed stack, resets
-only that runner's local database, creates ignored local configuration, provisions
-a temporary receipt signing capability, runs pgTAP and generated-type checks,
-builds the app and runs the integration suite. Receipt setup lets the token
-accounting RPC regression execute on a fresh runner. Cleanup runs even when an
-earlier step fails. No hosted project or repository secret is required.
-The integration command now includes Playwright's `list,github` reporters so a
-future failing run can expose the failing test location in check annotations,
-as well as detailed runner logs. The updated workflow passed remotely on
-`e88b7e54ca475c7d07e5d8244fd22fa9ecdb7c57`.
+Both jobs now select standard GitHub-hosted `ubuntu-24.04` and refuse a
+self-hosted environment. The ordinary check job withholds raw fixture output.
+
+**Local Supabase integration** means Supabase local to the disposable GitHub
+runner, never this computer. It reuses the existing workflow with a guarded
+run-specific project, Vector disabled, full migration replay/ledger verification,
+temporary receipt/deletion signing capabilities, pgTAP, full type generation and
+committed-type drift checks, production build and the entire provider/browser
+suite. Drift fails acceptance even after generation. Cleanup is scoped to that
+run's project and retried with `always()`. No hosted project or repository
+secret is required. This prepared change has **not run remotely**.
+
+Raw provider/SQL/assertion output is withheld. The custom reporter publishes
+only case locations, outcomes and durations; it never uploads credentials,
+cookies, DOM, error payloads, traces or storage state. Seven-day artifacts contain
+allowlisted summaries, generated public schema declarations and masked 390/1440px
+Studio screenshots only after successful acceptance. See the
+[M1 provider guide](system-design/PROVIDER_ACCEPTANCE.md) for exact commands,
+artifact paths, confidentiality, cleanup and remaining gates.
 
 The integration job explicitly uses `TUTOR_MODE=scripted` and
 `LIVE_TUTOR_SMOKE=false`. The real-model smoke and live-only intercepted stream UI
@@ -45,6 +54,11 @@ provider. Normal CI does not need a provider key and does not run real-model
 evaluations.
 
 ## Local equivalents
+
+The current user boundary prohibits starting local services or downloading
+container images. Prepare and inspect CI locally; execute provider acceptance
+only in the GitHub-hosted job. The historical local commands below describe
+existing tooling, not permission to start it on this computer.
 
 Use Node from `.nvmrc`, install dependencies with `npm ci`, then run:
 
@@ -70,14 +84,15 @@ must state any such execution limitations.
 
 ## Release limits
 
-Verified on **2026-10-19**: [Actions run 39126051992](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/39126051992)
-passed on the current commit `e88b7e54ca475c7d07e5d8244fd22fa9ecdb7c57`.
+Historical verification on **2026-10-19**: [Actions run 39126051992](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/39126051992)
+passed on commit `e88b7e54ca475c7d07e5d8244fd22fa9ecdb7c57`.
 Both **Code, database and browser checks** and **Local Supabase integration**
 completed successfully. Every integration-job step passed, including fresh-runner
 database setup, receipt provisioning, pgTAP, type drift, production build,
 integration tests and cleanup. The exact commit's check-runs API independently
 reports both jobs successful. This supersedes the failed run on `402e6a5` as the
-current CI result; the earlier failure's root cause remains unknown. No
+most recent recorded historical CI result; it does not verify M1. The earlier
+failure's root cause remains unknown. No
 application/workflow fix or additional test run was needed for this verification.
 
 Required-check enforcement remains unverified. The unauthenticated
@@ -90,6 +105,26 @@ required checks below needs approval to use existing GitHub authentication with
 admin access, or an owner change in GitHub settings. Preserve existing rules.
 NX-036 remains In progress until failed checks are verified to block release.
 The workflow has no deployment or hosted migration step.
+
+## M1 preparation and publication boundary — 2026-10-31
+
+Current local HEAD is `34b95e8` on `main`; the new workflow/support changes are
+uncommitted. A later authorised publication should use a review branch such as
+`ci/studio-m1-provider-acceptance` and a PR to `main`. A branch push without a PR
+does not trigger the current workflow. No push, workflow dispatch, remote run,
+production migration, billing change or local service startup occurred here.
+NX-046.2/.4 stay In review; deployment is blocked pending actual acceptance.
+
+The source configuration supports this job; account-side action policies,
+runner availability, artifact permission and billing allowance remain unverified.
+Check owner/organisation Settings → Billing → Usage and Budgets and alerts
+before authorising execution. Public standard hosted compute is free; private
+usage draws from the owner's allowance and may incur overage; artifacts consume
+storage. The 15/35-minute job caps bound one attempt to about 50 total runner
+minutes. No cost guarantee is made. See
+[GitHub billing](https://docs.github.com/en/actions/concepts/billing-and-usage)
+and [budget controls](https://docs.github.com/en/billing/how-tos/set-up-budgets).
+No additional repository secrets are required; permissions remain contents: read.
 
 ## Required checks to configure with authenticated admin access
 

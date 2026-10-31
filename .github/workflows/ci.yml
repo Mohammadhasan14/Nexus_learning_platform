@@ -15,9 +15,11 @@ concurrency:
 jobs:
   checks:
     name: Code, database and browser checks
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
+      - name: Require GitHub-hosted runner
+        run: test "$RUNNER_ENVIRONMENT" = github-hosted
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
@@ -28,16 +30,27 @@ jobs:
           cache-dependency-path: package-lock.json
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - run: npm run check
+      - name: Run application gates without publishing raw fixture output
+        run: |
+          if npm run check > "$RUNNER_TEMP/application-checks.log" 2>&1; then
+            rm -f "$RUNNER_TEMP/application-checks.log"
+            echo "Application checks passed."
+          else
+            rm -f "$RUNNER_TEMP/application-checks.log"
+            echo "::error::Application checks failed; raw fixture output was withheld."
+            exit 1
+          fi
 
   local-supabase:
     name: Local Supabase integration
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
     env:
       TUTOR_MODE: scripted
       LIVE_TUTOR_SMOKE: "false"
     steps:
+      - name: Require GitHub-hosted runner
+        run: test "$RUNNER_ENVIRONMENT" = github-hosted
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
           persist-credentials: false
@@ -48,16 +61,25 @@ jobs:
           cache-dependency-path: package-lock.json
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - run: npm run db:start
-      # This reset targets only the disposable database on the CI runner.
-      - run: npm run db:reset
-      - run: npm run db:env
-      - run: npm run tutor:receipts:setup
-      - run: npm run privacy:deletion:setup
-      - run: npm run db:test:local
-      - run: npm run db:types:check
-      - run: npm run build
-      # Publish failing test locations as check annotations as well as runner logs.
-      - run: npm run test:integration -- --reporter=list,github
-      - if: always()
-        run: npm run db:stop
+      # Fresh runner-only project; no linked/hosted project or repository secrets.
+      # Wrapper withholds raw CLI/Auth/assertion output and emits allowlisted reports.
+      - name: Verify M1 against disposable Supabase
+        id: provider
+        run: node --import tsx scripts/ci-provider-acceptance.ts
+      - name: Retry scoped cleanup even after failure or cancellation
+        if: always() && (steps.provider.outcome == 'success' || steps.provider.outcome == 'failure')
+        run: node --import tsx scripts/ci-provider-acceptance.ts --cleanup
+      - name: Upload sanitised M1 provider evidence
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: studio-m1-provider-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          include-hidden-files: false
+          if-no-files-found: warn
+          path: |
+            test-results/provider-artifacts/acceptance.json
+            test-results/provider-artifacts/browser.json
+            test-results/provider-artifacts/public-schema.types.ts
+            test-results/provider-artifacts/workshop-390.png
+            test-results/provider-artifacts/workshop-1440.png
