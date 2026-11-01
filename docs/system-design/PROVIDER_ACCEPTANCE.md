@@ -2,8 +2,8 @@
 
 Prepared on 31 October 2026 from clean `34b95e8`. This guide is not a tracker;
 statuses remain in `../features.csv` and the handoff in `../PROGRESS.md`.
-Remote execution began on 1 November; NX-046.2 and NX-046.4 remain In review
-until combined acceptance passes.
+Remote acceptance passed on 1 November. NX-046.2 and NX-046.4 are Completed
+on actual reviewed evidence; deployment and merge remain unauthorised.
 
 ## Actual remote evidence — 1 November
 
@@ -12,6 +12,28 @@ Authenticated inspection confirmed Actions/write access and no configured
 webhooks, environments, deployment history or external status contexts. The
 source workflow has only hosted checks; no connected deployment trigger was
 found. No merge, deployment or billing change is authorised or performed.
+
+**Accepted run:**
+[41295135451](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41295135451),
+both jobs successful. Code head `764cff52e1bedc18b43269533935f55ec5aefa4b`
+was checked out as PR merge `56b441cc222043a76b9639d90a5cbf705087d5a3`.
+The report records `accepted: true`, all 17 migrations through `202610290001`,
+legacy-JS upgrade preservation, 68 pgTAP assertions/four files, full generated
+public-schema equality/drift and build. Browser acceptance was **15 passed,
+two intentional live-only skips**, with no required case skipped. The separate
+application job passed all normal quality, fixture and performance gates.
+All scoped cleanup and empty container/volume/network checks passed.
+
+[Sanitised artifact](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41295135451/artifacts/13078779714)
+and ignored local copies under
+`test-results/verification/studio-provider-remote/studio-m1-provider-41295135451-1/`
+contain accepted JSON reports, generated schema and reviewed 390/1440px masked
+screenshots. The captures follow the Studio populated-query Escape/focus-return
+regression and retain the established layout. No type/schema source change was
+needed. A documentation-only follow-up publishes these facts and receives the
+normal PR checks; exact current-head status is visible on the PR.
+
+### Earlier failures and focused fixes
 
 Initial [run 41292861327](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41292861327)
 tested branch head `825abb6` via merge
@@ -32,7 +54,13 @@ Axe audits in notes/search and outcomes, without disabling any accessibility
 rule. The reporter now adds only public rule IDs/test-source locations; its
 private-payload canary test passes. Follow-up
 [run 41293665342](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41293665342)
-is pending. No current acceptance success or new screenshot is claimed yet.
+then exposed a stale toolbar-focus assertion. It now checks the actual opener
+and separate button invocation. Run `41294245258` exposed the same loading-shell
+race in editorial and a real populated-search Escape defect. The small dialog
+handler fix closes on Escape without clearing the query or losing opener focus,
+while preserving composition. Equivalent project/review audit readiness was
+corrected too. No Axe rule, keyboard assertion or performance budget was removed.
+The accepted run above verifies these fixes together.
 
 ## Initial publication access blocker — resolved
 
@@ -41,7 +69,7 @@ no-publication restriction below describes the preparation session. Local branch
 `ci/studio-m1-provider-acceptance` was created from committed `0ab4ce2`. The
 workspace began clean, all M1 dependencies were included, and the diff excludes
 environment files and generated artifacts. Publication was initially blocked because the
-workspace GitHub sign-in helper returns no usable credentials and the SSH agent
+workspace GitHub sign-in helper returned no usable credentials and the SSH agent
 had no loaded identity. The user restored GitHub sign-in; publication and remote
 execution are recorded above.
 
@@ -56,8 +84,8 @@ tested remote `main` at `b69e40be1a4e2ff34bbd564af175b7b1294114ac`, not this
 prepared workflow. Both jobs failed. Provider reset, pgTAP, type check, build
 and stop steps reported success, while integration failed; no artifacts are
 available. Sanitised public annotations identify `page-has-heading-one` at
-notes-search line 229 and outcomes line 148. Counts, DOM cause and branch
-acceptance remain unverified. See the current handoff for precise boundaries.
+notes-search line 229 and outcomes line 148. Detailed counts/DOM captures for
+that historical run are unavailable; current acceptance is established above.
 
 ## Execution boundary
 
@@ -200,16 +228,15 @@ captures in `tests/integration/system-design.spec.ts`, and the canonical tracker
 handoff and relevant CI/decision/implementation/provider documentation. Exclude
 ignored artifacts, environment files and generated credentials.
 
-## Remaining gate
+## Remaining limits and stopping point
 
-First-run migration/types/pgTAP/Studio browser evidence is recorded above, but
-combined provider acceptance remains failed pending the focused follow-up.
-Local lightweight checks are recorded in the handoff.
+Combined M1 provider acceptance passed. Local lightweight checks and remote
+evidence are recorded in the handoff; no heavy local service/suite was started.
 Real cookie-session loss and expired-cookie refresh do not establish forced
 provider-side JWT expiry/revocation. Physical-device/screen-reader acceptance
 also remains separate.
 
-NX-046.2/.4 stay In review and M1 deployment stays blocked until actual provider
-criteria pass and evidence is reviewed. Independent foundations work may be
-separately authorised while this gate remains open. NX-046.22 is still Deferred;
-no foundations/editor/simulation/AI implementation begins in this preparation.
+NX-046.1–4 are Completed; broader NX-046 remains In progress and NX-046.22 is
+Deferred. This proves the disposable local-provider stack on GitHub, not managed
+or production Supabase, release readiness or deployment. No merge/deployment or
+foundations/editor/simulation/AI implementation is authorised by acceptance.

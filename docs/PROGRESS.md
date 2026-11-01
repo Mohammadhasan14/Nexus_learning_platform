@@ -4,65 +4,67 @@ Updated: **2026-11-01**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — M1 PR published; hosted acceptance in progress
+## Current handoff — M1 real-provider acceptance passed
 
-GitHub sign-in was restored on 1 November. Authenticated inspection confirmed
-repository write/workflow access, Actions enabled, no webhooks, environments,
-deployments or external status contexts, and only the checked-in hosted test
-workflow. No connected deployment trigger was found. Billing/settings were not
-changed and no production/shared Supabase project was accessed.
+[PR #1](https://github.com/Mohammadhasan14/Nexus_learning_platform/pull/1) remains
+open on `ci/studio-m1-provider-acceptance`, without merge or deployment.
+Both jobs passed in
+[run 41295135451](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41295135451)
+for code head `764cff52e1bedc18b43269533935f55ec5aefa4b`; the actual tested PR
+merge SHA is `56b441cc222043a76b9639d90a5cbf705087d5a3`.
+The documentation-only follow-up records this evidence; its normal required
+checks will run on the final PR head as well. Do not infer a merge/deployment.
 
-Pushed `ci/studio-m1-provider-acceptance` and opened
-[PR #1](https://github.com/Mohammadhasan14/Nexus_learning_platform/pull/1), without
-merge or deployment. Initial PR head is
-`825abb6eaa66a66d1ffebe8d49da27779d3b626c`.
-[Run 41292861327](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41292861327)
-completed: the application gate job passed; provider acceptance failed only in
-the notes/search browser case. The sanitised report records 17 replayed migration
-versions through `202610290001`, successful legacy-JS upgrade preservation,
-68 pgTAP assertions in four files, identical committed/generated type hashes,
-build success, 14 browser cases passed, one failed and two intentional live-only
-skips. Both Studio cases and password-confirmed deletion passed. Scoped cleanup
-and empty container/volume/network checks passed. Screenshots were withheld.
-PR workflows check out a temporary merge commit, so record the report's actual
-SHA separately from the branch head when reviewing evidence.
+**Actual provider evidence:** fresh GitHub-hosted Ubuntu/Supabase, synthetic
+accounts only, Vector disabled. All 17 migration versions through
+`202610290001` replayed, a pre-Studio JS enrolment/read fixture survived the
+upgrade, and the subsequent migration application was a no-op. **68 pgTAP
+assertions in four files** passed, including the 33 Studio assertions. Full
+provider public-schema generation and both drift comparisons passed; generated
+and committed declarations match byte for byte, SHA-256
+`07c9424d65695e0b2a43ccf509d2ec523270aa90cccc78f5ded6b07c9f06aaef`.
+No migration/type changes were needed and no existing database was touched.
 
-The report's actual tested merge SHA is
-`de8d327adf0cff09cea8fd7abc1d0d41f9ed62de`. Sanitised files are preserved under
-`test-results/verification/studio-provider-remote/studio-m1-provider-41292861327-1/`.
-The focused follow-up waits for the actual page h1 before keyboard/Axe audits in
-notes/search and outcomes, rather than potentially auditing the shared Suspense
-shell. All Axe checks remain enabled. The reporter additionally exposes only
-public rule IDs and test-source locations, with a private-payload canary check.
-This correction was pushed as
-`d7542a943a1a6c461a9c0d6a669948e13570c6c1` and is being verified in
-[run 41293665342](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41293665342).
-Its provider report again passed database/types/privacy/Studio checks, with the
-page-heading audits now passing. Notes/search then failed at line 285 because
-its old test expected the toolbar trigger after a shortcut opened search from
-the focused main region. The documented accessibility contract restores the
-actual opener. The next focused correction asserts main focus before/after the
-shortcut and separately checks button invocation returns to the button. It
-preserves all dialog trapping, Axe rules and keyboard checks. The independent
-regression job was still running at investigation time. No passing combined
-result is inferred from either failed provider run.
+**Real browser acceptance:** **15 passed, two intentional live-only skips**;
+no required case skipped. Both Studio journeys verified enrolment, exact pinned
+save/resume, new revisions, retry/conflict/isolation restrictions, export,
+signed password-confirmed deletion, two-tab recovery and same-account session
+recovery. Existing JS/Auth/privacy/tutor/token-accounting cases passed. The
+independent application job passed formatting, lint, types, units, isolated SQL,
+build, public/fixture flows and unchanged performance budgets.
 
-The focus-contract fix was pushed as `75838b5` and tested in
-[run 41294245258](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41294245258).
-Its application job passed; provider backend/types/Studio checks passed again.
-Sanitised diagnostics exposed an additional editorial loading-shell audit and
-an actual Quick search Escape defect: a populated search input can consume
-Escape to clear its value without closing the modal. The next fix explicitly
-handles Escape at the dialog (preserving IME composition), keeps focus return
-and layout intact, and adds a populated-query Escape check on the Studio page
-before its screenshots. Editorial and equivalent project/review audit loops
-now wait for their exact loaded h1. All rules and assertions remain enabled.
-These source fixes await their own remote verification.
+**Fixes:** real-provider latency exposed accessibility audits of streamed loading
+shells; audit loops now require their exact loaded headings. Corrected the stale
+keyboard expectation to restore the actual opener and separately verify button
+invocation. A populated search input could consume Escape without closing the
+modal; the shared dialog now handles it explicitly while preserving composition,
+layout and opener focus. Studio verifies that recovery before screenshots.
+All Axe rules and keyboard checks remain enabled. Five lightweight CI-policy/
+redaction tests pass locally; no local build/heavy suite or service was started.
 
-NX-046.2/.4 remain In review pending combined acceptance. Local Docker/Supabase,
-image downloads, builds and heavy suites remain stopped. No foundation/editor/
-simulation/AI feature work has started. Review sanitised artifacts and focused
-failure locations before any source fix; preserve all checks and route budgets.
+**Artifacts:**
+[seven-day sanitised evidence](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41295135451/artifacts/13078779714)
+contains acceptance/browser JSON, generated schema declarations and reviewed
+390px/1440px workshop screenshots. Editable/private values are masked. Local
+copies remain ignored under
+`test-results/verification/studio-provider-remote/studio-m1-provider-41295135451-1/`.
+No raw errors, logs, cookies, environment files or Auth storage were uploaded.
+Scoped stop/removal and empty container/volume/network checks all passed; no
+shared prune or image deletion was used. No local services were left running.
+
+**Status:** NX-046.1–4 Completed. The register has 103 rows: 55 Completed,
+11 In progress, 5 Pending, 32 Deferred, no In review. Broader NX-046 remains
+In progress; foundations NX-046.22 and later milestones remain Deferred.
+
+**Limits/stop:** this verifies real local-provider software on a disposable CI
+VM, not managed/production Supabase or deployment. Session-loss recovery and
+expired-cookie refresh are verified; forced provider-side JWT expiry/revocation
+was not induced. Physical devices, actual screen readers and Firefox/WebKit
+remain outside this evidence. No production database, credentials, billing or
+hosting settings changed. No merge, deployment, foundation/editor/simulation/AI
+work is authorised. The verified route is
+`/courses/system-design-studio-v1/studio/campus-events-v1` after sign-in/enrolment
+in an appropriately migrated environment; the CI environment was removed.
 
 ## Previous handoff — M1 publication authorised, blocked on GitHub sign-in
 

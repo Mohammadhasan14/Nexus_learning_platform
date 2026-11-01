@@ -236,13 +236,18 @@ in the handoff without private error payloads. NX-046.2/.4 remain In review.
 
 ## Actual hosted acceptance and focused corrections — 1 November
 
-PR #1 is published. Initial run `41292861327` and follow-ups establish real
+PR #1 is published. Accepted
+[run 41295135451](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41295135451)
+tested code `764cff52e1bedc18b43269533935f55ec5aefa4b` through merge
+`56b441cc222043a76b9639d90a5cbf705087d5a3`. Both jobs passed, establishing real
 Supabase replay of all 17 migrations through `202610290001`, preservation of a
 pre-Studio JavaScript fixture, 68 pgTAP assertions in four files, full generated
-public-schema equality/drift checks, build and scoped cleanup. Studio RPC/UI,
-privacy deletion and JavaScript course cases pass. Combined provider acceptance
-is still blocked by unrelated shared-UI regression cases until the latest fix
-is verified; do not mark NX-046.2/.4 complete yet.
+public-schema equality/drift checks, build and scoped cleanup. **15 real-provider
+browser cases passed** with two intentional live-only skips, no required skips;
+Studio RPC/UI, privacy deletion and JavaScript cases all passed. The application
+job passed all normal formatting/lint/types/unit/isolated-DB/build/public/fixture/
+performance gates. Generated types match source byte for byte; no migration or
+type source fix was necessary. NX-046.2/.4 are now Completed on this evidence.
 
 Real-provider latency exposed audits of the shared Suspense loading shell before
 the async page h1 arrived. Tests now require the exact loaded page heading;
@@ -259,3 +264,17 @@ Chrome's search-field Escape clearing behavior is documented by
 No course/progress, worksheet persistence, schema, credential or tutor behavior
 was changed. Sanitised failure diagnostics contain only public rule IDs and
 test-source positions, not messages, DOM, input values or secrets.
+
+Reviewed real-provider 390/1440px screenshots and JSON/schema artifacts are
+preserved locally under
+`test-results/verification/studio-provider-remote/studio-m1-provider-41295135451-1/`
+and in the seven-day run artifact. Private/editable content is masked. No
+temporary project containers, volumes or networks remained after scoped cleanup;
+Vector stayed disabled, no shared prune/image deletion or local service startup.
+The captures show the same workshop layout after the verified keyboard fix.
+
+This closes M1 provider acceptance, not managed/production deployment. Forced
+provider JWT expiry, physical devices, actual screen readers and Firefox/WebKit
+remain unclaimed; cookie-session loss/recovery and expired-cookie refresh were
+verified. Parent course work remains open and foundations Deferred. Stop without
+merge, deployment or later feature implementation.

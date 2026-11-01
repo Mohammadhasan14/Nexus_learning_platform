@@ -129,6 +129,26 @@ minutes. No cost guarantee is made. See
 and [budget controls](https://docs.github.com/en/billing/how-tos/set-up-budgets).
 No additional repository secrets are required; permissions remain contents: read.
 
+## M1 acceptance result — 2026-11-01
+
+Both required jobs passed in
+[run 41295135451](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41295135451)
+on PR #1 for code head `764cff52e1bedc18b43269533935f55ec5aefa4b` (tested PR
+merge `56b441cc222043a76b9639d90a5cbf705087d5a3`). Actual provider evidence:
+17 migrations through `202610290001`, preserved legacy-JS fixture, 68 pgTAP
+assertions/four files, full public-schema type equality/no drift, build and
+15 provider browser cases passed, with two deliberate live-only skips. All
+normal application/performance gates passed. Scoped cleanup/inventory checks
+passed and masked desktop/mobile images were reviewed. See
+[the seven-day artifact](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41295135451/artifacts/13078779714)
+and the canonical handoff. Evidence/status documentation is published in a
+separate follow-up and receives normal PR checks; no checks are bypassed.
+
+NX-046.2/.4 are Completed. No local heavy services, real database access,
+production migration, billing change, merge or deployment occurred. This result
+does not change required-check enforcement or other launch gates, which remain
+separate. No source type weakening, Axe exclusion or budget relaxation was used.
+
 ## Required checks to configure with authenticated admin access
 
 For `main`, preserve any existing rule and other required checks. Enable
