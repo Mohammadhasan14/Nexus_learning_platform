@@ -2,22 +2,53 @@
 
 Prepared on 31 October 2026 from clean `34b95e8`. This guide is not a tracker;
 statuses remain in `../features.csv` and the handoff in `../PROGRESS.md`.
-**Prepared, not executed: NX-046.2 and NX-046.4 remain In review.**
+Remote execution began on 1 November; NX-046.2 and NX-046.4 remain In review
+until combined acceptance passes.
 
-## Publication attempt — 1 November 2026
+## Actual remote evidence — 1 November
+
+[PR #1](https://github.com/Mohammadhasan14/Nexus_learning_platform/pull/1) is open.
+Authenticated inspection confirmed Actions/write access and no configured
+webhooks, environments, deployment history or external status contexts. The
+source workflow has only hosted checks; no connected deployment trigger was
+found. No merge, deployment or billing change is authorised or performed.
+
+Initial [run 41292861327](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41292861327)
+tested branch head `825abb6` via merge
+`de8d327adf0cff09cea8fd7abc1d0d41f9ed62de`. The application job passed. Provider
+replay/legacy-JS preservation, the complete 17-version ledger through
+`202610290001`, 68 pgTAP assertions in four files, full provider public-schema
+generation/drift, build and all scoped cleanup/inventory checks passed.
+Generated declarations match committed types byte for byte (SHA-256
+`07c9424d65695e0b2a43ccf509d2ec523270aa90cccc78f5ded6b07c9f06aaef`). Browser
+results were 14 passed, one notes/search failure and two explicit live-only
+skips. Both Studio journeys and signed password-confirmed deletion passed.
+Overall acceptance remained false and screenshots were withheld.
+
+Sanitised first-run artifacts are preserved under
+`test-results/verification/studio-provider-remote/studio-m1-provider-41292861327-1/`.
+The focused follow-up `d7542a9` waits for streamed page headings before keyboard/
+Axe audits in notes/search and outcomes, without disabling any accessibility
+rule. The reporter now adds only public rule IDs/test-source locations; its
+private-payload canary test passes. Follow-up
+[run 41293665342](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41293665342)
+is pending. No current acceptance success or new screenshot is claimed yet.
+
+## Initial publication access blocker — resolved
 
 The user now authorises publishing and running the prepared branch; the earlier
 no-publication restriction below describes the preparation session. Local branch
 `ci/studio-m1-provider-acceptance` was created from committed `0ab4ce2`. The
 workspace began clean, all M1 dependencies were included, and the diff excludes
-environment files and generated artifacts. Publication is blocked because the
+environment files and generated artifacts. Publication was initially blocked because the
 workspace GitHub sign-in helper returns no usable credentials and the SSH agent
-has no loaded identity. No push, PR or new run has occurred.
+had no loaded identity. The user restored GitHub sign-in; publication and remote
+execution are recorded above.
 
 No deployment workflow/configuration was found. Public deployment/environment
 and external-status lists are empty, but private repository hooks require
-authentication (401). Verify connected integrations after sign-in before any
-push/PR; deployment remains unauthorised.
+authentication (401). Authenticated inspection subsequently returned empty hook,
+environment and deployment lists. Deployment remains unauthorised.
 
 Historical run
 [41106596305](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41106596305)
@@ -98,9 +129,10 @@ contexts. Backend keys originate only from the fresh loopback CLI project.
 No Supabase login/link, `db push` or production/repository secret is used.
 
 `tests/support/provider-reporter.ts` records only file/line, statuses and duration.
-It omits error/assertion values, titles, stdout/stderr, source, DOM, attachments
+It omits error/assertion values, titles, stdout/stderr, source text, DOM, attachments
 and Auth storage. Traces, videos and automatic screenshots are off. This
-deliberately omits raw failure messages: use stage/file/line and reviewed schema
+deliberately omits raw failure messages: use stage/file/line, allowlisted public
+accessibility rule IDs and reviewed schema
 declarations to investigate, without turning on secret-bearing verbose output.
 
 One artifact, `studio-m1-provider-<run>-<attempt>`, has **seven-day retention**.
@@ -154,12 +186,12 @@ Primary references checked:
 
 ## Exact publication boundary
 
-Preparation remains uncommitted on local `main` at `34b95e8`. After a separate
-publication instruction, create a review branch such as
-`ci/studio-m1-provider-acceptance` from that HEAD plus these edits and open a PR
-to `main`. **Pushing that branch alone does not trigger this workflow**; opening
-or updating its PR does. A push to `main` also triggers both jobs. No branch,
-commit, push, PR or remote workflow is created during this preparation.
+Preparation was committed through `0ab4ce2`. The authorised review branch
+`ci/studio-m1-provider-acceptance` is now published as PR #1 to `main`.
+**Pushing a branch alone does not trigger this workflow**; opening or updating
+its PR does. A push to `main` also triggers both jobs. Focused M1/CI follow-ups
+are authorised. Do not merge, deploy, change billing or begin foundations.
+See the canonical handoff for the exact current head and tested merge SHAs.
 
 Include together: `.github/workflows/ci.yml`, `package.json`,
 `playwright.integration.config.ts`, `scripts/ci-provider-{acceptance,policy}.ts`,
@@ -170,8 +202,9 @@ ignored artifacts, environment files and generated credentials.
 
 ## Remaining gate
 
-No remote migration, full provider types/drift, pgTAP, browser result or new
-screenshot is claimed. Local lightweight checks are recorded in the handoff.
+First-run migration/types/pgTAP/Studio browser evidence is recorded above, but
+combined provider acceptance remains failed pending the focused follow-up.
+Local lightweight checks are recorded in the handoff.
 Real cookie-session loss and expired-cookie refresh do not establish forced
 provider-side JWT expiry/revocation. Physical-device/screen-reader acceptance
 also remains separate.

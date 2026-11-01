@@ -28,7 +28,8 @@ temporary receipt/deletion signing capabilities, pgTAP, full type generation and
 committed-type drift checks, production build and the entire provider/browser
 suite. Drift fails acceptance even after generation. Cleanup is scoped to that
 run's project and retried with `always()`. No hosted project or repository
-secret is required. This prepared change has **not run remotely**.
+secret is required. The prepared job has now run on PR #1; current outcomes
+and exact tested SHAs are recorded in the canonical handoff and provider guide.
 
 Raw provider/SQL/assertion output is withheld. The custom reporter publishes
 only case locations, outcomes and durations; it never uploads credentials,
@@ -108,15 +109,17 @@ The workflow has no deployment or hosted migration step.
 
 ## M1 preparation and publication boundary — 2026-10-31
 
-Current local HEAD is `34b95e8` on `main`; the new workflow/support changes are
-uncommitted. A later authorised publication should use a review branch such as
-`ci/studio-m1-provider-acceptance` and a PR to `main`. A branch push without a PR
-does not trigger the current workflow. No push, workflow dispatch, remote run,
-production migration, billing change or local service startup occurred here.
-NX-046.2/.4 stay In review; deployment is blocked pending actual acceptance.
+Preparation was committed through `0ab4ce2`. On 1 November the user authorised
+publication; `ci/studio-m1-provider-acceptance` is now open as PR #1 to `main`.
+A branch push without a PR does not trigger the current workflow. No merge,
+deployment, production migration, billing change or local service startup is
+included. Follow actual outcomes in the canonical handoff; prepared workflows
+and successful partial stages are not combined acceptance.
 
 The source configuration supports this job; account-side action policies,
-runner availability, artifact permission and billing allowance remain unverified.
+runner availability and artifact upload have been exercised by the first PR run.
+Authenticated Actions policy permits the pinned actions. Billing allowance was
+not accessed or changed; this public repository uses standard hosted runners.
 Check owner/organisation Settings → Billing → Usage and Budgets and alerts
 before authorising execution. Public standard hosted compute is free; private
 usage draws from the owner's allowance and may incur overage; artifacts consume

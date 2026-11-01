@@ -34,7 +34,18 @@ The focused follow-up waits for the actual page h1 before keyboard/Axe audits in
 notes/search and outcomes, rather than potentially auditing the shared Suspense
 shell. All Axe checks remain enabled. The reporter additionally exposes only
 public rule IDs and test-source locations, with a private-payload canary check.
-This correction awaits its own remote verification; no passing result is inferred.
+This correction was pushed as
+`d7542a943a1a6c461a9c0d6a669948e13570c6c1` and is being verified in
+[run 41293665342](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41293665342).
+Its provider report again passed database/types/privacy/Studio checks, with the
+page-heading audits now passing. Notes/search then failed at line 285 because
+its old test expected the toolbar trigger after a shortcut opened search from
+the focused main region. The documented accessibility contract restores the
+actual opener. The next focused correction asserts main focus before/after the
+shortcut and separately checks button invocation returns to the button. It
+preserves all dialog trapping, Axe rules and keyboard checks. The independent
+regression job was still running at investigation time. No passing combined
+result is inferred from either failed provider run.
 
 NX-046.2/.4 remain In review pending combined acceptance. Local Docker/Supabase,
 image downloads, builds and heavy suites remain stopped. No foundation/editor/
