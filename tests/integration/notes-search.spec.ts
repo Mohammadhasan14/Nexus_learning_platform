@@ -207,6 +207,14 @@ test("private notes survive retries and conflicts; search and command menu respe
         .getByRole("link", { name: /Values and bindings/ }),
     ).toBeVisible();
     await page.goto("/search?q=values");
+    // The shell/skip link can stream before the async search page has arrived.
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Search your workspace.",
+        exact: true,
+      }),
+    ).toBeVisible();
     await page.keyboard.press("Tab");
     await expect(
       page.getByRole("link", { name: "Skip to content" }),

@@ -4,7 +4,44 @@ Updated: **2026-11-01**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — M1 publication authorised, blocked on GitHub sign-in
+## Current handoff — M1 PR published; hosted acceptance in progress
+
+GitHub sign-in was restored on 1 November. Authenticated inspection confirmed
+repository write/workflow access, Actions enabled, no webhooks, environments,
+deployments or external status contexts, and only the checked-in hosted test
+workflow. No connected deployment trigger was found. Billing/settings were not
+changed and no production/shared Supabase project was accessed.
+
+Pushed `ci/studio-m1-provider-acceptance` and opened
+[PR #1](https://github.com/Mohammadhasan14/Nexus_learning_platform/pull/1), without
+merge or deployment. Initial PR head is
+`825abb6eaa66a66d1ffebe8d49da27779d3b626c`.
+[Run 41292861327](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41292861327)
+completed: the application gate job passed; provider acceptance failed only in
+the notes/search browser case. The sanitised report records 17 replayed migration
+versions through `202610290001`, successful legacy-JS upgrade preservation,
+68 pgTAP assertions in four files, identical committed/generated type hashes,
+build success, 14 browser cases passed, one failed and two intentional live-only
+skips. Both Studio cases and password-confirmed deletion passed. Scoped cleanup
+and empty container/volume/network checks passed. Screenshots were withheld.
+PR workflows check out a temporary merge commit, so record the report's actual
+SHA separately from the branch head when reviewing evidence.
+
+The report's actual tested merge SHA is
+`de8d327adf0cff09cea8fd7abc1d0d41f9ed62de`. Sanitised files are preserved under
+`test-results/verification/studio-provider-remote/studio-m1-provider-41292861327-1/`.
+The focused follow-up waits for the actual page h1 before keyboard/Axe audits in
+notes/search and outcomes, rather than potentially auditing the shared Suspense
+shell. All Axe checks remain enabled. The reporter additionally exposes only
+public rule IDs and test-source locations, with a private-payload canary check.
+This correction awaits its own remote verification; no passing result is inferred.
+
+NX-046.2/.4 remain In review pending combined acceptance. Local Docker/Supabase,
+image downloads, builds and heavy suites remain stopped. No foundation/editor/
+simulation/AI feature work has started. Review sanitised artifacts and focused
+failure locations before any source fix; preserve all checks and route budgets.
+
+## Previous handoff — M1 publication authorised, blocked on GitHub sign-in
 
 The user authorised branch creation, reviewed M1/CI commits, pushing the review
 branch, opening a PR and focused failure fixes, without merge/deployment. Started

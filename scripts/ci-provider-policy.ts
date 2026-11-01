@@ -52,6 +52,84 @@ export type SafeBrowserCase = {
   expected: string;
   durationMs: number;
 };
+/** Diagnostic identifiers only; never return error text, selectors, DOM or values. */
+export function failureDetails(
+  errors: readonly {
+    message?: string;
+    stack?: string;
+    location?: { file: string; line: number; column: number };
+  }[],
+  sourceFile: string,
+) {
+  const allowedFile = basename(sourceFile);
+  const text = errors
+    .map((e) => `${e.message ?? ""}\n${e.stack ?? ""}`)
+    .join("\n");
+  const knownRules = [
+    "page-has-heading-one",
+    "landmark-one-main",
+    "region",
+    "color-contrast",
+    "heading-order",
+    "aria-hidden-focus",
+    "aria-allowed-attr",
+    "aria-valid-attr-value",
+    "duplicate-id-aria",
+    "scrollable-region-focusable",
+    "target-size",
+    "document-title",
+    "html-has-lang",
+  ];
+  const rules = knownRules.filter(
+    (rule) => text.includes(`"${rule}"`) || text.includes(`'${rule}'`),
+  );
+  const locations: { file: string; line: number; column: number }[] = [];
+  for (const error of errors) {
+    const loc = error.location;
+    if (
+      loc &&
+      /^[a-z-]+\.spec\.ts$/.test(basename(loc.file)) &&
+      basename(loc.file) === allowedFile &&
+      Number.isSafeInteger(loc.line) &&
+      loc.line > 0 &&
+      Number.isSafeInteger(loc.column) &&
+      loc.column > 0
+    )
+      locations.push({
+        file: basename(loc.file),
+        line: loc.line,
+        column: loc.column,
+      });
+  }
+  for (const match of text.matchAll(
+    /tests\/integration\/([a-z-]+\.spec\.ts):(\d+):(\d+)/g,
+  )) {
+    if (match[1] !== allowedFile) continue;
+    const loc = {
+      file: match[1],
+      line: Number(match[2]),
+      column: Number(match[3]),
+    };
+    if (
+      !locations.some(
+        (old) =>
+          old.file === loc.file &&
+          old.line === loc.line &&
+          old.column === loc.column,
+      )
+    )
+      locations.push(loc);
+  }
+  return {
+    kind: rules.length
+      ? "accessibility"
+      : /timeout/i.test(text)
+        ? "timeout"
+        : "assertion-or-runtime",
+    rules,
+    locations: locations.slice(0, 8),
+  };
+}
 export function browserCase(input: SafeBrowserCase): SafeBrowserCase {
   const file = basename(input.file);
   const statuses = ["passed", "failed", "timedOut", "skipped", "interrupted"];
