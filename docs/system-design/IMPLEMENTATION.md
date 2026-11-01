@@ -218,3 +218,18 @@ execution. Reports omit private values, and successful desktop/mobile captures
 mask editable worksheet data. Only lightweight targeted validation runs locally.
 NX-046.2/.4 remain In review and deployment is blocked pending actual acceptance.
 No foundations, architecture, simulation or AI implementation is included.
+
+## Publication/access audit — 1 November 2026
+
+Created the authorised local branch `ci/studio-m1-provider-acceptance` from
+`0ab4ce2`; all reviewed dependencies are committed. GitHub authentication is
+unavailable to automation, so nothing was pushed and no PR/run was created.
+Deployment inspection found no source workflow/config or public deployment
+history; private hook visibility remains blocked on sign-in.
+
+Public metadata for historical run `41106596305` at `b69e40b` establishes that
+provider reset, pgTAP, generated-type comparison, build and stop steps reported
+success. Both overall jobs failed, including provider browser integration.
+There are no artifacts or detailed counts; the prepared new wrapper/upgrade
+fixture/expanded assertions have not run. Known annotation rule IDs are recorded
+in the handoff without private error payloads. NX-046.2/.4 remain In review.

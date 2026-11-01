@@ -4,6 +4,30 @@ Prepared on 31 October 2026 from clean `34b95e8`. This guide is not a tracker;
 statuses remain in `../features.csv` and the handoff in `../PROGRESS.md`.
 **Prepared, not executed: NX-046.2 and NX-046.4 remain In review.**
 
+## Publication attempt — 1 November 2026
+
+The user now authorises publishing and running the prepared branch; the earlier
+no-publication restriction below describes the preparation session. Local branch
+`ci/studio-m1-provider-acceptance` was created from committed `0ab4ce2`. The
+workspace began clean, all M1 dependencies were included, and the diff excludes
+environment files and generated artifacts. Publication is blocked because the
+workspace GitHub sign-in helper returns no usable credentials and the SSH agent
+has no loaded identity. No push, PR or new run has occurred.
+
+No deployment workflow/configuration was found. Public deployment/environment
+and external-status lists are empty, but private repository hooks require
+authentication (401). Verify connected integrations after sign-in before any
+push/PR; deployment remains unauthorised.
+
+Historical run
+[41106596305](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41106596305)
+tested remote `main` at `b69e40be1a4e2ff34bbd564af175b7b1294114ac`, not this
+prepared workflow. Both jobs failed. Provider reset, pgTAP, type check, build
+and stop steps reported success, while integration failed; no artifacts are
+available. Sanitised public annotations identify `page-has-heading-one` at
+notes-search line 229 and outcomes line 148. Counts, DOM cause and branch
+acceptance remain unverified. See the current handoff for precise boundaries.
+
 ## Execution boundary
 
 The user superseded temporary local-Docker authorisation with a remote-CI-only
