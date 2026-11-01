@@ -47,6 +47,18 @@ preserves all dialog trapping, Axe rules and keyboard checks. The independent
 regression job was still running at investigation time. No passing combined
 result is inferred from either failed provider run.
 
+The focus-contract fix was pushed as `75838b5` and tested in
+[run 41294245258](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41294245258).
+Its application job passed; provider backend/types/Studio checks passed again.
+Sanitised diagnostics exposed an additional editorial loading-shell audit and
+an actual Quick search Escape defect: a populated search input can consume
+Escape to clear its value without closing the modal. The next fix explicitly
+handles Escape at the dialog (preserving IME composition), keeps focus return
+and layout intact, and adds a populated-query Escape check on the Studio page
+before its screenshots. Editorial and equivalent project/review audit loops
+now wait for their exact loaded h1. All rules and assertions remain enabled.
+These source fixes await their own remote verification.
+
 NX-046.2/.4 remain In review pending combined acceptance. Local Docker/Supabase,
 image downloads, builds and heavy suites remain stopped. No foundation/editor/
 simulation/AI feature work has started. Review sanitised artifacts and focused

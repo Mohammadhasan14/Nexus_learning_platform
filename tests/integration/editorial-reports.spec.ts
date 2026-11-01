@@ -217,6 +217,13 @@ insert into learning_private.answer_keys(exercise_id,answer,hint,explanation) se
       ["admin", staffPage],
     ] as const) {
       await p.reload();
+      await expect(
+        p.getByRole("heading", {
+          level: 1,
+          name: name === "reports" ? "My reports." : "Editorial workspace.",
+          exact: true,
+        }),
+      ).toBeVisible();
       await p.keyboard.press("Tab");
       await expect(
         p.getByRole("link", { name: "Skip to content" }),

@@ -288,6 +288,8 @@ test("private notes survive retries and conflicts; search and command menu respe
     await trigger.focus();
     await page.keyboard.press("Enter");
     await expect(dialog).toBeVisible();
+    await expect(query).toBeFocused();
+    await expect(query).toHaveValue("Values and bindings");
     await page.keyboard.press("Escape");
     await expect(dialog).not.toBeVisible();
     await expect(trigger).toBeFocused();

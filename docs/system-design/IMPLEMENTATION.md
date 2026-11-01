@@ -233,3 +233,29 @@ success. Both overall jobs failed, including provider browser integration.
 There are no artifacts or detailed counts; the prepared new wrapper/upgrade
 fixture/expanded assertions have not run. Known annotation rule IDs are recorded
 in the handoff without private error payloads. NX-046.2/.4 remain In review.
+
+## Actual hosted acceptance and focused corrections — 1 November
+
+PR #1 is published. Initial run `41292861327` and follow-ups establish real
+Supabase replay of all 17 migrations through `202610290001`, preservation of a
+pre-Studio JavaScript fixture, 68 pgTAP assertions in four files, full generated
+public-schema equality/drift checks, build and scoped cleanup. Studio RPC/UI,
+privacy deletion and JavaScript course cases pass. Combined provider acceptance
+is still blocked by unrelated shared-UI regression cases until the latest fix
+is verified; do not mark NX-046.2/.4 complete yet.
+
+Real-provider latency exposed audits of the shared Suspense loading shell before
+the async page h1 arrived. Tests now require the exact loaded page heading;
+all Axe rules remain enabled. The older search test also expected the toolbar
+trigger after opening via a shortcut from main; it now verifies the documented
+actual-opener return plus separate button invocation.
+
+The resulting keyboard test exposed a real populated-search-input Escape issue.
+The dialog now handles Escape explicitly, preserving composition, normal focus
+return and its existing layout. The Studio journey exercises a populated query,
+Escape and return to its worksheet field before capturing desktop/mobile images.
+Chrome's search-field Escape clearing behavior is documented by
+[MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/search).
+No course/progress, worksheet persistence, schema, credential or tutor behavior
+was changed. Sanitised failure diagnostics contain only public rule IDs and
+test-source positions, not messages, DOM, input values or secrets.

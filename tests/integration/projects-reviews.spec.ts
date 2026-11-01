@@ -180,6 +180,13 @@ test("projects keep private revisions and reviews follow saved practice", async 
     await mkdir("test-results/verification/phase5", { recursive: true });
     for (const route of ["projects", "reviews"]) {
       await page.goto(`/${route}`);
+      await expect(
+        page.getByRole("heading", {
+          level: 1,
+          name: route === "projects" ? "Your projects." : "Your review queue.",
+          exact: true,
+        }),
+      ).toBeVisible();
       for (const width of [320, 768, 1440]) {
         await page.setViewportSize({ width, height: 900 });
         expect(
