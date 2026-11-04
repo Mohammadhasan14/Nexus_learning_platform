@@ -4,7 +4,74 @@ Updated: **2026-11-01**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — M1 real-provider acceptance passed
+## Current handoff — first foundations lesson implemented, remote acceptance pending
+
+Authorised bounded NX-046.22 slice only. Began clean at verified M1
+`49172274b38613ef1efc130a93d7fb304e4dea1e`; authenticated read-only PR inspection
+found PR #1 still open/unmerged. Created local branch
+`feat/studio-foundations-web-request` from that head. It depends on PR #1; do not
+merge that PR or add these changes to its branch. No commit, push, workflow
+trigger, deployment or local service startup occurred.
+
+**Implemented:** `/courses/system-design-studio-v1/foundations/web-request-v1`
+inside the existing learner shell and Studio enrolment. Courses offers Start
+foundations before Open workshop; existing worksheet owners retain their
+workshop continuation. Learn has definitions, four manual walkthrough steps,
+Back/Next/Replay and a static textual alternative. Practice has three objective
+checks, SQL-private keys, selected-option feedback after submission, progressive
+hints, all-option explanation on request and retries with support/attempt history.
+Recap links practice/workshop and labels the four remaining lessons Planned.
+No prerequisite lock, mastery, course completion, editor, simulation or AI.
+
+**Persistence:** additive migration `202611010001_studio_foundations.sql` adds
+versioned lesson metadata, owner-only append-only position saves and assessment
+support events. Explicit Save lesson position tracks section/step/self-reported
+viewing separately from actual submitted practice. Expected revisions,
+idempotency, same-account recovery and explicit conflict choices keep current
+tab state. No localStorage/autosave. Account export adds only owned collections;
+signed account deletion cascades them. Published M1/JS content, formulas,
+worksheet revisions, enrolments, tutor and privacy restrictions remain intact.
+
+**Local evidence:** four new foundations units, five CI-policy/redaction units,
+three existing M1 arithmetic units; five foundations isolated SQL test results
+(parent plus four subtests), eight existing M1 SQL results and one existing
+JavaScript learning SQL case passed. The new SQL suite caught an ambiguous export
+column reference, fixed before its successful recheck. TypeScript `tsc --noEmit`
+passed. Targeted ESLint (zero warnings), changed-file formatting and CRLF-aware
+whitespace validation passed. All SQL
+checks used in-process PGlite/Auth shims, not a real Supabase service. No build,
+full suite, local browser, Docker, Supabase or provider check ran.
+
+**Types and remote preparation:** only the new table/RPC declarations were
+catalog-generated using the existing Studio type script's `--foundations` mode;
+no provider drift pass is claimed. The existing GitHub-hosted disposable gate now
+expects the additive migration, preserves all M1 requirements, requires the two
+prepared foundations integration journeys and allows two additional masked
+screenshots. Twenty-four pgTAP assertions and desktop/mobile/keyboard/Axe/reduced-
+motion/save-failure/session/conflict browser cases are prepared, not passed.
+Provider migration/Auth/pgTAP/full type generation and drift, browser/screenshots,
+production build and performance budgets await a separately authorised hosted
+run. No workflow was triggered or new screenshot captured.
+
+**Content provenance:** AI-assisted editorial review of roles, arrow directions,
+question/feedback/hint alignment and explicit simplifications. No independent
+educator review or learner validation. See
+[FOUNDATIONS.md](system-design/FOUNDATIONS.md) for contracts, limits and files.
+
+**Tracker:** NX-046.22 In progress, first lesson NX-046.23 In review, remaining
+NX-046.24–27 Deferred (APIs/data; latency/throughput/concurrency; read/write
+workloads; units/estimation transition). M1 NX-046.1–4 remain Completed based on
+actual prior provider evidence, including the final head's successful
+[run 41296122440](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41296122440).
+The canonical register has 108 rows: 55 Completed, 12 In progress, 5 Pending,
+1 In review and 35 Deferred. Preserve all original IDs/criteria.
+
+**Stop/next:** review this uncommitted first lesson and authorise remote acceptance
+separately. Next small content slice is NX-046.24, APIs and data, only with new
+implementation authorisation. Do not begin it, the rest of foundations or any
+architecture editor in this session.
+
+## Previous handoff — M1 real-provider acceptance passed
 
 [PR #1](https://github.com/Mohammadhasan14/Nexus_learning_platform/pull/1) remains
 open on `ci/studio-m1-provider-acceptance`, without merge or deployment.

@@ -166,3 +166,12 @@ and [required-check troubleshooting](https://docs.github.com/en/pull-requests/ho
 No setting was changed in this session. Configure only these requested checks;
 broader environment separation, release/rollback, backups and launch gates stay
 separate work.
+
+## Foundations preparation — 2026-11-01
+
+The separate, uncommitted foundations branch extends the existing disposable
+provider gate to migration `202611010001`, two mandatory foundations browser
+cases, 24 prepared pgTAP assertions and masked 390px/1440px foundations artifacts.
+The M1 gates, hosted-only boundary, synthetic-data policy and cleanup remain
+required. No workflow was triggered for these edits and no acceptance is claimed.
+See [foundations evidence and limits](system-design/FOUNDATIONS.md).

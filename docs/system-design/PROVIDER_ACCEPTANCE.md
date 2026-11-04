@@ -240,3 +240,15 @@ NX-046.1–4 are Completed; broader NX-046 remains In progress and NX-046.22 is
 Deferred. This proves the disposable local-provider stack on GitHub, not managed
 or production Supabase, release readiness or deployment. No merge/deployment or
 foundations/editor/simulation/AI implementation is authorised by acceptance.
+
+## Foundations branch preparation — 2026-11-01
+
+The uncommitted first-lesson branch adds migration `202611010001` after verified
+M1 `202610290001`, a 24-assertion pgTAP file and two required provider/browser
+journeys in `tests/integration/foundations.spec.ts`. The hosted wrapper's explicit
+migration scope and browser acceptance list include them while retaining all M1
+requirements. Successful hosted acceptance will additionally preserve masked
+`foundations-390.png` and `foundations-1440.png` via the existing fixed seven-day
+artifact allowlist. No services/workflows were started. This is preparation, not
+a passed provider run. Full new-schema generation/drift, upgrade, Auth/browser,
+Axe, screenshots and cleanup remain pending. See [FOUNDATIONS.md](FOUNDATIONS.md).

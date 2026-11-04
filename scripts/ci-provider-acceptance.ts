@@ -10,6 +10,7 @@ import {
   rmSync,
 } from "node:fs";
 import { join, resolve } from "node:path";
+import { defaultWorksheet } from "../modules/system-design/content";
 import {
   hostedProviderContext,
   providerChildEnvironment,
@@ -173,7 +174,8 @@ async function main() {
       .map((f) => f.split("_")[0])
       .sort();
     if (
-      expectedVersions.at(-1) !== "202610290001" ||
+      expectedVersions.at(-1) !== "202611010001" ||
+      expectedVersions.at(-2) !== "202610290001" ||
       expectedVersions.length < 2
     )
       throw new Error("Review migration scope before acceptance");
@@ -214,6 +216,10 @@ async function main() {
     );
     // Synthetic SQL upgrade fixture, distinct from the later real-Auth browser journey.
     const legacy = randomUUID();
+    const legacyWorksheet = JSON.stringify(defaultWorksheet).replaceAll(
+      "'",
+      "''",
+    );
     sql(
       "legacy-js-before-upgrade",
       `begin;
@@ -223,6 +229,8 @@ async function main() {
       select set_config('request.jwt.claim.sub','${legacy}',true);
       select public.enrol_course('javascript-foundations-v1');
       select public.mark_lesson_read('js-v1-values');
+      select public.enrol_course('system-design-studio-v1');
+      select public.save_studio_worksheet('campus-events-v1',0,'${randomUUID()}','${legacyWorksheet}'::jsonb);
       commit;`,
     );
     required("studio-migration-upgrade", cli, [
@@ -238,7 +246,8 @@ async function main() {
         or not exists(select 1 from public.enrolments where user_id='${legacy}' and course_id='javascript-foundations-v1')
         or not exists(select 1 from public.lesson_reads where user_id='${legacy}' and lesson_id='js-v1-values')
         or not exists(select 1 from public.course_versions where id='javascript-foundations-v1' and experience_kind='lessons')
-      then raise exception 'Legacy JavaScript evidence changed'; end if;
+        or not exists(select 1 from public.studio_worksheet_revisions where user_id='${legacy}' and scenario_id='campus-events-v1' and revision=1 and worksheet='${legacyWorksheet}'::jsonb)
+      then raise exception 'Legacy JavaScript or worksheet evidence changed'; end if;
       end $$;
       delete from auth.users where id='${legacy}';`,
     );
@@ -332,7 +341,12 @@ async function main() {
     const passed =
       completed && stages.every((s) => s.passed) && types?.drift === false;
     mkdirSync(destination, { recursive: true });
-    const screenshotFiles = ["workshop-390.png", "workshop-1440.png"];
+    const screenshotFiles = [
+      "workshop-390.png",
+      "workshop-1440.png",
+      "foundations-390.png",
+      "foundations-1440.png",
+    ];
     const screenshotsPresent = screenshotFiles.every((file) =>
       existsSync(`test-results/verification/studio-provider/${file}`),
     );
@@ -366,9 +380,7 @@ async function main() {
           types,
           tapCounts,
           stages,
-          screenshots: accepted
-            ? ["workshop-390.png", "workshop-1440.png"]
-            : [],
+          screenshots: accepted ? screenshotFiles : [],
           limits: [
             "Synthetic accounts only",
             "Cookie-session loss is not forced provider-side JWT expiry",

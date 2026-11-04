@@ -83,3 +83,5 @@ jobs:
             test-results/provider-artifacts/public-schema.types.ts
             test-results/provider-artifacts/workshop-390.png
             test-results/provider-artifacts/workshop-1440.png
+            test-results/provider-artifacts/foundations-390.png
+            test-results/provider-artifacts/foundations-1440.png
