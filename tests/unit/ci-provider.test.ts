@@ -94,6 +94,8 @@ test("skipped M1/privacy/token checks and runner errors cannot pass browser acce
   const files = [
     "system-design",
     "system-design",
+    "foundations",
+    "foundations",
     "privacy-controls",
     "privacy-export",
     "course-versions",
@@ -115,7 +117,7 @@ test("skipped M1/privacy/token checks and runner errors cannot pass browser acce
   assert.equal(browserAcceptance(cases, false), true);
   assert.equal(browserAcceptance(cases, true), false);
   assert.equal(browserAcceptance(cases.slice(1), false), false);
-  for (const index of [0, 2, 9]) {
+  for (const index of [0, 2, 4, 11]) {
     const skipped = cases.map((c, n) =>
       n === index ? { ...c, status: "skipped" } : c,
     );
