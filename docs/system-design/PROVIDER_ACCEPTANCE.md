@@ -2,7 +2,90 @@
 
 Prepared on 31 October 2026 from clean `34b95e8`. This guide is not a tracker;
 statuses remain in `../features.csv` and the handoff in `../PROGRESS.md`.
-**Prepared, not executed: NX-046.2 and NX-046.4 remain In review.**
+Remote acceptance passed on 1 November. NX-046.2 and NX-046.4 are Completed
+on actual reviewed evidence; deployment and merge remain unauthorised.
+
+## Actual remote evidence — 1 November
+
+[PR #1](https://github.com/Mohammadhasan14/Nexus_learning_platform/pull/1) is open.
+Authenticated inspection confirmed Actions/write access and no configured
+webhooks, environments, deployment history or external status contexts. The
+source workflow has only hosted checks; no connected deployment trigger was
+found. No merge, deployment or billing change is authorised or performed.
+
+**Accepted run:**
+[41295135451](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41295135451),
+both jobs successful. Code head `764cff52e1bedc18b43269533935f55ec5aefa4b`
+was checked out as PR merge `56b441cc222043a76b9639d90a5cbf705087d5a3`.
+The report records `accepted: true`, all 17 migrations through `202610290001`,
+legacy-JS upgrade preservation, 68 pgTAP assertions/four files, full generated
+public-schema equality/drift and build. Browser acceptance was **15 passed,
+two intentional live-only skips**, with no required case skipped. The separate
+application job passed all normal quality, fixture and performance gates.
+All scoped cleanup and empty container/volume/network checks passed.
+
+[Sanitised artifact](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41295135451/artifacts/13078779714)
+and ignored local copies under
+`test-results/verification/studio-provider-remote/studio-m1-provider-41295135451-1/`
+contain accepted JSON reports, generated schema and reviewed 390/1440px masked
+screenshots. The captures follow the Studio populated-query Escape/focus-return
+regression and retain the established layout. No type/schema source change was
+needed. A documentation-only follow-up publishes these facts and receives the
+normal PR checks; exact current-head status is visible on the PR.
+
+### Earlier failures and focused fixes
+
+Initial [run 41292861327](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41292861327)
+tested branch head `825abb6` via merge
+`de8d327adf0cff09cea8fd7abc1d0d41f9ed62de`. The application job passed. Provider
+replay/legacy-JS preservation, the complete 17-version ledger through
+`202610290001`, 68 pgTAP assertions in four files, full provider public-schema
+generation/drift, build and all scoped cleanup/inventory checks passed.
+Generated declarations match committed types byte for byte (SHA-256
+`07c9424d65695e0b2a43ccf509d2ec523270aa90cccc78f5ded6b07c9f06aaef`). Browser
+results were 14 passed, one notes/search failure and two explicit live-only
+skips. Both Studio journeys and signed password-confirmed deletion passed.
+Overall acceptance remained false and screenshots were withheld.
+
+Sanitised first-run artifacts are preserved under
+`test-results/verification/studio-provider-remote/studio-m1-provider-41292861327-1/`.
+The focused follow-up `d7542a9` waits for streamed page headings before keyboard/
+Axe audits in notes/search and outcomes, without disabling any accessibility
+rule. The reporter now adds only public rule IDs/test-source locations; its
+private-payload canary test passes. Follow-up
+[run 41293665342](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41293665342)
+then exposed a stale toolbar-focus assertion. It now checks the actual opener
+and separate button invocation. Run `41294245258` exposed the same loading-shell
+race in editorial and a real populated-search Escape defect. The small dialog
+handler fix closes on Escape without clearing the query or losing opener focus,
+while preserving composition. Equivalent project/review audit readiness was
+corrected too. No Axe rule, keyboard assertion or performance budget was removed.
+The accepted run above verifies these fixes together.
+
+## Initial publication access blocker — resolved
+
+The user now authorises publishing and running the prepared branch; the earlier
+no-publication restriction below describes the preparation session. Local branch
+`ci/studio-m1-provider-acceptance` was created from committed `0ab4ce2`. The
+workspace began clean, all M1 dependencies were included, and the diff excludes
+environment files and generated artifacts. Publication was initially blocked because the
+workspace GitHub sign-in helper returned no usable credentials and the SSH agent
+had no loaded identity. The user restored GitHub sign-in; publication and remote
+execution are recorded above.
+
+No deployment workflow/configuration was found. Public deployment/environment
+and external-status lists are empty, but private repository hooks require
+authentication (401). Authenticated inspection subsequently returned empty hook,
+environment and deployment lists. Deployment remains unauthorised.
+
+Historical run
+[41106596305](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41106596305)
+tested remote `main` at `b69e40be1a4e2ff34bbd564af175b7b1294114ac`, not this
+prepared workflow. Both jobs failed. Provider reset, pgTAP, type check, build
+and stop steps reported success, while integration failed; no artifacts are
+available. Sanitised public annotations identify `page-has-heading-one` at
+notes-search line 229 and outcomes line 148. Detailed counts/DOM captures for
+that historical run are unavailable; current acceptance is established above.
 
 ## Execution boundary
 
@@ -74,9 +157,10 @@ contexts. Backend keys originate only from the fresh loopback CLI project.
 No Supabase login/link, `db push` or production/repository secret is used.
 
 `tests/support/provider-reporter.ts` records only file/line, statuses and duration.
-It omits error/assertion values, titles, stdout/stderr, source, DOM, attachments
+It omits error/assertion values, titles, stdout/stderr, source text, DOM, attachments
 and Auth storage. Traces, videos and automatic screenshots are off. This
-deliberately omits raw failure messages: use stage/file/line and reviewed schema
+deliberately omits raw failure messages: use stage/file/line, allowlisted public
+accessibility rule IDs and reviewed schema
 declarations to investigate, without turning on secret-bearing verbose output.
 
 One artifact, `studio-m1-provider-<run>-<attempt>`, has **seven-day retention**.
@@ -130,12 +214,12 @@ Primary references checked:
 
 ## Exact publication boundary
 
-Preparation remains uncommitted on local `main` at `34b95e8`. After a separate
-publication instruction, create a review branch such as
-`ci/studio-m1-provider-acceptance` from that HEAD plus these edits and open a PR
-to `main`. **Pushing that branch alone does not trigger this workflow**; opening
-or updating its PR does. A push to `main` also triggers both jobs. No branch,
-commit, push, PR or remote workflow is created during this preparation.
+Preparation was committed through `0ab4ce2`. The authorised review branch
+`ci/studio-m1-provider-acceptance` is now published as PR #1 to `main`.
+**Pushing a branch alone does not trigger this workflow**; opening or updating
+its PR does. A push to `main` also triggers both jobs. Focused M1/CI follow-ups
+are authorised. Do not merge, deploy, change billing or begin foundations.
+See the canonical handoff for the exact current head and tested merge SHAs.
 
 Include together: `.github/workflows/ci.yml`, `package.json`,
 `playwright.integration.config.ts`, `scripts/ci-provider-{acceptance,policy}.ts`,
@@ -144,15 +228,15 @@ captures in `tests/integration/system-design.spec.ts`, and the canonical tracker
 handoff and relevant CI/decision/implementation/provider documentation. Exclude
 ignored artifacts, environment files and generated credentials.
 
-## Remaining gate
+## Remaining limits and stopping point
 
-No remote migration, full provider types/drift, pgTAP, browser result or new
-screenshot is claimed. Local lightweight checks are recorded in the handoff.
+Combined M1 provider acceptance passed. Local lightweight checks and remote
+evidence are recorded in the handoff; no heavy local service/suite was started.
 Real cookie-session loss and expired-cookie refresh do not establish forced
 provider-side JWT expiry/revocation. Physical-device/screen-reader acceptance
 also remains separate.
 
-NX-046.2/.4 stay In review and M1 deployment stays blocked until actual provider
-criteria pass and evidence is reviewed. Independent foundations work may be
-separately authorised while this gate remains open. NX-046.22 is still Deferred;
-no foundations/editor/simulation/AI implementation begins in this preparation.
+NX-046.1–4 are Completed; broader NX-046 remains In progress and NX-046.22 is
+Deferred. This proves the disposable local-provider stack on GitHub, not managed
+or production Supabase, release readiness or deployment. No merge/deployment or
+foundations/editor/simulation/AI implementation is authorised by acceptance.

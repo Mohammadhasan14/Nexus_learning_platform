@@ -1,10 +1,125 @@
 # Current progress
 
-Updated: **2026-10-31**. Read this file, [features.csv](features.csv) and
+Updated: **2026-11-01**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — M1 remote CI prepared, not executed
+## Current handoff — M1 real-provider acceptance passed
+
+[PR #1](https://github.com/Mohammadhasan14/Nexus_learning_platform/pull/1) remains
+open on `ci/studio-m1-provider-acceptance`, without merge or deployment.
+Both jobs passed in
+[run 41295135451](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41295135451)
+for code head `764cff52e1bedc18b43269533935f55ec5aefa4b`; the actual tested PR
+merge SHA is `56b441cc222043a76b9639d90a5cbf705087d5a3`.
+The documentation-only follow-up records this evidence; its normal required
+checks will run on the final PR head as well. Do not infer a merge/deployment.
+
+**Actual provider evidence:** fresh GitHub-hosted Ubuntu/Supabase, synthetic
+accounts only, Vector disabled. All 17 migration versions through
+`202610290001` replayed, a pre-Studio JS enrolment/read fixture survived the
+upgrade, and the subsequent migration application was a no-op. **68 pgTAP
+assertions in four files** passed, including the 33 Studio assertions. Full
+provider public-schema generation and both drift comparisons passed; generated
+and committed declarations match byte for byte, SHA-256
+`07c9424d65695e0b2a43ccf509d2ec523270aa90cccc78f5ded6b07c9f06aaef`.
+No migration/type changes were needed and no existing database was touched.
+
+**Real browser acceptance:** **15 passed, two intentional live-only skips**;
+no required case skipped. Both Studio journeys verified enrolment, exact pinned
+save/resume, new revisions, retry/conflict/isolation restrictions, export,
+signed password-confirmed deletion, two-tab recovery and same-account session
+recovery. Existing JS/Auth/privacy/tutor/token-accounting cases passed. The
+independent application job passed formatting, lint, types, units, isolated SQL,
+build, public/fixture flows and unchanged performance budgets.
+
+**Fixes:** real-provider latency exposed accessibility audits of streamed loading
+shells; audit loops now require their exact loaded headings. Corrected the stale
+keyboard expectation to restore the actual opener and separately verify button
+invocation. A populated search input could consume Escape without closing the
+modal; the shared dialog now handles it explicitly while preserving composition,
+layout and opener focus. Studio verifies that recovery before screenshots.
+All Axe rules and keyboard checks remain enabled. Five lightweight CI-policy/
+redaction tests pass locally; no local build/heavy suite or service was started.
+
+**Artifacts:**
+[seven-day sanitised evidence](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41295135451/artifacts/13078779714)
+contains acceptance/browser JSON, generated schema declarations and reviewed
+390px/1440px workshop screenshots. Editable/private values are masked. Local
+copies remain ignored under
+`test-results/verification/studio-provider-remote/studio-m1-provider-41295135451-1/`.
+No raw errors, logs, cookies, environment files or Auth storage were uploaded.
+Scoped stop/removal and empty container/volume/network checks all passed; no
+shared prune or image deletion was used. No local services were left running.
+
+**Status:** NX-046.1–4 Completed. The register has 103 rows: 55 Completed,
+11 In progress, 5 Pending, 32 Deferred, no In review. Broader NX-046 remains
+In progress; foundations NX-046.22 and later milestones remain Deferred.
+
+**Limits/stop:** this verifies real local-provider software on a disposable CI
+VM, not managed/production Supabase or deployment. Session-loss recovery and
+expired-cookie refresh are verified; forced provider-side JWT expiry/revocation
+was not induced. Physical devices, actual screen readers and Firefox/WebKit
+remain outside this evidence. No production database, credentials, billing or
+hosting settings changed. No merge, deployment, foundation/editor/simulation/AI
+work is authorised. The verified route is
+`/courses/system-design-studio-v1/studio/campus-events-v1` after sign-in/enrolment
+in an appropriately migrated environment; the CI environment was removed.
+
+## Previous handoff — M1 publication authorised, blocked on GitHub sign-in
+
+The user authorised branch creation, reviewed M1/CI commits, pushing the review
+branch, opening a PR and focused failure fixes, without merge/deployment. Started
+clean at `0ab4ce220ddc025d99a6ad90be8e8068a9dc014b` and created local branch
+`ci/studio-m1-provider-acceptance`. All M1 dependencies are already committed;
+the four prepared commits after remote `main` use the configured Git identity
+without co-authors. The publication diff contains 18 reviewed paths and no
+environment files, secrets, private data or generated test artifacts.
+
+**Access blocker:** no configured Git credential helper or loaded SSH identity;
+the existing VS Code askpass integration did not return usable credentials.
+Only authentication availability/error metadata was printed, never credentials.
+The user was asked to complete workspace GitHub sign-in. No push, PR or new
+workflow was triggered. A push dry-run also timed out awaiting authentication;
+its temporary Git process group was stopped without publishing any ref. Resume
+authenticated deployment checks before publishing. A draft PR description is
+prepared locally at `/tmp/studio-m1-pr-body.md`, outside the Git worktree.
+
+**Deployment inspection:** the sole checked-in workflow contains only hosted
+test jobs; no Vercel/Netlify/deployment configuration was found. Public GitHub
+metadata reports no deployments, environments or external status contexts, and
+only github-actions check runs. Unauthenticated repository-hook inspection
+returns 401, so private connected integrations are not fully verified. Do not
+claim that deployment connections were definitively ruled out.
+
+**Actual historical evidence:** public remote `main` is still
+`b69e40be1a4e2ff34bbd564af175b7b1294114ac`. The
+[30 October run](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41106596305)
+failed both jobs. Its provider job reports successful stack startup/reset,
+receipt/deletion setup, pgTAP, provider type check, build and stop steps; browser
+integration failed. No artifacts or precise assertion counts are available.
+Sanitised annotation inspection identified `page-has-heading-one` failures at
+`tests/integration/notes-search.spec.ts:229` and
+`tests/integration/outcomes.spec.ts:148`; the underlying DOM cause remains
+unverified. Raw annotations, test values and logs were not printed or saved.
+The ordinary job failed inside `npm run check`, with no public per-gate result.
+This older run does not test the prepared CI wrapper, expanded pgTAP/acceptance
+suite, upgrade fixture or sanitised artifacts on the new branch.
+
+**Status:** NX-046.1/.3 Completed; NX-046.2/.4 In review. No acceptance completion
+or deployment approval is inferred from successful historical steps. Current
+branch provider migration-ledger/replay, full types/drift, pgTAP, browser and
+sanitised screenshot/report gates await an actual authorised PR run. Foundations
+NX-046.22 remains Deferred. No local Docker/Supabase, heavy suite, build, image
+download, database access, billing change, merge or deployment occurred.
+
+**Next:** finish GitHub sign-in with repository write access; inspect connected
+deployment integrations with authenticated visibility; report any deployment
+trigger before proceeding. Then push this branch and open its PR to `main`,
+monitor the exact tested SHA, and fix only demonstrated M1/CI failures. Do not
+weaken the accessibility checks or infer their cause from a rule ID alone.
+
+## Previous handoff — M1 remote CI prepared, not executed
 
 The current request supersedes local-daemon authorisation: no Docker, Supabase,
 heavy local service or image download on this computer. The interrupted RAM/disk

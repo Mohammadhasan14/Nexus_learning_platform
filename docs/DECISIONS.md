@@ -4,6 +4,34 @@ This dated log preserves earlier implementation and staging decisions. The lates
 entry and [current progress](PROGRESS.md) describe the active repository layout;
 older references to parent-workspace files are historical.
 
+## 2026-11-01 — M1 provider acceptance passed on disposable hosted CI
+
+The user authorised review-branch publication and focused M1/CI fixes, while
+prohibiting merge, deployment, billing changes, local heavy services and later
+features. Restored workspace GitHub sign-in; authenticated deployment inspection
+found no hooks/environments/deployments/external status trigger. Published PR #1.
+
+Actual provider evidence comes from run `41295135451`, code head `764cff5`,
+tested merge `56b441c`: both jobs passed, 17 migrations replayed with a legacy-JS
+upgrade fixture, 68 pgTAP assertions/four files, full generated public-schema
+equality/no drift, 15 browser cases passed and two deliberate live-only skips.
+Scoped cleanup/inventory checks passed; reviewed masked desktop/mobile images
+and sanitised reports were preserved. Mark NX-046.2/.4 Completed on these facts;
+keep the broader course In progress and foundations Deferred.
+
+Real-provider latency exposed loading-shell audits; require the loaded page h1
+without suppressing Axe rules. Assert focus returns to the actual shortcut
+opener, and independently verify button invocation. Handle Escape explicitly in
+the shared search dialog so a populated search field cannot consume it merely
+to clear its value; preserve composition, layout and normal focus return. Test
+that behavior in the actual Studio journey before screenshot capture.
+
+No migration/type weakening, check disabling, performance-budget relaxation or
+private diagnostic payload is permitted. Documentation-only evidence updates
+receive normal PR checks. Managed production hosting, forced JWT expiry,
+physical devices/screen readers and Firefox/WebKit remain separate limits.
+Stop without merge, deployment, foundations or editor/simulation/AI work.
+
 ## 2026-10-31 — M1 provider acceptance runs only on GitHub-hosted CI
 
 The user superseded local temporary-daemon authorisation with a prohibition on

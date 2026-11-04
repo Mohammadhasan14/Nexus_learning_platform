@@ -207,6 +207,14 @@ test("private notes survive retries and conflicts; search and command menu respe
         .getByRole("link", { name: /Values and bindings/ }),
     ).toBeVisible();
     await page.goto("/search?q=values");
+    // The shell/skip link can stream before the async search page has arrived.
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Search your workspace.",
+        exact: true,
+      }),
+    ).toBeVisible();
     await page.keyboard.press("Tab");
     await expect(
       page.getByRole("link", { name: "Skip to content" }),
@@ -232,6 +240,8 @@ test("private notes survive retries and conflicts; search and command menu respe
         fullPage: true,
       });
     }
+    const opener = page.locator("#learner-content");
+    await expect(opener).toBeFocused();
     await page.keyboard.press("Control+k");
     const dialog = page.getByRole("dialog", { name: "Quick search" });
     await expect(dialog).toBeVisible();
@@ -272,9 +282,17 @@ test("private notes survive retries and conflicts; search and command menu respe
     ).toBeFocused();
     await page.keyboard.press("Escape");
     await expect(dialog).not.toBeVisible();
-    await expect(
-      page.getByRole("button", { name: /Quick search/ }),
-    ).toBeFocused();
+    await expect(opener).toBeFocused();
+    // Button invocation must also return focus to that button, not just the shortcut opener.
+    const trigger = page.getByRole("button", { name: /Quick search/ });
+    await trigger.focus();
+    await page.keyboard.press("Enter");
+    await expect(dialog).toBeVisible();
+    await expect(query).toBeFocused();
+    await expect(query).toHaveValue("Values and bindings");
+    await page.keyboard.press("Escape");
+    await expect(dialog).not.toBeVisible();
+    await expect(trigger).toBeFocused();
     await page.keyboard.press("Meta+k");
     await expect(dialog).toBeVisible();
     await query.fill("zzznothing");

@@ -80,6 +80,12 @@ export function CommandMenu() {
         className="command-menu"
         aria-labelledby="command-title"
         onKeyDown={(e) => {
+          // Search inputs can consume Escape to clear their value instead of closing.
+          if (e.key === "Escape" && !e.nativeEvent.isComposing) {
+            e.preventDefault();
+            close();
+            return;
+          }
           if (e.key !== "Tab") return;
           const controls = Array.from(
             e.currentTarget.querySelectorAll<HTMLElement>(

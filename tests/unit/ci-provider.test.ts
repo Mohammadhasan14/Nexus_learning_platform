@@ -5,6 +5,7 @@ import {
   providerChildEnvironment,
   browserCase,
   browserAcceptance,
+  failureDetails,
 } from "../../scripts/ci-provider-policy";
 
 const hosted = {
@@ -17,6 +18,29 @@ const hosted = {
   GITHUB_WORKSPACE: process.cwd(),
   RUNNER_TEMP: "/tmp",
 };
+test("failure diagnostics expose public rule IDs and source locations without private payloads", () => {
+  const canary = "private-cookie-token-email-canary";
+  const detail = failureDetails(
+    [
+      {
+        message: `expect failed: { "id": "page-has-heading-one", "html": "${canary}", "target": "${canary}" }`,
+        stack: `Error: ${canary}\n at tests/integration/notes-search.spec.ts:229:81\n at tests/integration/${canary}.spec.ts:9:1`,
+        location: {
+          file: "/workspace/tests/integration/notes-search.spec.ts",
+          line: 229,
+          column: 81,
+        },
+      },
+    ],
+    "notes-search.spec.ts",
+  );
+  assert.ok(!JSON.stringify(detail).includes(canary));
+  assert.deepEqual(detail, {
+    kind: "accessibility",
+    rules: ["page-has-heading-one"],
+    locations: [{ file: "notes-search.spec.ts", line: 229, column: 81 }],
+  });
+});
 test("provider orchestration refuses local/self-hosted/mismatched contexts before startup", () => {
   assert.equal(
     hostedProviderContext(hosted, process.cwd()).project,
