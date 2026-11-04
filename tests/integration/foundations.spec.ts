@@ -164,6 +164,10 @@ async function auditSection(
   }
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
   if (width === 390 || width === 1440) {
+    // Match the workshop capture: fixed skip links must stay relative to scroll origin.
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.mouse.move(0, 0);
+    await expect(tab).toBeFocused();
     const suffix = section === "Learn" ? "" : `-${section.toLowerCase()}`;
     await page.screenshot({
       path: `test-results/verification/studio-provider/foundations${suffix}-${width}.png`,
