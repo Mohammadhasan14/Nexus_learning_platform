@@ -4,3 +4,9 @@ export function studioHref(course: string) {
     ? `/courses/${course}/studio/campus-events-v1`
     : undefined;
 }
+
+export function foundationHref(course: string) {
+  return course === "system-design-studio-v1"
+    ? `/courses/${course}/foundations/web-request-v1`
+    : undefined;
+}
