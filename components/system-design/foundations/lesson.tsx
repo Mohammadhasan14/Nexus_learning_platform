@@ -427,7 +427,10 @@ export function FoundationLesson({
         <span> / Foundations</span>
       </nav>
       <div className={styles.layout}>
-        <aside className={styles.sidebar}>
+        <aside
+          className={styles.sidebar}
+          aria-label="Foundations lesson navigation"
+        >
           <details open>
             <summary>Foundations lesson list</summary>
             <nav aria-label="Foundations lessons">

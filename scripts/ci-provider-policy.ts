@@ -68,6 +68,12 @@ export function failureDetails(
   const knownRules = [
     "page-has-heading-one",
     "landmark-one-main",
+    "landmark-unique",
+    "landmark-complementary-is-top-level",
+    "landmark-main-is-top-level",
+    "landmark-no-duplicate-banner",
+    "landmark-no-duplicate-contentinfo",
+    "landmark-no-duplicate-main",
     "region",
     "color-contrast",
     "heading-order",
