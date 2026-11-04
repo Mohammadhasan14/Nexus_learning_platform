@@ -1,10 +1,31 @@
 # Current progress
 
-Updated: **2026-11-01**. Read this file, [features.csv](features.csv) and
+Updated: **2026-11-04**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — first foundations lesson implemented, remote acceptance pending
+## Current handoff — foundations remote acceptance authorised
+
+User authorised focused NX-046.23 acceptance fixes, committing/pushing the feature
+branch and opening a PR, with all heavy checks on GitHub-hosted disposable runners.
+No merge, deployment, local Docker/Supabase, billing change or later lesson.
+
+Began clean on `feat/studio-foundations-web-request` at `6228939`; the reported
+uncommitted state was stale after the five requested staging/commit groups.
+Authenticated inspection found M1 PR #1 still open/unmerged at `4917227`. The
+foundations PR must target `ci/studio-m1-provider-acceptance`, then be retargeted
+and reverified after M1 merges. Existing unfiltered PR triggers support this.
+No hooks, environments, deployment history or external checks/statuses were found.
+
+Prepared stronger journey checks and 36 foundations pgTAP assertions, plus masked
+Learn/Practice-feedback/Recap desktop/mobile captures. Provider execution remains
+pending publication; prepared assertions are not acceptance evidence. No local
+heavy service/suite was started. Current statuses stay NX-046.22 In progress,
+NX-046.23 In review and NX-046.24–27 Deferred. See
+[FOUNDATIONS.md](system-design/FOUNDATIONS.md) for the bounded contract and
+independent educator/learner-validation limits.
+
+## Previous handoff — first foundations lesson implemented, remote acceptance pending
 
 Authorised bounded NX-046.22 slice only. Began clean at verified M1
 `49172274b38613ef1efc130a93d7fb304e4dea1e`; authenticated read-only PR inspection

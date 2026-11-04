@@ -85,3 +85,7 @@ jobs:
             test-results/provider-artifacts/workshop-1440.png
             test-results/provider-artifacts/foundations-390.png
             test-results/provider-artifacts/foundations-1440.png
+            test-results/provider-artifacts/foundations-practice-390.png
+            test-results/provider-artifacts/foundations-practice-1440.png
+            test-results/provider-artifacts/foundations-recap-390.png
+            test-results/provider-artifacts/foundations-recap-1440.png

@@ -5,6 +5,7 @@ import { randomUUID } from "node:crypto";
 import { mkdir } from "node:fs/promises";
 import { localSupabase } from "../../scripts/local-supabase";
 import type { Database } from "../../lib/supabase/database.types";
+import { walkthrough } from "../../modules/system-design/foundations/content";
 import { foundationStateSchema } from "../../modules/system-design/foundations/schema";
 const course = "system-design-studio-v1",
   lesson = "web-request-v1";
@@ -60,6 +61,33 @@ async function fixture() {
       );
       expect(response.ok).toBe(false);
     },
+    probeForgedGrade: async (
+      client: ReturnType<typeof createClient<Database>>,
+    ) => {
+      const { data } = await client.auth.getSession();
+      const response = await fetch(
+        `${backend.url}/rest/v1/rpc/submit_studio_foundation`,
+        {
+          method: "POST",
+          headers: {
+            apikey: backend.key,
+            Authorization: `Bearer ${data.session!.access_token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            lesson,
+            content: "web-request-content-v1",
+            schema_id: "foundation-position-v1",
+            question: "initiator",
+            event_kind: "attempt",
+            selected: "database",
+            request: randomUUID(),
+            correct: true,
+          }),
+        },
+      );
+      expect(response.ok).toBe(false);
+    },
     forgetDeleted: (id: string) => {
       ids.splice(ids.indexOf(id), 1);
     },
@@ -95,6 +123,56 @@ async function open(page: Page) {
     page.getByRole("button", { name: "Save lesson position", exact: true }),
   ).toBeEnabled();
 }
+async function checkStep(page: Page, index: number) {
+  const learn = page.getByRole("tabpanel", { name: "Learn", exact: true });
+  const step = walkthrough[index];
+  await expect(
+    learn.getByRole("heading", { level: 3, name: step.text, exact: true }),
+  ).toBeVisible();
+  const diagram = learn.locator('div[aria-hidden="true"]');
+  await expect(diagram.locator("svg").locator("..")).toHaveText([
+    "Browser",
+    "Application server",
+    "Database",
+  ]);
+  const arrow = diagram.locator("b").nth(index === 0 || index === 3 ? 0 : 1);
+  await expect(arrow).toHaveText(index >= 2 ? "←" : "→");
+  await expect(arrow.locator("..").locator("span")).toHaveText(step.label);
+}
+async function auditSection(
+  page: Page,
+  section: "Learn" | "Practice" | "Recap",
+  width: number,
+) {
+  const tab = page.getByRole("tab", { name: section, exact: true });
+  await tab.focus();
+  await page.keyboard.press("Enter");
+  await expect(tab).toBeFocused();
+  await expect(tab).toHaveAttribute("aria-selected", "true");
+  expect(
+    await tab.evaluate((el) => getComputedStyle(el).outlineStyle),
+  ).not.toBe("none");
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  const panel = page.getByRole("tabpanel", { name: section, exact: true });
+  for (const button of await panel.locator("button:visible").all()) {
+    const box = await button.boundingBox();
+    expect(box!.height).toBeGreaterThanOrEqual(44);
+  }
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+  if (width === 390 || width === 1440) {
+    const suffix = section === "Learn" ? "" : `-${section.toLowerCase()}`;
+    await page.screenshot({
+      path: `test-results/verification/studio-provider/foundations${suffix}-${width}.png`,
+      fullPage: true,
+      mask: [page.locator("input,textarea,pre")],
+      maskColor: "#18243b",
+    });
+  }
+}
 test("foundations provider journey, protected keys, retry evidence, responsive keyboard and existing courses", async ({
   page,
 }) => {
@@ -123,10 +201,13 @@ test("foundations provider journey, protected keys, retry evidence, responsive k
     await expect(
       page.getByRole("button", { name: "← Back", exact: true }),
     ).toBeDisabled();
+    await checkStep(page, 0);
     for (let n = 2; n <= 4; n++) {
       await page
         .getByRole("button", { name: "Next step →", exact: true })
-        .click();
+        .focus();
+      await page.keyboard.press("Enter");
+      await checkStep(page, n - 1);
       await expect(
         page.getByText(`Step ${n} of 4`, { exact: true }),
       ).toBeVisible();
@@ -134,9 +215,25 @@ test("foundations provider journey, protected keys, retry evidence, responsive k
     await expect(
       page.getByRole("button", { name: "Next step →", exact: true }),
     ).toBeDisabled();
-    await page.getByRole("button", { name: "← Back", exact: true }).click();
+    await page.getByRole("button", { name: "← Back", exact: true }).focus();
+    await page.keyboard.press("Enter");
+    await checkStep(page, 2);
     await expect(page.getByText("Step 3 of 4", { exact: true })).toBeVisible();
-    await page.getByRole("button", { name: "↻ Replay", exact: true }).click();
+    await page.getByRole("button", { name: "↻ Replay", exact: true }).focus();
+    await page.keyboard.press("Space");
+    await checkStep(page, 0);
+    const sequence = page.getByText("Read the whole journey", { exact: true });
+    await sequence.focus();
+    await page.keyboard.press("Enter");
+    await expect(sequence.locator("..").locator("li")).toHaveText(
+      walkthrough.map((step) => step.text),
+    );
+    const list = page.getByText("Foundations lesson list", { exact: true });
+    await list.focus();
+    await page.keyboard.press("Enter");
+    await expect(list.locator("..")).toHaveJSProperty("open", false);
+    await page.keyboard.press("Enter");
+    await expect(list.locator("..")).toHaveJSProperty("open", true);
     await expect(page.getByText("Step 1 of 4", { exact: true })).toBeVisible();
     const initial = foundationStateSchema.parse(
       (await a.client.rpc("get_studio_foundation", { course, lesson })).data,
@@ -144,6 +241,12 @@ test("foundations provider journey, protected keys, retry evidence, responsive k
     expect(initial.evidence).toEqual([]);
     expect(initial.saved).toBeNull();
     await f.probeKeys(a.client);
+    await f.probeForgedGrade(a.client);
+    expect(
+      foundationStateSchema.parse(
+        (await a.client.rpc("get_studio_foundation", { course, lesson })).data,
+      ).evidence,
+    ).toEqual([]);
     await page.getByRole("tab", { name: "Learn", exact: true }).focus();
     await page.keyboard.press("ArrowRight");
     await expect(
@@ -315,30 +418,39 @@ test("foundations provider journey, protected keys, retry evidence, responsive k
     });
     for (const width of [320, 390, 768, 1440]) {
       await page.setViewportSize({ width, height: 900 });
-      expect(
-        await page.evaluate(
-          () => document.documentElement.scrollWidth <= innerWidth,
-        ),
-      ).toBe(true);
+      for (const section of ["Learn", "Practice", "Recap"] as const)
+        await auditSection(page, section, width);
+      await page.getByRole("tab", { name: "Learn", exact: true }).click();
+      await expect(
+        page.getByText("Step 1 of 4", { exact: true }),
+      ).toBeVisible();
       await expect(
         page.getByRole("button", { name: "Save lesson position", exact: true }),
       ).toBeVisible();
       await expect(
         page.getByRole("button", { name: "← Back", exact: true }),
       ).toBeVisible();
-      expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
-      if (width === 390 || width === 1440)
-        await page.screenshot({
-          path: `test-results/verification/studio-provider/foundations-${width}.png`,
-          fullPage: true,
-          mask: [page.locator("input,textarea,pre")],
-          maskColor: "#18243b",
-        });
     }
-    await page.getByRole("tab", { name: "Practice", exact: true }).click();
-    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
     await page.getByRole("tab", { name: "Recap", exact: true }).click();
-    expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+    await page
+      .getByRole("link", { name: "Open capacity workshop →", exact: true })
+      .click();
+    await expect(page).toHaveURL(`/courses/${course}/studio/campus-events-v1`);
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Campus event directory",
+        exact: true,
+      }),
+    ).toBeVisible();
+    const resume = foundationStateSchema.parse(
+      (await a.client.rpc("get_studio_foundation", { course, lesson })).data,
+    );
+    expect(resume.saved?.revision).toBe(2);
+    expect(resume.evidence.filter((e) => e.kind === "attempt")).toHaveLength(3);
+    expect((await a.client.from("exercise_evidence").select("*")).data).toEqual(
+      [],
+    );
   } finally {
     await f.cleanup();
   }
@@ -421,6 +533,12 @@ test("foundations provider isolation, conflict, failed saves, session recovery a
       .first();
     await first.getByLabel("Browser", { exact: true }).check();
     await context.clearCookies();
+    await tab
+      .getByRole("button", { name: "Save lesson position", exact: true })
+      .click();
+    await expect(tab.locator("footer").getByRole("status")).toContainText(
+      "Your session expired or the account changed",
+    );
     await first
       .getByRole("button", { name: "Check answer", exact: true })
       .click();

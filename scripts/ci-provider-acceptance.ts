@@ -346,6 +346,10 @@ async function main() {
       "workshop-1440.png",
       "foundations-390.png",
       "foundations-1440.png",
+      "foundations-practice-390.png",
+      "foundations-practice-1440.png",
+      "foundations-recap-390.png",
+      "foundations-recap-1440.png",
     ];
     const screenshotsPresent = screenshotFiles.every((file) =>
       existsSync(`test-results/verification/studio-provider/${file}`),

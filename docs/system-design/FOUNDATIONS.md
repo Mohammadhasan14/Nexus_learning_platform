@@ -11,7 +11,9 @@ of the beginner-to-advanced course. Current verification is in
 `49172274b38613ef1efc130a93d7fb304e4dea1e`. Authenticated read-only inspection
 found PR #1 still open/unmerged before branching. This branch depends on PR #1;
 retarget/rebase after its eventual merge rather than merging it as part of this
-slice. No commit, push, workflow trigger or deployment is authorised here.
+slice. The original implementation session prohibited publication. On 2026-11-04,
+the user authorised focused acceptance fixes, feature-branch publication, a stacked
+PR and GitHub-hosted acceptance. Merge and deployment remain unauthorised.
 
 Open `/courses/system-design-studio-v1/foundations/web-request-v1` after onboarding
 and the existing System Design Studio enrolment. Courses offers Start foundations
@@ -174,3 +176,22 @@ screenshots were captured locally.
 
 Next small slice after reviewing/accepting this lesson: NX-046.24, APIs and data.
 NX-046.22 stays In progress until all its children meet their acceptance gates.
+
+## Remote acceptance authorised — 2026-11-04
+
+The reported uncommitted state was stale: five requested commits already recorded
+the complete implementation through `6228939`, with a clean worktree. Fresh
+authenticated inspection found PR #1 still open at verified head `4917227`, so the
+foundations PR will target `ci/studio-m1-provider-acceptance`. The workflow's
+unfiltered `pull_request` event supports that base; no trigger adjustment is
+needed. Retarget and reverify foundations against main after M1 eventually merges.
+No hooks, environments, deployments or external deployment checks were found.
+
+Preparation extends pgTAP to 36 foundations assertions, checks the four visual
+paths against the textual journey with keyboard controls, and requires masked
+Learn, Practice-feedback and Recap captures at 390/1440 pixels. All sections get
+Axe/overflow/touch-control checks at 320/390/768/1440 pixels. Raw errors, tokens,
+Auth state, private logs and automatic failure screenshots remain excluded. The
+existing seven-day allowlist gains four explicitly named Practice/Recap PNGs;
+its historical artifact name is unchanged. These are prepared checks, not passed
+provider evidence. NX-046.23 stays In review until actual acceptance.
