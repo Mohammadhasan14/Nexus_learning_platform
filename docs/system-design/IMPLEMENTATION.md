@@ -9,8 +9,10 @@ belong in the canonical feature register and current progress handoff.
 `worksheet-v1` and estimator `capacity-v1`. Immutable scenario identity binds the
 reviewed brief/teaching in `modules/system-design/content.ts` and database seed.
 The first workshop is one slice of a planned beginner-to-advanced course.
-NX-046.22 tracks the future introductory module; M1 teaches unfamiliar terms
-inline without implementing or requiring that module.
+NX-046.22 tracks the introductory module; M1 originally taught unfamiliar terms
+inline without implementing or requiring it. The separately authorised first
+lesson is documented in [FOUNDATIONS.md](FOUNDATIONS.md); it does not change M1
+identities or constitute a completed module.
 
 Defaults are an illustrative workload, not observed traffic: 100,000 DAU, 20
 requests/user/day, peak factor 5, 90% reads, 20,000 bytes/read response, 2,000

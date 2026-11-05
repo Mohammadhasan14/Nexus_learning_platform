@@ -4,6 +4,26 @@ This dated log preserves earlier implementation and staging decisions. The lates
 entry and [current progress](PROGRESS.md) describe the active repository layout;
 older references to parent-workspace files are historical.
 
+## 2026-11-05 — First foundations lesson accepted on a stacked PR
+
+The user authorised publishing and running NX-046.23 acceptance with remote-only
+heavy checks. M1 PR #1 was still unmerged, so PR #2 targets its verified branch 4917227. No deployment connections were found. Retarget and reverify after M1
+merges; no merge/deployment, billing change or local service is authorised.
+
+Run 41889906663 passed both jobs at head fde8a390beef514bacb37221cac0618183f4601e
+and tested merge 81504e8f8237e190915597ade77a5e20140a74dd: 18 migrations, preserved JS/worksheet
+upgrade fixtures, identical full provider types, 104 pgTAP assertions, 17 browser
+passes and two intentional live-only skips. Reviewed six masked lesson captures;
+cleanup passed. Name the lesson sidebar landmark, preserve every Axe rule, and
+reset scroll before full-page capture. Emit fixed per-gate quality outcomes so
+future failures retain useful evidence without raw fixture output. The earlier
+aggregate failure's cause remains unknown; do not invent or hide it.
+
+Mark only the first lesson Completed. Foundations remains In progress, with
+remaining lessons Deferred. AI-assisted content review is not independent educator
+or learner validation; automated functional acceptance establishes no mastery or
+educational effectiveness. Stop here.
+
 ## 2026-11-01 — M1 provider acceptance passed on disposable hosted CI
 
 The user authorised review-branch publication and focused M1/CI fixes, while

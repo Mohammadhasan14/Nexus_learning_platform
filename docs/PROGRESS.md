@@ -1,10 +1,155 @@
 # Current progress
 
-Updated: **2026-11-01**. Read this file, [features.csv](features.csv) and
+Updated: **2026-11-05**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — M1 real-provider acceptance passed
+## Current handoff — first foundations lesson provider acceptance passed
+
+[Stacked PR #2](https://github.com/Mohammadhasan14/Nexus_learning_platform/pull/2) targets unmerged M1 PR #1 at
+`49172274b38613ef1efc130a93d7fb304e4dea1e`. **Retarget to main and rerun
+acceptance after M1 merges.** Neither PR was merged or deployed.
+
+[Accepted run 41889906663](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41889906663) tested branch head
+`fde8a390beef514bacb37221cac0618183f4601e` as PR merge
+`81504e8f8237e190915597ade77a5e20140a74dd`. Both required jobs passed.
+The evidence-only follow-up receives the normal required checks; the PR reports
+its latest exact-head run. This source acceptance is not a claim that a later
+untested documentation SHA was already executed.
+
+All **18 migrations through 202611010001** replayed. A synthetic pre-foundations
+JavaScript enrolment/read record and exact saved M1 worksheet survived the
+upgrade; ledger comparison and subsequent no-op passed. **104 pgTAP assertions
+in five files**, including **36 foundations assertions**, passed. Full provider
+type generation and both drift comparisons passed. Generated/committed public
+schema declarations match byte for byte, SHA-256:
+`04f4f7ce399338daa408f649de309cbeaaabc150d9fd028f6c3d8a08d70d703b`. No migration or type-source correction was needed.
+
+**17 provider/browser cases passed; two intentional live-only cases skipped**
+(`live-tutor.spec.ts`, `tutor-stream.spec.ts`). No required case skipped.
+Foundations covered real enrolment, all four steps using keyboard Back/Next/
+Replay, matching textual alternatives, tab/disclosure behavior, private keys,
+rejected client grades, wrong/correct answers, progressive hints, explanations,
+non-independent retry evidence, pinned save/reload, revision conflicts/rebase,
+failed-save retention, missing-cookie/wrong-account recovery, owner/staff
+isolation, export and password-confirmed synthetic-account deletion. Existing
+JavaScript and M1 workshop journeys passed. Neither saving nor these specific
+checks awards mastery or course completion.
+
+The independent job passed the same nine application gates: formatting, lint,
+types, unit checks, isolated SQL, production build, public browsers, fixture
+flows and existing performance budgets. Provider checks used actual Supabase
+Auth/PostgREST/PostgreSQL on a fresh GitHub-hosted VM with synthetic accounts;
+fixture/isolated results are separate evidence. Vector remained disabled.
+
+Axe, visible keyboard focus, 44px button targets, reduced-motion styles and
+absence of horizontal overflow passed at 320/390/768/1440px. All six sanitized
+Learn/Practice-feedback/Recap desktop/mobile captures were visually compared
+with the reference: navy surfaces, restrained violet tabs, spacious diagram,
+collapsible lesson navigation and stacked mobile controls adapt to the existing
+Farzain Learning shell. Physical devices and human screen-reader verification
+were not performed.
+
+First run `41886663871` passed the independent application job and provider
+migration/types/pgTAP/build but failed the first lesson Axe audit; screenshots
+were withheld. Naming the lesson sidebar landmark resolved that audit in
+`41888096350`, whose provider job passed. Its independent application job failed
+behind the old aggregate wrapper; its discarded raw output cannot identify the
+historical failing gate, so no cause is invented. The current workflow reports
+fixed outcomes for each of the same nine gates without exposing raw fixture
+output. No assertion, accessibility rule or performance budget was weakened.
+Full-page screenshots now reset scroll origin, avoiding displaced fixed skip-
+link layers after keyboard focus; this changes capture behavior, not layout.
+
+[Seven-day sanitized artifact](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41889906663/artifacts/13354935168) contains acceptance/browser JSON,
+full public-schema declarations, six lesson and two workshop PNGs. Ignored local
+copies are under
+`test-results/verification/foundations-provider-remote/studio-m1-provider-41889906663-1/`.
+Editable values are masked. Raw logs/errors, DOM dumps, tokens, cookies,
+environment files and browser Auth state were excluded. Scoped stop/removal and
+empty container/volume/network inventories passed; no local services ran.
+
+NX-046.23 is functionally Completed; NX-046.22 stays In progress and NX-046.24–27
+remain Deferred. Independent educator review, learner/educational-effectiveness
+validation, forced provider JWT expiry/revocation, physical devices, human
+screen readers, Firefox/WebKit, managed Supabase and deployment remain unverified.
+No production/shared database, credentials, billing setting, later lesson,
+architecture editor, simulation or AI feature was changed.
+
+Open `/courses/system-design-studio-v1/foundations/web-request-v1` after Studio
+enrolment on a migrated environment. The disposable test backend was removed.
+Register: 108 stable IDs; 56 Completed, 12 In progress,
+5 Pending, 35 Deferred, 0 In review. All original acceptance criteria and
+unrelated rows are preserved. Stop after this acceptance; do not begin APIs/data.
+
+## Previous handoff — first foundations lesson implemented, remote acceptance pending
+
+Authorised bounded NX-046.22 slice only. Began clean at verified M1
+`49172274b38613ef1efc130a93d7fb304e4dea1e`; authenticated read-only PR inspection
+found PR #1 still open/unmerged. Created local branch
+`feat/studio-foundations-web-request` from that head. It depends on PR #1; do not
+merge that PR or add these changes to its branch. No commit, push, workflow
+trigger, deployment or local service startup occurred.
+
+**Implemented:** `/courses/system-design-studio-v1/foundations/web-request-v1`
+inside the existing learner shell and Studio enrolment. Courses offers Start
+foundations before Open workshop; existing worksheet owners retain their
+workshop continuation. Learn has definitions, four manual walkthrough steps,
+Back/Next/Replay and a static textual alternative. Practice has three objective
+checks, SQL-private keys, selected-option feedback after submission, progressive
+hints, all-option explanation on request and retries with support/attempt history.
+Recap links practice/workshop and labels the four remaining lessons Planned.
+No prerequisite lock, mastery, course completion, editor, simulation or AI.
+
+**Persistence:** additive migration `202611010001_studio_foundations.sql` adds
+versioned lesson metadata, owner-only append-only position saves and assessment
+support events. Explicit Save lesson position tracks section/step/self-reported
+viewing separately from actual submitted practice. Expected revisions,
+idempotency, same-account recovery and explicit conflict choices keep current
+tab state. No localStorage/autosave. Account export adds only owned collections;
+signed account deletion cascades them. Published M1/JS content, formulas,
+worksheet revisions, enrolments, tutor and privacy restrictions remain intact.
+
+**Local evidence:** four new foundations units, five CI-policy/redaction units,
+three existing M1 arithmetic units; five foundations isolated SQL test results
+(parent plus four subtests), eight existing M1 SQL results and one existing
+JavaScript learning SQL case passed. The new SQL suite caught an ambiguous export
+column reference, fixed before its successful recheck. TypeScript `tsc --noEmit`
+passed. Targeted ESLint (zero warnings), changed-file formatting and CRLF-aware
+whitespace validation passed. All SQL
+checks used in-process PGlite/Auth shims, not a real Supabase service. No build,
+full suite, local browser, Docker, Supabase or provider check ran.
+
+**Types and remote preparation:** only the new table/RPC declarations were
+catalog-generated using the existing Studio type script's `--foundations` mode;
+no provider drift pass is claimed. The existing GitHub-hosted disposable gate now
+expects the additive migration, preserves all M1 requirements, requires the two
+prepared foundations integration journeys and allows two additional masked
+screenshots. Twenty-four pgTAP assertions and desktop/mobile/keyboard/Axe/reduced-
+motion/save-failure/session/conflict browser cases are prepared, not passed.
+Provider migration/Auth/pgTAP/full type generation and drift, browser/screenshots,
+production build and performance budgets await a separately authorised hosted
+run. No workflow was triggered or new screenshot captured.
+
+**Content provenance:** AI-assisted editorial review of roles, arrow directions,
+question/feedback/hint alignment and explicit simplifications. No independent
+educator review or learner validation. See
+[FOUNDATIONS.md](system-design/FOUNDATIONS.md) for contracts, limits and files.
+
+**Tracker:** NX-046.22 In progress, first lesson NX-046.23 In review, remaining
+NX-046.24–27 Deferred (APIs/data; latency/throughput/concurrency; read/write
+workloads; units/estimation transition). M1 NX-046.1–4 remain Completed based on
+actual prior provider evidence, including the final head's successful
+[run 41296122440](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41296122440).
+The canonical register has 108 rows: 55 Completed, 12 In progress, 5 Pending,
+1 In review and 35 Deferred. Preserve all original IDs/criteria.
+
+**Stop/next:** review this uncommitted first lesson and authorise remote acceptance
+separately. Next small content slice is NX-046.24, APIs and data, only with new
+implementation authorisation. Do not begin it, the rest of foundations or any
+architecture editor in this session.
+
+## Previous handoff — M1 real-provider acceptance passed
 
 [PR #1](https://github.com/Mohammadhasan14/Nexus_learning_platform/pull/1) remains
 open on `ci/studio-m1-provider-acceptance`, without merge or deployment.

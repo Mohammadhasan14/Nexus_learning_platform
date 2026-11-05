@@ -649,6 +649,129 @@ export type Database = {
         };
         Relationships: [];
       };
+      studio_foundation_events: {
+        Row: {
+          choice: string | null;
+          content_version: string;
+          created_at: string;
+          event_order: number;
+          kind: string;
+          lesson_id: string;
+          question_id: string;
+          request_id: string;
+          result: Json;
+          user_id: string;
+        };
+        Insert: {
+          choice?: string | null;
+          content_version: string;
+          created_at?: string;
+          event_order?: number;
+          kind: string;
+          lesson_id: string;
+          question_id: string;
+          request_id: string;
+          result: Json;
+          user_id: string;
+        };
+        Update: {
+          choice?: string | null;
+          content_version?: string;
+          created_at?: string;
+          event_order?: number;
+          kind?: string;
+          lesson_id?: string;
+          question_id?: string;
+          request_id?: string;
+          result?: Json;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "studio_foundation_events_lesson_id_fkey";
+            columns: ["lesson_id"];
+            isOneToOne: false;
+            referencedRelation: "studio_foundation_lessons";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      studio_foundation_lessons: {
+        Row: {
+          content_version: string;
+          course_id: string;
+          id: string;
+          review_record: string;
+          schema_version: string;
+        };
+        Insert: {
+          content_version: string;
+          course_id: string;
+          id: string;
+          review_record: string;
+          schema_version: string;
+        };
+        Update: {
+          content_version?: string;
+          course_id?: string;
+          id?: string;
+          review_record?: string;
+          schema_version?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "studio_foundation_lessons_course_id_fkey";
+            columns: ["course_id"];
+            isOneToOne: false;
+            referencedRelation: "course_versions";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      studio_foundation_positions: {
+        Row: {
+          base_revision: number;
+          content_version: string;
+          lesson_id: string;
+          position: Json;
+          request_id: string;
+          revision: number;
+          saved_at: string;
+          schema_version: string;
+          user_id: string;
+        };
+        Insert: {
+          base_revision: number;
+          content_version: string;
+          lesson_id: string;
+          position: Json;
+          request_id: string;
+          revision: number;
+          saved_at?: string;
+          schema_version: string;
+          user_id: string;
+        };
+        Update: {
+          base_revision?: number;
+          content_version?: string;
+          lesson_id?: string;
+          position?: Json;
+          request_id?: string;
+          revision?: number;
+          saved_at?: string;
+          schema_version?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "studio_foundation_positions_lesson_id_fkey";
+            columns: ["lesson_id"];
+            isOneToOne: false;
+            referencedRelation: "studio_foundation_lessons";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       studio_scenario_versions: {
         Row: {
           course_id: string;
@@ -860,6 +983,10 @@ export type Database = {
         Returns: boolean;
       };
       get_privacy_settings: { Args: never; Returns: Json };
+      get_studio_foundation: {
+        Args: { course: string; lesson: string };
+        Returns: Json;
+      };
       get_studio_workshop: {
         Args: { course: string; scenario: string };
         Returns: Json;
@@ -901,6 +1028,17 @@ export type Database = {
         };
         Returns: Json;
       };
+      save_studio_foundation: {
+        Args: {
+          content: string;
+          document: Json;
+          expected: number;
+          lesson: string;
+          request: string;
+          schema_id: string;
+        };
+        Returns: Json;
+      };
       save_studio_worksheet: {
         Args: {
           document: Json;
@@ -928,6 +1066,18 @@ export type Database = {
       };
       submit_project: {
         Args: { base: number; project: string; request: string; work: Json };
+        Returns: Json;
+      };
+      submit_studio_foundation: {
+        Args: {
+          content: string;
+          event_kind: string;
+          lesson: string;
+          question: string;
+          request: string;
+          schema_id: string;
+          selected: string;
+        };
         Returns: Json;
       };
       triage_content_report: {

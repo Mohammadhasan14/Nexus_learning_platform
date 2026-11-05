@@ -21,6 +21,11 @@ that appended the saved goal to new text. JavaScript is required for these contr
 - Saved scripted/live tutor requests, completed replies, reservations and token
   accounting, plus the learner's daily request/token usage buckets.
 - An account summary containing the verified Auth user ID, email and creation time.
+- Studio worksheet heads/revisions; with the separately prepared foundations
+  migration, explicit lesson-position revisions and submitted practice/help events
+  pinned to content versions. Unsubmitted selections and unsaved positions are not
+  included. Protected assessment keys are excluded. See
+  [foundations contracts and pending provider gates](system-design/FOUNDATIONS.md).
 
 The export contains source/version identifiers rather than a copy of the whole
 course catalogue. Derived summaries/review schedules can be recomputed from the

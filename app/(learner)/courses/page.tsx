@@ -1,3 +1,4 @@
+import { foundationHref, studioHref } from "@/modules/system-design/links";
 import { recommendation, visibleCourses } from "@/modules/learning/rules";
 import Link from "next/link";
 import { learningData, passed } from "@/modules/learning/data";
@@ -20,21 +21,33 @@ export default async function Courses() {
           if (c.experience_kind === "studio")
             return (
               <Card key={c.id}>
-                <Badge>Workshop pilot · v{c.version}</Badge>
+                <Badge>Studio pilot · v{c.version}</Badge>
                 <h2>{c.title}</h2>
-                <p>{c.summary}</p>
                 <p>
-                  1 requirements &amp; capacity workshop · private worksheet
+                  Learn how a web request works, then estimate the campus event
+                  directory workload.
                 </p>
                 <p>
-                  Foundations and later design tools are planned. This is not
-                  the complete course.
+                  1 foundations lesson · 1 capacity workshop · private saves
+                </p>
+                <p>
+                  More foundations lessons and later design tools are planned.
+                  This is not the complete course.
                 </p>
                 {enrolled && step.href ? (
                   <>
-                    <Link className="button button-primary" href={step.href}>
-                      Open workshop
+                    <Link
+                      className="button button-primary"
+                      href={foundationHref(c.id)!}
+                    >
+                      Start foundations
                     </Link>
+                    <p>
+                      <Link className="text-link" href={studioHref(c.id)!}>
+                        Open workshop
+                      </Link>{" "}
+                      · available at any time
+                    </p>
                     <p>{step.reason}</p>
                   </>
                 ) : (
