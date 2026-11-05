@@ -175,3 +175,15 @@ cases, 24 prepared pgTAP assertions and masked 390px/1440px foundations artifact
 The M1 gates, hosted-only boundary, synthetic-data policy and cleanup remain
 required. No workflow was triggered for these edits and no acceptance is claimed.
 See [foundations evidence and limits](system-design/FOUNDATIONS.md).
+
+## Foundations acceptance — 2026-11-05
+
+Both jobs passed in [run 41889906663](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41889906663) on stacked
+[PR #2](https://github.com/Mohammadhasan14/Nexus_learning_platform/pull/2). Provider evidence includes 18 migrations, full
+types/no drift, 104 pgTAP assertions and 17 browser passes/two intentional skips.
+The quality job keeps package.json's same nine check gates in the same order,
+now printing a fixed pass/fail label and job-summary row for each gate while
+deleting raw fixture output. Run 41888096350's old aggregate failure has no
+recoverable gate detail; no cause is inferred. Runners, timeouts, read-only
+permissions and performance budgets are unchanged. Retarget/reverify after M1
+merges. See [full evidence and limits](system-design/FOUNDATIONS.md).

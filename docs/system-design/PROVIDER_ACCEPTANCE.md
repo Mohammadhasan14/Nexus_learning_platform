@@ -252,3 +252,75 @@ requirements. Successful hosted acceptance will additionally preserve masked
 artifact allowlist. No services/workflows were started. This is preparation, not
 a passed provider run. Full new-schema generation/drift, upgrade, Auth/browser,
 Axe, screenshots and cleanup remain pending. See [FOUNDATIONS.md](FOUNDATIONS.md).
+
+## Actual foundations acceptance — 2026-11-05
+
+[Stacked PR #2](https://github.com/Mohammadhasan14/Nexus_learning_platform/pull/2) targets unmerged M1 PR #1 at
+`49172274b38613ef1efc130a93d7fb304e4dea1e`. **Retarget to main and rerun
+acceptance after M1 merges.** Neither PR was merged or deployed.
+
+[Accepted run 41889906663](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41889906663) tested branch head
+`fde8a390beef514bacb37221cac0618183f4601e` as PR merge
+`81504e8f8237e190915597ade77a5e20140a74dd`. Both required jobs passed.
+The evidence-only follow-up receives the normal required checks; the PR reports
+its latest exact-head run. This source acceptance is not a claim that a later
+untested documentation SHA was already executed.
+
+All **18 migrations through 202611010001** replayed. A synthetic pre-foundations
+JavaScript enrolment/read record and exact saved M1 worksheet survived the
+upgrade; ledger comparison and subsequent no-op passed. **104 pgTAP assertions
+in five files**, including **36 foundations assertions**, passed. Full provider
+type generation and both drift comparisons passed. Generated/committed public
+schema declarations match byte for byte, SHA-256:
+`04f4f7ce399338daa408f649de309cbeaaabc150d9fd028f6c3d8a08d70d703b`. No migration or type-source correction was needed.
+
+**17 provider/browser cases passed; two intentional live-only cases skipped**
+(`live-tutor.spec.ts`, `tutor-stream.spec.ts`). No required case skipped.
+Foundations covered real enrolment, all four steps using keyboard Back/Next/
+Replay, matching textual alternatives, tab/disclosure behavior, private keys,
+rejected client grades, wrong/correct answers, progressive hints, explanations,
+non-independent retry evidence, pinned save/reload, revision conflicts/rebase,
+failed-save retention, missing-cookie/wrong-account recovery, owner/staff
+isolation, export and password-confirmed synthetic-account deletion. Existing
+JavaScript and M1 workshop journeys passed. Neither saving nor these specific
+checks awards mastery or course completion.
+
+The independent job passed the same nine application gates: formatting, lint,
+types, unit checks, isolated SQL, production build, public browsers, fixture
+flows and existing performance budgets. Provider checks used actual Supabase
+Auth/PostgREST/PostgreSQL on a fresh GitHub-hosted VM with synthetic accounts;
+fixture/isolated results are separate evidence. Vector remained disabled.
+
+Axe, visible keyboard focus, 44px button targets, reduced-motion styles and
+absence of horizontal overflow passed at 320/390/768/1440px. All six sanitized
+Learn/Practice-feedback/Recap desktop/mobile captures were visually compared
+with the reference: navy surfaces, restrained violet tabs, spacious diagram,
+collapsible lesson navigation and stacked mobile controls adapt to the existing
+Farzain Learning shell. Physical devices and human screen-reader verification
+were not performed.
+
+First run `41886663871` passed the independent application job and provider
+migration/types/pgTAP/build but failed the first lesson Axe audit; screenshots
+were withheld. Naming the lesson sidebar landmark resolved that audit in
+`41888096350`, whose provider job passed. Its independent application job failed
+behind the old aggregate wrapper; its discarded raw output cannot identify the
+historical failing gate, so no cause is invented. The current workflow reports
+fixed outcomes for each of the same nine gates without exposing raw fixture
+output. No assertion, accessibility rule or performance budget was weakened.
+Full-page screenshots now reset scroll origin, avoiding displaced fixed skip-
+link layers after keyboard focus; this changes capture behavior, not layout.
+
+[Seven-day sanitized artifact](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41889906663/artifacts/13354935168) contains acceptance/browser JSON,
+full public-schema declarations, six lesson and two workshop PNGs. Ignored local
+copies are under
+`test-results/verification/foundations-provider-remote/studio-m1-provider-41889906663-1/`.
+Editable values are masked. Raw logs/errors, DOM dumps, tokens, cookies,
+environment files and browser Auth state were excluded. Scoped stop/removal and
+empty container/volume/network inventories passed; no local services ran.
+
+NX-046.23 is functionally Completed; NX-046.22 stays In progress and NX-046.24–27
+remain Deferred. Independent educator review, learner/educational-effectiveness
+validation, forced provider JWT expiry/revocation, physical devices, human
+screen readers, Firefox/WebKit, managed Supabase and deployment remain unverified.
+No production/shared database, credentials, billing setting, later lesson,
+architecture editor, simulation or AI feature was changed.
