@@ -9,8 +9,10 @@ implementation evidence and remaining gates are in the current handoff. See [aud
 The intended beginner-to-advanced student journey starts with foundations before
 the capacity workshop. NX-046.22 remains the parent for this module. The first
 bounded slice, NX-046.23, implements the workspace and **How a web request works**;
-it is under local review, not a complete module. The remaining planned children
-are NX-046.24 APIs and data; NX-046.25 latency, throughput and concurrency;
+it passed provider acceptance, not completion of the module. NX-046.24 now
+implements APIs and data in a separate bounded slice and awaits remote acceptance
+([lesson contract](APIS_DATA.md)). The remaining planned children
+are NX-046.25 latency, throughput and concurrency;
 NX-046.26 read/write workloads; and NX-046.27 units and the transition to capacity
 estimation. Each needs simple examples, guided practice, feedback, accessible
 alternatives and independent acceptance. Statuses/evidence live only in the
@@ -20,8 +22,8 @@ Recommended order is foundations → capacity workshop, without a hard prerequis
 lock. Existing enrolments and saved workshop routes remain valid. This first
 lesson is a separate feature branch based on verified M1; no later editor,
 simulation or AI work is part of it. The original M1 curriculum clarification
-kept foundations outside that milestone; the current request authorises only
-this first foundations lesson, not the remaining module.
+kept foundations outside that milestone; the current request authorises APIs and
+data and necessary shared-workspace extensions only, not the remaining module.
 
 ## One tracker and delivery order
 

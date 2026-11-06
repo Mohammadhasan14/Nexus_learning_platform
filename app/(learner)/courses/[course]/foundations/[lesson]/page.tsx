@@ -1,9 +1,16 @@
 import Link from "next/link";
 import { foundationData } from "@/modules/system-design/foundations/data";
 import { FoundationLesson } from "@/components/system-design/foundations/lesson";
-export const metadata = {
-  title: "How a web request works — Foundations — Farzain Learning",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lesson: string }>;
+}) {
+  const { lesson } = await params;
+  return {
+    title: `${lesson === "apis-data-v1" ? "APIs and data" : "How a web request works"} — Foundations — Farzain Learning`,
+  };
+}
 export default async function FoundationPage({
   params,
 }: {
@@ -35,5 +42,11 @@ export default async function FoundationPage({
         <Link href="/courses">Return to Courses</Link>
       </>
     );
-  return <FoundationLesson owner={data.owner} initial={data.state} />;
+  return (
+    <FoundationLesson
+      key={`${data.owner}:${data.state.identity.lesson}:${data.state.identity.content}`}
+      owner={data.owner}
+      initial={data.state}
+    />
+  );
 }

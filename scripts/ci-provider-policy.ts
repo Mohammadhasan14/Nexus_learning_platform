@@ -160,6 +160,7 @@ export function browserAcceptance(
   const required = [
     "system-design.spec.ts",
     "foundations.spec.ts",
+    "apis-data.spec.ts",
     "privacy-controls.spec.ts",
     "privacy-export.spec.ts",
     "course-versions.spec.ts",
@@ -180,6 +181,8 @@ export function browserAcceptance(
     cases.filter(
       (c) => c.file === "foundations.spec.ts" && c.status === "passed",
     ).length >= 2 &&
+    cases.filter((c) => c.file === "apis-data.spec.ts" && c.status === "passed")
+      .length >= 2 &&
     cases.every(
       (c) =>
         c.status === "passed" ||

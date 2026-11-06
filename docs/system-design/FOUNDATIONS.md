@@ -1,5 +1,12 @@
 # Foundations — first bounded lesson
 
+> Current extension (2026-11-05): NX-046.24 implements **APIs and data** on
+> `feat/studio-foundations-apis-data`, based on verified first-lesson head
+> `d3e80b43ed2d944552da0f7369d7ebf095c06fbc`. See [the API lesson contract,
+> provenance and pending acceptance](APIS_DATA.md). This extension is In review;
+> NX-046.22 stays In progress. Earlier first-lesson acceptance below is historical
+> evidence for that slice, not a passing run for the API changes.
+
 Implementation checkpoint: 2026-11-01. This is NX-046.23, the first child of
 NX-046.22 in the canonical [feature register](../features.csv), not completion
 of the beginner-to-advanced course. Current verification is in

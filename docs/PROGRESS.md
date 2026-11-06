@@ -4,7 +4,103 @@ Updated: **2026-11-05**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — first foundations lesson provider acceptance passed
+## Current handoff — APIs and data implemented; remote acceptance pending
+
+NX-046.24 is **In review** on new local branch
+`feat/studio-foundations-apis-data`, based on verified first-lesson commit
+`d3e80b43ed2d944552da0f7369d7ebf095c06fbc`. The initial worktree was clean.
+Authenticated read-only inspection found PR #2 still open/unmerged and stacked
+on open M1 PR #1; neither dependency branch was changed. This slice depends on
+PR #2. Future publication must use that branch as its base while unmerged, or
+safely reconcile against main once it contains the dependencies. Retarget/reverify
+after the dependency merges. **No commit, push, PR, workflow, deployment or merge
+was performed.** The changes remain unstaged; HEAD is unchanged.
+
+Open `/courses/system-design-studio-v1/foundations/apis-data-v1` on a migrated
+backend after existing Studio enrolment. The shared lesson list exposes both
+implemented lessons; Courses still offers Start foundations at lesson one and
+Open workshop. There is no extra enrolment, prerequisite lock or progress reset.
+
+Implemented within this slice:
+
+- Learn: defined API/HTTP/JSON/representation vocabulary and a deterministic local
+  List/View/Create explorer with method/path, structured title or bounded ID,
+  distinct request/response JSON and plain-language equivalents. Explicit Run
+  shows 200/201/400/404; edits and Reset clear results. It never calls an event
+  endpoint or creates retained events. Context explains safe GET, other uses of
+  POST, validation, authentication/authorization and chosen-contract caveats.
+- Practice: four protected server-evaluated questions with option feedback,
+  progressive hints, immutable assistance/retry history and accurate independent
+  first-attempt distinctions. Explorer activity earns no assessment credit.
+- Recap/glossary and links to lesson one, practice and the existing workshop.
+  The existing shell, keyboard tabs/disclosures, navy/violet tokens and
+  reduced-motion behavior are reused. Request/response panels stack and JSON wraps.
+- Explicit private position save/resume restores section, viewed flag and explorer
+  scenario/ID/title draft, never a generated response or real event. Expected
+  revisions, retry keys, conflict comparison/adoption/rebase, network failures
+  and same-account session recovery retain the current draft. No localStorage.
+
+Additive migration `202611050001_foundations_apis_data.sql` seeds only new
+`apis-data-v1` / `apis-data-content-v1` / `api-position-v1` metadata and private
+keys. It extends allowed question IDs and shared eligibility/save validation;
+existing public tables/RPC signatures, owner-only immutable records, export and
+signed deletion are reused. Published first-lesson seeds/content, M1 formulas,
+worksheet revisions, tutor scope and JavaScript grading/progress are untouched.
+No real database was changed. Public type shapes are unchanged by code inspection;
+full provider type generation/drift has **not** run for this slice.
+
+Actual lightweight verification on 2026-11-05:
+
+| Check                                                         | Result                                                    |
+| ------------------------------------------------------------- | --------------------------------------------------------- |
+| API explorer/contracts/public-key boundary unit file          | 6 passed                                                  |
+| Existing foundations unit file                                | 4 passed                                                  |
+| CI hosted-only/sanitization/required-browser policy unit file | 5 passed                                                  |
+| API additive-upgrade/private lifecycle PGlite file            | 6 passed, including parent/subtests                       |
+| Existing foundations PGlite file                              | 5 passed                                                  |
+| Existing workshop PGlite file                                 | 8 passed                                                  |
+| Existing JavaScript learning PGlite file                      | 1 passed                                                  |
+| Next route type generation; TypeScript `--noEmit`             | Passed                                                    |
+| Targeted ESLint and changed-file Prettier                     | Passed                                                    |
+| Tracker IDs/rows/statuses and whitespace                      | Checked; no IDs removed or unrelated tracker rows changed |
+
+The isolated upgrade preserves first-lesson keys, saved position/attempt and JS
+reading records. It checks API auth/enrolment/owner/staff isolation, unsupported
+versions/questions/extra fields, immutable writes, invalid drafts, conflicts,
+identical/conflicting retries, private evaluation/help evidence, both-lesson export
+and signed synthetic-user deletion. These are PGlite Auth shims, **not Supabase
+provider results**. No full local suite, production build, browser or service ran.
+
+Prepared only: 32 additional pgTAP assertions and two API provider/browser cases
+covering the local explorer, errors/reset/stale state, grading/help/retries,
+private resume, conflicts/adoption, failed saves/session/account recovery,
+export/deletion and earlier-lesson/workshop continuity. Axe, keyboard/focus,
+reduced motion, touch targets and overflow at 320/390/768/1440 are pending.
+Six masked Learn/Practice/Recap screenshot paths at 390/1440 are prepared; **no
+new screenshots were captured**. The existing hosted-only disposable workflow
+now upgrades from `202611010001` to `202611050001`, verifies JS/M1/first-lesson
+fixtures, requires both new API browser cases and allowlists the six captures.
+The seven-day sanitized artifact policy, disabled Vector and scoped cleanup are
+preserved. No service/trigger, credential, environment, package or billing setup
+was changed. No remote test was triggered.
+
+Outstanding acceptance: real Supabase migration/upgrade, full generated types and
+drift, pgTAP/Auth/PostgREST and full browser journey/screenshots/Axe, production
+build, full regressions and existing route performance budgets on GitHub-hosted
+runners. Prior first-lesson acceptance below does not prove these new changes.
+No concrete implementation blocker was found. Independent educator review,
+beginner/learner validation, physical-device/human screen-reader testing and
+forced provider JWT expiry/revocation remain unclaimed.
+
+Content was AI-assisted and checked against authoritative RFC 9110, RFC 8259 and
+MDN sources on 2026-11-05; chosen example paths/shapes/bounds are teaching design
+choices. See [APIS_DATA.md](system-design/APIS_DATA.md) for the source links,
+version contract, changed-file map and limitations. NX-046.22 stays **In progress**;
+NX-046.23 retains its earlier Completed evidence; NX-046.24 stays **In review**;
+NX-046.25–27 remain **Deferred**. Next small slice after API acceptance is
+NX-046.25, latency/throughput/concurrency; it was not started.
+
+## Previous handoff — first foundations lesson provider acceptance passed
 
 [Stacked PR #2](https://github.com/Mohammadhasan14/Nexus_learning_platform/pull/2) targets unmerged M1 PR #1 at
 `49172274b38613ef1efc130a93d7fb304e4dea1e`. **Retarget to main and rerun

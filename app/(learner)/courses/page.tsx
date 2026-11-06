@@ -24,11 +24,11 @@ export default async function Courses() {
                 <Badge>Studio pilot · v{c.version}</Badge>
                 <h2>{c.title}</h2>
                 <p>
-                  Learn how a web request works, then estimate the campus event
-                  directory workload.
+                  Learn how a web request works, explore APIs and data, then
+                  estimate the campus event directory workload.
                 </p>
                 <p>
-                  1 foundations lesson · 1 capacity workshop · private saves
+                  2 foundations lessons · 1 capacity workshop · private saves
                 </p>
                 <p>
                   More foundations lessons and later design tools are planned.

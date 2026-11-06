@@ -744,17 +744,53 @@ export function FoundationLesson({
             tabIndex={0}
           >
             <div className={styles.card}>
-              <h2>Recap the journey</h2>
-              <ol>
-                {walkthrough.map((s) => (
-                  <li key={s.text}>{s.text}</li>
-                ))}
-              </ol>
-              <p>
-                The browser talks to the application server. The server controls
-                access to stored event records. A request asks for something; a
-                response replies to that request.
-              </p>
+              <h2>{isApi ? "Recap APIs and data" : "Recap the journey"}</h2>
+              {isApi ? (
+                <>
+                  <p>
+                    An API is an agreed interface. In these HTTP examples,
+                    requests use a method and path, and a create request carries
+                    a title in its request body. Responses include a status and
+                    a separate response body.
+                  </p>
+                  <ul>
+                    <li>
+                      GET /api/events returns an events array; GET
+                      /api/events/evt_101 returns one event (200).
+                    </li>
+                    <li>
+                      An unknown event returns 404. A missing or invalid create
+                      title returns 400 in our chosen contract.
+                    </li>
+                    <li>
+                      A valid POST /api/events title shows an illustrative 201
+                      response; no real event is retained.
+                    </li>
+                    <li>
+                      JSON is a structured data format, not a database. API
+                      fields can differ from internal records.
+                    </li>
+                    <li>
+                      The application validates input and checks identity and
+                      permissions. A method or status alone does not describe
+                      the entire interaction.
+                    </li>
+                  </ul>
+                </>
+              ) : (
+                <>
+                  <ol>
+                    {walkthrough.map((s) => (
+                      <li key={s.text}>{s.text}</li>
+                    ))}
+                  </ol>
+                  <p>
+                    The browser talks to the application server. The server
+                    controls access to stored event records. A request asks for
+                    something; a response replies to that request.
+                  </p>
+                </>
+              )}
               <h3>Compact glossary</h3>
               <dl>
                 {definitions.map(([name, text]) => (
@@ -775,6 +811,17 @@ export function FoundationLesson({
                 I viewed this lesson (self-reported; saved with my position).
               </label>
               <div className={styles.controls}>
+                <Link
+                  className="text-link"
+                  href={foundationHref(
+                    studioCourse,
+                    isApi ? "web-request-v1" : "apis-data-v1",
+                  )!}
+                >
+                  {isApi
+                    ? "Revisit How a web request works"
+                    : "Continue to APIs and data"}
+                </Link>
                 <button
                   type="button"
                   className="button button-secondary"
