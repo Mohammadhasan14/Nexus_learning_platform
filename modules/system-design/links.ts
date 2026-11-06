@@ -5,8 +5,9 @@ export function studioHref(course: string) {
     : undefined;
 }
 
-export function foundationHref(course: string) {
-  return course === "system-design-studio-v1"
-    ? `/courses/${course}/foundations/web-request-v1`
+export function foundationHref(course: string, lesson = "web-request-v1") {
+  return course === "system-design-studio-v1" &&
+    ["web-request-v1", "apis-data-v1"].includes(lesson)
+    ? `/courses/${course}/foundations/${lesson}`
     : undefined;
 }
