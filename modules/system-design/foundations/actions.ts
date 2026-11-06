@@ -12,6 +12,9 @@ import {
   type FoundationState,
   type SavedPosition,
   type Feedback,
+  type FoundationIdentity,
+  supportedIdentitySchema,
+  positionMatchesIdentity,
 } from "./schema";
 export type FoundationResult = {
   status: "ok" | "error" | "session" | "conflict";
@@ -73,7 +76,8 @@ export async function saveFoundationPosition(
             }
           : failed;
     const saved = savedPositionSchema.safeParse(data);
-    return saved.success
+    return saved.success &&
+      positionMatchesIdentity(identity, saved.data.position)
       ? {
           status: "ok",
           message: `Position saved · revision ${saved.data.revision}. This is not a grade.`,
@@ -116,7 +120,9 @@ export async function submitFoundationPractice(
           }
         : failed;
     const feedback = practiceFeedbackSchema.safeParse(data);
-    return feedback.success
+    return feedback.success &&
+      feedback.data.question === question &&
+      feedback.data.kind === kind
       ? {
           status: "ok",
           message: feedback.data.message,
@@ -129,16 +135,20 @@ export async function submitFoundationPractice(
 }
 export async function loadFoundationPosition(
   owner: string,
+  identity: FoundationIdentity = foundationIdentity,
 ): Promise<FoundationResult> {
+  if (!supportedIdentitySchema.safeParse(identity).success) return failed;
   try {
     const client = await session(owner);
     if (!client) return expired;
     const { data, error } = await client.rpc("get_studio_foundation", {
       course: studioCourse,
-      lesson: foundationIdentity.lesson,
+      lesson: identity.lesson,
     });
     const parsed = foundationStateSchema.safeParse(data);
-    return !error && parsed.success
+    return !error &&
+      parsed.success &&
+      parsed.data.identity.lesson === identity.lesson
       ? {
           status: "ok",
           message:
