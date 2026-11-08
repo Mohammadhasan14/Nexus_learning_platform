@@ -1,10 +1,56 @@
 # Current progress
 
-Updated: **2026-11-05**. Read this file, [features.csv](features.csv) and
+Updated: **2026-11-08**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — APIs and data implemented; remote acceptance pending
+## Current handoff — API provider accepted; application flow gate pending
+
+Publication is now authorised. All implementation changes had already been
+committed in five requested commits through `58f270d319ec36a7156e0261c60454b9a6ff69f5`;
+the initial worktree was clean. Read-only GitHub inspection on 2026-11-08 found
+PRs #1/#2 still open/unmerged, no hooks/environments/deployments/external checks,
+and Actions enabled. [PR #3](https://github.com/Mohammadhasan14/Nexus_learning_platform/pull/3)
+therefore targets `feat/studio-foundations-web-request`. Retarget and reverify
+after the dependency merges; no PR was merged or deployed.
+
+[Run 42503597466](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/42503597466)
+tested source `58f270d319ec36a7156e0261c60454b9a6ff69f5` as merge
+`a59d8c2c725dcbf6b75fc9438bdc4fe1a2c8cf2a`. The provider job passed: all 19 migrations
+through `202611050001`; preserved JS/M1/first-lesson upgrade fixtures; 136 pgTAP
+assertions in six files; full provider type generation and drift checks with
+unchanged SHA-256 `04f4f7ce399338daa408f649de309cbeaaabc150d9fd028f6c3d8a08d70d703b`;
+19 provider/browser passes and two intentional live-only skips. Both API journeys
+passed, including private grading, assistance/retry evidence, save/resume,
+conflict/adoption, failed saves, account/session recovery, export/deletion and
+prior course continuity. All six masked API Learn/Practice/Recap desktop/mobile
+captures were visually reviewed. Axe, keyboard, reduced motion, touch targets
+and overflow checks passed at 320/390/768/1440. Scoped cleanup/inventories passed.
+
+[Sanitized provider artifact](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/42503597466/artifacts/13626028557)
+contains reports, public schema declarations and 14 masked PNGs including the six
+API captures. Ignored local copies are under
+`test-results/verification/apis-data-provider-remote/studio-m1-provider-42503597466-1/`.
+This is actual disposable Supabase Auth/PostgREST/PostgreSQL evidence on GitHub;
+no local service, real learner database or hosted environment was accessed.
+
+The independent application job passed format, lint, types, unit, isolated SQL,
+build and public browsers, then **failed `test:flows`**. Performance was not reached.
+Its former wrapper discarded raw fixture output, so the individual failed case
+and cause cannot be recovered and are not invented. The focused CI follow-up
+adds an allowlisted application browser reporter with only source locations,
+outcomes, public accessibility rule IDs and durations; raw errors, selectors,
+DOM, titles, traces, browser state and credentials remain excluded. All nine
+application gates and assertions remain required. A privacy-canary unit test
+covers fixture/performance source coordinates. No product assertion was weakened.
+
+NX-046.24 remains **In review** pending application/fixture/performance acceptance;
+NX-046.22 stays **In progress**; NX-046.25–27 remain **Deferred**. Independent
+educator/learner validation, human screen readers, physical devices and forced
+provider JWT expiry remain unclaimed. No later lesson, merge, deploy or billing
+change is authorised. See [API contract and source review](system-design/APIS_DATA.md).
+
+## Previous handoff — APIs and data implementation and lightweight checks
 
 NX-046.24 is **In review** on new local branch
 `feat/studio-foundations-apis-data`, based on verified first-lesson commit

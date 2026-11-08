@@ -33,7 +33,12 @@ jobs:
       - name: Run application gates without publishing raw fixture output
         run: |
           for gate in format:check lint typecheck test:unit test:db build test test:flows test:performance; do
-            if npm run "$gate" > "$RUNNER_TEMP/application-checks.log" 2>&1; then
+            browser_args=()
+            if [[ "$gate" == test:flows || "$gate" == test:performance ]]; then
+              export APPLICATION_BROWSER_SUITE="${gate#test:}"
+              browser_args=(-- --reporter=./tests/support/application-reporter.ts --trace=off)
+            fi
+            if npm run "$gate" "${browser_args[@]}" > "$RUNNER_TEMP/application-checks.log" 2>&1; then
               rm -f "$RUNNER_TEMP/application-checks.log"
               echo "$gate: passed. Raw output withheld."
               echo "- $gate: passed" >> "$GITHUB_STEP_SUMMARY"
@@ -44,6 +49,18 @@ jobs:
               exit 1
             fi
           done
+
+      - name: Upload sanitized application browser diagnostics
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: application-browser-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          include-hidden-files: false
+          if-no-files-found: ignore
+          path: |
+            test-results/application-report/flows.json
+            test-results/application-report/performance.json
 
   local-supabase:
     name: Local Supabase integration

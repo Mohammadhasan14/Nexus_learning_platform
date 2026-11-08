@@ -187,3 +187,42 @@ No screenshots were captured locally. No local services, container downloads,
 provider mutations, package installation, billing changes, publication or later
 lesson work occurred. After this lesson passes remote acceptance, the next small
 slice is NX-046.25: latency, throughput and concurrency.
+
+## Remote acceptance — 2026-11-08, application gate pending
+
+Publication was separately authorised. [Stacked PR #3](https://github.com/Mohammadhasan14/Nexus_learning_platform/pull/3)
+targets unmerged PR #2, which depends on unmerged M1 PR #1. Retarget/reverify
+after their eventual merge; neither was merged or deployed.
+
+[Run 42503597466](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/42503597466)
+verified source `58f270d319ec36a7156e0261c60454b9a6ff69f5` as merge
+`a59d8c2c725dcbf6b75fc9438bdc4fe1a2c8cf2a`. Provider acceptance passed all 19 migrations
+through `202611050001`, upgrade preservation, 136 pgTAP assertions/six files,
+full generated types/drift, provider build, 19 browser cases and scoped cleanup.
+Two live-only cases were intentionally skipped, not substituted for required cases.
+The public schema remained byte-identical: SHA-256
+`04f4f7ce399338daa408f649de309cbeaaabc150d9fd028f6c3d8a08d70d703b`.
+
+Both API journeys passed, including local-only responses/reset/stale state,
+private grading/help/retries, pinned saves, conflicts, session/account recovery,
+privacy lifecycle and earlier course continuity. Axe/keyboard/reduced-motion/
+touch/overflow checks passed at all four widths. Six sanitized API captures were
+visually reviewed against the supplied reference: existing shell/tokens, desktop
+request/response panels, mobile stacks and visible state/evidence distinctions.
+Inputs and JSON are masked by artifact policy. No interface redesign was needed.
+
+[Seven-day artifact](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/42503597466/artifacts/13626028557)
+contains reports, generated schema and six API plus eight earlier-lesson/workshop
+PNGs. Ignored local copies are in
+`test-results/verification/apis-data-provider-remote/studio-m1-provider-42503597466-1/`.
+No credentials, browser state, raw error payloads or private logs were uploaded.
+
+The independent application job passed its first seven gates, then failed fixture
+flows before performance. Its discarded raw output cannot identify the historical
+case/cause. The CI follow-up preserves sanitized case coordinates, outcomes,
+public rule IDs and durations for fixture/performance failures, without weakening
+assertions or uploading raw data. NX-046.24 stays In review pending these remaining
+application gates. This provider pass alone does not claim the entire workflow
+passed. Independent educator/learner validation and the previously stated manual
+or managed-provider limits remain unclaimed. No local Docker, Supabase, browser
+suite, build, production data, merge, deployment or later lesson was used.
