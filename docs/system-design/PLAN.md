@@ -10,7 +10,7 @@ The intended beginner-to-advanced student journey starts with foundations before
 the capacity workshop. NX-046.22 remains the parent for this module. The first
 bounded slice, NX-046.23, implements the workspace and **How a web request works**;
 it passed provider acceptance, not completion of the module. NX-046.24 now
-implements APIs and data in a separate bounded slice and awaits remote acceptance
+implements APIs and data in a separate bounded slice with functional remote acceptance on 2026-11-08
 ([lesson contract](APIS_DATA.md)). The remaining planned children
 are NX-046.25 latency, throughput and concurrency;
 NX-046.26 read/write workloads; and NX-046.27 units and the transition to capacity

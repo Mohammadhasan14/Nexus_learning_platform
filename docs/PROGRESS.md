@@ -4,7 +4,80 @@ Updated: **2026-11-08**. Read this file, [features.csv](features.csv) and
 [DECISIONS.md](DECISIONS.md) before continuing. This repository's `docs/` is now
 canonical; parent-workspace documents and the spreadsheet are legacy snapshots.
 
-## Current handoff — API provider accepted; application flow gate pending
+## Current handoff — APIs and data remote acceptance passed
+
+[Stacked PR #3](https://github.com/Mohammadhasan14/Nexus_learning_platform/pull/3)
+targets `feat/studio-foundations-web-request` (unmerged PR #2), itself stacked on
+unmerged M1 PR #1. **Retarget and reverify after the dependencies merge.** No
+merge, deployment, branch-protection or billing change was performed.
+
+[Accepted run 42504661018](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/42504661018)
+tested branch source `5827ad6bcf7c1944b6b49ac9afbd0d7976c4a351` as merge
+`48205949e872d74fc379eb208a7c23999a21ef40`. **Both GitHub-hosted jobs passed.**
+This evidence-only follow-up receives the normal required checks; the PR shows
+its latest exact-head result. The accepted source/run above is immutable evidence,
+not a claim that a later documentation SHA was already tested.
+
+Actual results:
+
+| Gate                                  | Result                                                                                                                                            |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Migration replay/upgrade/ledger/no-op | All 19 migrations through `202611050001`; synthetic JS reads/enrolment, M1 worksheet and first-lesson position/attempt preserved                  |
+| pgTAP                                 | 136 assertions in six files, including all 32 API assertions                                                                                      |
+| Full provider types/drift             | Committed check, generation and recheck passed; generated public declarations unchanged                                                           |
+| Provider/browser                      | 19 passed, two intentional live-only skips; no required case skipped                                                                              |
+| Application quality                   | All nine gates passed: format, lint, types, units, isolated SQL, production build, public browser, fixture flows and existing performance budgets |
+| Fixture and performance reports       | 86 fixture-flow passes; 11 performance passes; no runner errors                                                                                   |
+| API UI/accessibility                  | Both API journeys; Axe, keyboard/focus, disclosures, reduced motion, touch targets and no overflow at 320/390/768/1440                            |
+| Screenshots                           | Six API Learn/Practice-feedback/Recap captures at 390/1440 visually reviewed; accepted-run copies are byte-identical to those reviewed initially  |
+| Cleanup                               | Scoped stop/removal and empty project container/volume/network inventories passed; Vector disabled                                                |
+
+Generated/committed public schema SHA-256 is unchanged:
+`04f4f7ce399338daa408f649de309cbeaaabc150d9fd028f6c3d8a08d70d703b`.
+The real disposable Supabase Auth/PostgREST/PostgreSQL journeys covered the
+local-only explorer's 200/201/400/404 responses, invalid/stale/reset states, protected
+keys/rejected client grades, four checks with hint/explanation/retry distinctions,
+pinned position save/reload, concurrent idempotency, conflicts/adoption, failed
+saves, missing-cookie/wrong-account recovery, export and signed synthetic-account
+deletion. Existing first-lesson, M1 and JavaScript flows remained required and passed.
+No position save or these objective checks awarded mastery/course completion.
+
+Seven-day sanitized artifacts:
+
+- [Provider reports, schema and 14 masked PNGs](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/42504661018/artifacts/13627490966), including all six API desktop/mobile captures.
+- [Fixture/performance diagnostics](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/42504661018/artifacts/13627710291).
+
+Ignored local copies are under
+`test-results/verification/apis-data-provider-remote/studio-m1-provider-42504661018-1/`
+and `application-browser-42504661018-1/`. Raw logs/error payloads, DOM, selectors,
+private titles, traces, cookies, Auth state and credentials are excluded. The
+first run's sanitized provider evidence is retained separately.
+
+Run `42503597466` passed provider acceptance and the first seven application
+gates, then failed fixture flows before performance. That wrapper discarded the
+assertion output, so its exact case/cause remains unknown. The focused follow-up
+added a sanitized application reporter with public source coordinates, outcomes,
+rule IDs and durations; it preserved every gate/assertion. The failure did not
+recur in the accepted run; **no product root-cause fix is claimed**. No application
+code, published content, grading key, M1 formula, learner record or type source
+needed correction during acceptance.
+
+NX-046.24 is functionally **Completed**. NX-046.22 remains **In progress**;
+NX-046.23 retains its Completed evidence; NX-046.25–27 stay **Deferred**. Independent
+educator review, learner/educational-effectiveness validation, physical-device and
+human screen-reader checks, Firefox/WebKit, forced provider JWT expiry/revocation,
+managed Supabase and deployment remain unclaimed. These are separate limits,
+not fabricated approval. The original fixture failure's cause is also unresolved.
+
+Open `/courses/system-design-studio-v1/foundations/apis-data-v1` after Studio
+enrolment on a migrated environment. The disposable verification backend has
+been removed. The existing workshop remains at
+`/courses/system-design-studio-v1/studio/campus-events-v1`. No local Docker,
+Supabase, heavy build or browser suite ran; no service is left running locally.
+The next bounded slice is NX-046.25 (latency, throughput and concurrency), requiring
+separate authorisation; it was not started.
+
+## Previous handoff — API provider accepted; application flow gate pending
 
 Publication is now authorised. All implementation changes had already been
 committed in five requested commits through `58f270d319ec36a7156e0261c60454b9a6ff69f5`;
