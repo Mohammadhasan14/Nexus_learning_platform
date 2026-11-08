@@ -90,12 +90,14 @@ test("browser report allowlist drops error payloads, attachments, stdout and pri
   assert.equal(safe.file, "system-design.spec.ts");
   assert.equal(browserCase({ ...safe, file: canary }).file, "unknown.spec.ts");
 });
-test("skipped M1/privacy/token checks and runner errors cannot pass browser acceptance", () => {
+test("skipped Studio/privacy/token checks and runner errors cannot pass browser acceptance", () => {
   const files = [
     "system-design",
     "system-design",
     "foundations",
     "foundations",
+    "apis-data",
+    "apis-data",
     "privacy-controls",
     "privacy-export",
     "course-versions",
@@ -117,7 +119,14 @@ test("skipped M1/privacy/token checks and runner errors cannot pass browser acce
   assert.equal(browserAcceptance(cases, false), true);
   assert.equal(browserAcceptance(cases, true), false);
   assert.equal(browserAcceptance(cases.slice(1), false), false);
-  for (const index of [0, 2, 4, 11]) {
+  assert.equal(
+    browserAcceptance(
+      cases.filter((_, index) => index !== 4),
+      false,
+    ),
+    false,
+  );
+  for (const index of [0, 2, 4, 6, 13]) {
     const skipped = cases.map((c, n) =>
       n === index ? { ...c, status: "skipped" } : c,
     );
@@ -139,4 +148,24 @@ test("skipped M1/privacy/token checks and runner errors cannot pass browser acce
     ),
     true,
   );
+});
+
+test("fixture/performance diagnostics retain source coordinates while excluding private error contents", () => {
+  const canary = "private-browser-canary";
+  for (const suite of ["flows", "performance"]) {
+    const result = failureDetails(
+      [
+        {
+          message: `${canary} timeout`,
+          stack: `at tests/${suite}/accounts.spec.ts:123:45\n${canary}`,
+        },
+      ],
+      "accounts.spec.ts",
+    );
+    assert.deepEqual(result.locations, [
+      { file: "accounts.spec.ts", line: 123, column: 45 },
+    ]);
+    assert.equal(result.kind, "timeout");
+    assert.ok(!JSON.stringify(result).includes(canary));
+  }
 });

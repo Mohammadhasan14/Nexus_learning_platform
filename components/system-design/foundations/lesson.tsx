@@ -8,19 +8,13 @@ import {
   useTransition,
   type KeyboardEvent,
 } from "react";
-import {
-  definitions,
-  foundationIdentity,
-  lessonTitle,
-  plannedLessons,
-  questions,
-  walkthrough,
-} from "@/modules/system-design/foundations/content";
+import { walkthrough } from "@/modules/system-design/foundations/content";
 import {
   moveStep,
   type Feedback,
   type FoundationState,
-  type Position,
+  type LessonPosition as Position,
+  type FoundationIdentity,
   type SavedPosition,
 } from "@/modules/system-design/foundations/schema";
 import {
@@ -29,7 +23,16 @@ import {
   submitFoundationPractice,
   type FoundationResult,
 } from "@/modules/system-design/foundations/actions";
-import { studioHref } from "@/modules/system-design/links";
+import { ApiExplorer } from "./api-explorer";
+import { apiFoundationIdentity } from "@/modules/system-design/foundations/api-content";
+import { defaultExplorerConfig } from "@/modules/system-design/foundations/api-example";
+import {
+  foundationLessons,
+  getFoundationLesson,
+  remainingFoundationLessons,
+  type PublicQuestion,
+} from "@/modules/system-design/foundations/lessons";
+import { studioHref, foundationHref } from "@/modules/system-design/links";
 import { studioCourse } from "@/modules/system-design/schema";
 import styles from "./lesson.module.css";
 const subscribe = () => () => {};
@@ -75,8 +78,10 @@ function PracticeQuestion({
   initial,
   onUnsaved,
   onFeedback,
+  identity,
 }: {
-  question: (typeof questions)[number];
+  question: PublicQuestion;
+  identity: FoundationIdentity;
   owner: string;
   initial: Feedback[];
   onUnsaved: (question: string, dirty: boolean) => void;
@@ -107,7 +112,7 @@ function PracticeQuestion({
       return;
     }
     const payload = {
-      identity: foundationIdentity,
+      identity,
       question: question.id,
       kind,
       choice: kind === "attempt" ? choice : null,
@@ -306,8 +311,16 @@ export function FoundationLesson({
   owner: string;
   initial: FoundationState;
 }) {
+  const identity = initial.identity;
+  const lesson = getFoundationLesson(identity.lesson);
+  const isApi = identity.lesson === apiFoundationIdentity.lesson;
+  const { title: lessonTitle, definitions, questions } = lesson;
+  const [explorerEpoch, setExplorerEpoch] = useState(0);
   const [position, setPosition] = useState<Position>(
-    initial.saved?.position ?? initialPosition,
+    initial.saved?.position ??
+      (isApi
+        ? { ...initialPosition, step: 0, explorer: defaultExplorerConfig() }
+        : initialPosition),
   );
   const [saved, setSaved] = useState(initial.saved);
   const [base, setBase] = useState(initial.saved?.revision ?? 0);
@@ -382,7 +395,7 @@ export function FoundationLesson({
       let response: FoundationResult;
       try {
         response = await saveFoundationPosition(owner, {
-          identity: foundationIdentity,
+          identity,
           expected: base,
           request: key,
           position: snapshot,
@@ -406,7 +419,7 @@ export function FoundationLesson({
   function compare() {
     startTransition(async () => {
       try {
-        const response = await loadFoundationPosition(owner);
+        const response = await loadFoundationPosition(owner, identity);
         setResult(response);
         setComparison(response.state?.saved ?? null);
       } catch {
@@ -435,12 +448,27 @@ export function FoundationLesson({
             <summary>Foundations lesson list</summary>
             <nav aria-label="Foundations lessons">
               <ol>
-                <li>
-                  <span aria-current="page">1. {lessonTitle}</span>
-                </li>
-                {plannedLessons.map((name, i) => (
+                {foundationLessons.map((item) => (
+                  <li key={item.identity.lesson}>
+                    {item.identity.lesson === identity.lesson ? (
+                      <span aria-current="page">
+                        {item.number}. {item.title}
+                      </span>
+                    ) : (
+                      <Link
+                        href={foundationHref(
+                          studioCourse,
+                          item.identity.lesson,
+                        )!}
+                      >
+                        {item.number}. {item.title}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+                {remainingFoundationLessons.map((name, i) => (
                   <li key={name}>
-                    {i + 2}. {name} <small>Planned</small>
+                    {i + 3}. {name} <small>Planned</small>
                   </li>
                 ))}
               </ol>
@@ -449,12 +477,17 @@ export function FoundationLesson({
         </aside>
         <div className={styles.main}>
           <header>
-            <p className="eyebrow">Lesson 1 · Beginner</p>
+            <p className="eyebrow">Lesson {lesson.number} · Beginner</p>
             <h1>{lessonTitle}</h1>
-            <p>Follow a student opening the campus events page.</p>
             <p>
-              Objective: explain the browser, server and database roles, and
-              trace a request and its response.
+              {isApi
+                ? "Explore the contract between a client and an application."
+                : "Follow a student opening the campus events page."}
+            </p>
+            <p>
+              {isApi
+                ? "Objective: distinguish requests and responses, interpret JSON and status feedback, and explain a representation without confusing it with database storage."
+                : "Objective: explain the browser, server and database roles, and trace a request and its response."}
             </p>
           </header>
           <div
@@ -488,154 +521,170 @@ export function FoundationLesson({
             hidden={position.section !== "learn"}
             tabIndex={0}
           >
-            <div className={styles.card}>
-              <h2>Guided walkthrough</h2>
-              <p>
-                A student opens the campus event directory to find an event.
-                These three components cooperate to show the list.
-              </p>
-              <div className={styles.diagram} aria-hidden="true">
-                {["Browser", "Application server", "Database"].map(
-                  (name, i) => (
-                    <div key={name} className={styles.diagramGroup}>
-                      {i > 0 && (
-                        <span
-                          className={`${styles.arrow} ${(i === 1 && (position.step === 0 || position.step === 3)) || (i === 2 && (position.step === 1 || position.step === 2)) ? styles.activeArrow : ""}`}
-                        >
-                          <span>
-                            {i === 1
-                              ? position.step === 3
-                                ? "Response"
-                                : "Request"
-                              : position.step === 2
-                                ? "Records"
-                                : "Query"}
-                          </span>
-                          <b>
-                            {(i === 1 && position.step === 3) ||
-                            (i === 2 && position.step === 2)
-                              ? "←"
-                              : "→"}
-                          </b>
-                        </span>
-                      )}
-                      <div
-                        className={`${styles.node} ${name === step.from || name === step.to ? styles.activeNode : ""}`}
-                      >
-                        <ComponentIcon kind={name} />
-                        <span>{name}</span>
-                      </div>
-                    </div>
-                  ),
-                )}
-              </div>
-              <div
-                className={styles.step}
-                role="status"
-                aria-live="polite"
-                aria-atomic="true"
-              >
-                <p>Step {position.step + 1} of 4</p>
-                <h3>{step.text}</h3>
-                <p>{step.detail}</p>
-              </div>
-              <div className={styles.controls}>
-                <button
-                  type="button"
-                  className="button button-secondary"
-                  disabled={position.step === 0}
-                  onClick={() =>
-                    setPosition((p) => ({
-                      ...p,
-                      step: moveStep(p.step, "back"),
-                    }))
-                  }
-                >
-                  ← Back
-                </button>
-                <button
-                  type="button"
-                  className="button button-primary"
-                  disabled={position.step === 3}
-                  onClick={() =>
-                    setPosition((p) => ({
-                      ...p,
-                      step: moveStep(p.step, "next"),
-                    }))
-                  }
-                >
-                  Next step →
-                </button>
-                <button
-                  type="button"
-                  className="button button-secondary"
-                  onClick={() =>
-                    setPosition((p) => ({
-                      ...p,
-                      step: moveStep(p.step, "replay"),
-                    }))
-                  }
-                >
-                  ↻ Replay
-                </button>
-              </div>
-              <p>
-                <small>
-                  Simplified illustration, not a live network request. No
-                  autoplay.
-                </small>
-              </p>
-              <details>
-                <summary>Read the whole journey</summary>
-                <ol>
-                  {walkthrough.map((s) => (
-                    <li key={s.text}>{s.text}</li>
-                  ))}
-                </ol>
-              </details>
-            </div>
-            <div className={styles.card}>
-              <h2>In plain language</h2>
-              <p>
-                The browser asks. The application server handles the request.
-                The database stores event records.
-              </p>
-              <dl>
-                {definitions.map(([name, text]) => (
-                  <div key={name}>
-                    <dt>{name}</dt>
-                    <dd>{text}</dd>
-                  </div>
-                ))}
-              </dl>
-              <h3>Why not go straight to the database?</h3>
-              <p>
-                In this architecture the application server is the controlled
-                entry point. It checks access, applies rules and chooses which
-                information to return. Giving every browser direct database
-                credentials would expose access the student does not need. Other
-                architectures can use carefully controlled data APIs; this
-                example does not show them.
-              </p>
-              <h3>What this example leaves out</h3>
-              <p>
-                We omit DNS (finding a server’s address), TLS (protecting the
-                connection), caching (reusing an earlier result) and other
-                network details. Not every request needs a database query: a
-                server may already have the answer in a cache or produce it
-                without stored records.
-              </p>
-              <button
-                type="button"
-                className="button button-primary"
-                onClick={() => {
+            {isApi && "explorer" in position ? (
+              <ApiExplorer
+                key={explorerEpoch}
+                config={position.explorer}
+                onChange={(explorer) =>
+                  setPosition((p) => ({ ...p, step: 0, explorer }))
+                }
+                onPractice={() => {
                   section("practice");
                   tabs.current[1]?.focus();
                 }}
-              >
-                Try a practice question →
-              </button>
-            </div>
+              />
+            ) : (
+              <>
+                <div className={styles.card}>
+                  <h2>Guided walkthrough</h2>
+                  <p>
+                    A student opens the campus event directory to find an event.
+                    These three components cooperate to show the list.
+                  </p>
+                  <div className={styles.diagram} aria-hidden="true">
+                    {["Browser", "Application server", "Database"].map(
+                      (name, i) => (
+                        <div key={name} className={styles.diagramGroup}>
+                          {i > 0 && (
+                            <span
+                              className={`${styles.arrow} ${(i === 1 && (position.step === 0 || position.step === 3)) || (i === 2 && (position.step === 1 || position.step === 2)) ? styles.activeArrow : ""}`}
+                            >
+                              <span>
+                                {i === 1
+                                  ? position.step === 3
+                                    ? "Response"
+                                    : "Request"
+                                  : position.step === 2
+                                    ? "Records"
+                                    : "Query"}
+                              </span>
+                              <b>
+                                {(i === 1 && position.step === 3) ||
+                                (i === 2 && position.step === 2)
+                                  ? "←"
+                                  : "→"}
+                              </b>
+                            </span>
+                          )}
+                          <div
+                            className={`${styles.node} ${name === step.from || name === step.to ? styles.activeNode : ""}`}
+                          >
+                            <ComponentIcon kind={name} />
+                            <span>{name}</span>
+                          </div>
+                        </div>
+                      ),
+                    )}
+                  </div>
+                  <div
+                    className={styles.step}
+                    role="status"
+                    aria-live="polite"
+                    aria-atomic="true"
+                  >
+                    <p>Step {position.step + 1} of 4</p>
+                    <h3>{step.text}</h3>
+                    <p>{step.detail}</p>
+                  </div>
+                  <div className={styles.controls}>
+                    <button
+                      type="button"
+                      className="button button-secondary"
+                      disabled={position.step === 0}
+                      onClick={() =>
+                        setPosition((p) => ({
+                          ...p,
+                          step: moveStep(p.step, "back"),
+                        }))
+                      }
+                    >
+                      ← Back
+                    </button>
+                    <button
+                      type="button"
+                      className="button button-primary"
+                      disabled={position.step === 3}
+                      onClick={() =>
+                        setPosition((p) => ({
+                          ...p,
+                          step: moveStep(p.step, "next"),
+                        }))
+                      }
+                    >
+                      Next step →
+                    </button>
+                    <button
+                      type="button"
+                      className="button button-secondary"
+                      onClick={() =>
+                        setPosition((p) => ({
+                          ...p,
+                          step: moveStep(p.step, "replay"),
+                        }))
+                      }
+                    >
+                      ↻ Replay
+                    </button>
+                  </div>
+                  <p>
+                    <small>
+                      Simplified illustration, not a live network request. No
+                      autoplay.
+                    </small>
+                  </p>
+                  <details>
+                    <summary>Read the whole journey</summary>
+                    <ol>
+                      {walkthrough.map((s) => (
+                        <li key={s.text}>{s.text}</li>
+                      ))}
+                    </ol>
+                  </details>
+                </div>
+                <div className={styles.card}>
+                  <h2>In plain language</h2>
+                  <p>
+                    The browser asks. The application server handles the
+                    request. The database stores event records.
+                  </p>
+                  <dl>
+                    {definitions.map(([name, text]) => (
+                      <div key={name}>
+                        <dt>{name}</dt>
+                        <dd>{text}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                  <h3>Why not go straight to the database?</h3>
+                  <p>
+                    In this architecture the application server is the
+                    controlled entry point. It checks access, applies rules and
+                    chooses which information to return. Giving every browser
+                    direct database credentials would expose access the student
+                    does not need. Other architectures can use carefully
+                    controlled data APIs; this example does not show them.
+                  </p>
+                  <h3>What this example leaves out</h3>
+                  <p>
+                    We omit DNS (finding a server’s address), TLS (protecting
+                    the connection), caching (reusing an earlier result) and
+                    other network details. Not every request needs a database
+                    query: a server may already have the answer in a cache or
+                    produce it without stored records.
+                  </p>
+                  <button
+                    type="button"
+                    className="button button-primary"
+                    onClick={() => {
+                      section("practice");
+                      tabs.current[1]?.focus();
+                    }}
+                  >
+                    Try a practice question →
+                  </button>
+                </div>
+              </>
+            )}
           </section>
           <section
             role="tabpanel"
@@ -647,14 +696,15 @@ export function FoundationLesson({
             <div className={styles.card}>
               <h2>Practice the request journey</h2>
               <p>
-                Three short checks on this lesson. Submit an answer before
-                asking for hints or option explanations. Help and retries are
-                recorded; these checks do not prove mastery.
+                {questions.length} short checks on this lesson. Submit an answer
+                before asking for hints or option explanations. Help and retries
+                are recorded; these checks do not prove mastery.
               </p>
               {questions.map((q) => (
                 <PracticeQuestion
                   key={q.id}
                   question={q}
+                  identity={identity}
                   owner={owner}
                   initial={initial.evidence}
                   onFeedback={(feedback) =>
@@ -694,17 +744,53 @@ export function FoundationLesson({
             tabIndex={0}
           >
             <div className={styles.card}>
-              <h2>Recap the journey</h2>
-              <ol>
-                {walkthrough.map((s) => (
-                  <li key={s.text}>{s.text}</li>
-                ))}
-              </ol>
-              <p>
-                The browser talks to the application server. The server controls
-                access to stored event records. A request asks for something; a
-                response replies to that request.
-              </p>
+              <h2>{isApi ? "Recap APIs and data" : "Recap the journey"}</h2>
+              {isApi ? (
+                <>
+                  <p>
+                    An API is an agreed interface. In these HTTP examples,
+                    requests use a method and path, and a create request carries
+                    a title in its request body. Responses include a status and
+                    a separate response body.
+                  </p>
+                  <ul>
+                    <li>
+                      GET /api/events returns an events array; GET
+                      /api/events/evt_101 returns one event (200).
+                    </li>
+                    <li>
+                      An unknown event returns 404. A missing or invalid create
+                      title returns 400 in our chosen contract.
+                    </li>
+                    <li>
+                      A valid POST /api/events title shows an illustrative 201
+                      response; no real event is retained.
+                    </li>
+                    <li>
+                      JSON is a structured data format, not a database. API
+                      fields can differ from internal records.
+                    </li>
+                    <li>
+                      The application validates input and checks identity and
+                      permissions. A method or status alone does not describe
+                      the entire interaction.
+                    </li>
+                  </ul>
+                </>
+              ) : (
+                <>
+                  <ol>
+                    {walkthrough.map((s) => (
+                      <li key={s.text}>{s.text}</li>
+                    ))}
+                  </ol>
+                  <p>
+                    The browser talks to the application server. The server
+                    controls access to stored event records. A request asks for
+                    something; a response replies to that request.
+                  </p>
+                </>
+              )}
               <h3>Compact glossary</h3>
               <dl>
                 {definitions.map(([name, text]) => (
@@ -725,6 +811,17 @@ export function FoundationLesson({
                 I viewed this lesson (self-reported; saved with my position).
               </label>
               <div className={styles.controls}>
+                <Link
+                  className="text-link"
+                  href={foundationHref(
+                    studioCourse,
+                    isApi ? "web-request-v1" : "apis-data-v1",
+                  )!}
+                >
+                  {isApi
+                    ? "Revisit How a web request works"
+                    : "Continue to APIs and data"}
+                </Link>
                 <button
                   type="button"
                   className="button button-secondary"
@@ -744,8 +841,8 @@ export function FoundationLesson({
               </div>
               <p>
                 Additional foundations lessons are planned:{" "}
-                {plannedLessons.join("; ")}. They are not available yet. The
-                workshop is available now without a prerequisite lock.
+                {remainingFoundationLessons.join("; ")}. They are not available
+                yet. The workshop is available now without a prerequisite lock.
               </p>
             </div>
           </section>
@@ -769,10 +866,16 @@ export function FoundationLesson({
               {dirty ? " · current draft" : " · saved"}. Position saves do not
               submit practice.
             </p>
+            {isApi && (
+              <p>
+                Saving restores the scenario, event ID and title draft.
+                Responses and illustrative created events are not saved.
+              </p>
+            )}
             <p>
               Practice:{" "}
               {practiceEvidence.filter((e) => e.kind === "attempt").length
-                ? `${practiceEvidence.filter((e) => e.kind === "attempt").length} of 3 questions attempted; ${practiceEvidence.filter((e) => e.kind === "attempt" && e.correct).length} latest responses correct on these specific checks.`
+                ? `${practiceEvidence.filter((e) => e.kind === "attempt").length} of ${questions.length} questions attempted; ${practiceEvidence.filter((e) => e.kind === "attempt" && e.correct).length} latest responses correct on these specific checks.`
                 : "not attempted."}{" "}
               Details and help history appear in Practice. This is not course
               completion.
@@ -807,8 +910,11 @@ export function FoundationLesson({
               <div className={styles.card}>
                 <h3>Saved revision {comparison.revision}</h3>
                 <p>
-                  {comparison.position.section}, walkthrough step{" "}
-                  {comparison.position.step + 1}; viewed:{" "}
+                  {comparison.position.section};{" "}
+                  {"explorer" in comparison.position
+                    ? `explorer scenario ${comparison.position.explorer.scenario}, event ID ${comparison.position.explorer.eventId}, title draft: ${comparison.position.explorer.title || "(empty)"}`
+                    : `walkthrough step ${comparison.position.step + 1}`}
+                  ; viewed:{" "}
                   {comparison.position.viewed ? "yes (self-reported)" : "no"}.
                   Your current position is still kept.
                 </p>
@@ -824,6 +930,7 @@ export function FoundationLesson({
                       )
                         return;
                       setPosition(comparison.position);
+                      setExplorerEpoch((n) => n + 1);
                       setSaved(comparison);
                       setBase(comparison.revision);
                       setComparison(null);
@@ -853,9 +960,8 @@ export function FoundationLesson({
               </div>
             )}
             <small>
-              Content: {foundationIdentity.content} · position:{" "}
-              {foundationIdentity.schema}. Private to your account. No automatic
-              saves.
+              Content: {identity.content} · position: {identity.schema}. Private
+              to your account. No automatic saves.
             </small>
           </footer>
         </div>

@@ -174,8 +174,8 @@ async function main() {
       .map((f) => f.split("_")[0])
       .sort();
     if (
-      expectedVersions.at(-1) !== "202611010001" ||
-      expectedVersions.at(-2) !== "202610290001" ||
+      expectedVersions.at(-1) !== "202611050001" ||
+      expectedVersions.at(-2) !== "202611010001" ||
       expectedVersions.length < 2
     )
       throw new Error("Review migration scope before acceptance");
@@ -230,6 +230,8 @@ async function main() {
       select public.enrol_course('javascript-foundations-v1');
       select public.mark_lesson_read('js-v1-values');
       select public.enrol_course('system-design-studio-v1');
+      select public.save_studio_foundation('web-request-v1','web-request-content-v1','foundation-position-v1',0,'${randomUUID()}','{"section":"learn","step":2,"viewed":true}'::jsonb);
+      select public.submit_studio_foundation('web-request-v1','web-request-content-v1','foundation-position-v1','initiator','attempt','browser','${randomUUID()}');
       select public.save_studio_worksheet('campus-events-v1',0,'${randomUUID()}','${legacyWorksheet}'::jsonb);
       commit;`,
     );
@@ -247,7 +249,9 @@ async function main() {
         or not exists(select 1 from public.lesson_reads where user_id='${legacy}' and lesson_id='js-v1-values')
         or not exists(select 1 from public.course_versions where id='javascript-foundations-v1' and experience_kind='lessons')
         or not exists(select 1 from public.studio_worksheet_revisions where user_id='${legacy}' and scenario_id='campus-events-v1' and revision=1 and worksheet='${legacyWorksheet}'::jsonb)
-      then raise exception 'Legacy JavaScript or worksheet evidence changed'; end if;
+        or not exists(select 1 from public.studio_foundation_positions where user_id='${legacy}' and lesson_id='web-request-v1' and content_version='web-request-content-v1' and schema_version='foundation-position-v1' and revision=1 and position='{"section":"learn","step":2,"viewed":true}'::jsonb)
+        or not exists(select 1 from public.studio_foundation_events where user_id='${legacy}' and lesson_id='web-request-v1' and question_id='initiator' and choice='browser' and result->>'correct'='true')
+      then raise exception 'Legacy JavaScript, worksheet or first-lesson evidence changed'; end if;
       end $$;
       delete from auth.users where id='${legacy}';`,
     );
@@ -350,6 +354,12 @@ async function main() {
       "foundations-practice-1440.png",
       "foundations-recap-390.png",
       "foundations-recap-1440.png",
+      "apis-data-learn-390.png",
+      "apis-data-learn-1440.png",
+      "apis-data-practice-390.png",
+      "apis-data-practice-1440.png",
+      "apis-data-recap-390.png",
+      "apis-data-recap-1440.png",
     ];
     const screenshotsPresent = screenshotFiles.every((file) =>
       existsSync(`test-results/verification/studio-provider/${file}`),

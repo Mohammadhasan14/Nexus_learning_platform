@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { foundationIdentity, questions } from "./content";
+import { foundationIdentity } from "./content";
+import { apiFoundationIdentity } from "./api-content";
+import { explorerConfigSchema } from "./api-example";
+import { getFoundationLesson } from "./lessons";
 export const identitySchema = z
   .object({
     lesson: z.literal(foundationIdentity.lesson),
@@ -15,22 +18,63 @@ export const positionSchema = z
     viewed: z.boolean(),
   })
   .strict();
-export const positionSaveSchema = z
+export const apiIdentitySchema = z
   .object({
-    identity: identitySchema,
-    expected: z.number().int().min(0).max(1000),
-    request: z.string().uuid(),
-    position: positionSchema,
+    lesson: z.literal(apiFoundationIdentity.lesson),
+    content: z.literal(apiFoundationIdentity.content),
+    schema: z.literal(apiFoundationIdentity.schema),
   })
   .strict();
+export const supportedIdentitySchema = z.union([
+  identitySchema,
+  apiIdentitySchema,
+]);
+export type FoundationIdentity = z.infer<typeof supportedIdentitySchema>;
+export const apiPositionSchema = z
+  .object({
+    section: sectionSchema,
+    step: z.literal(0),
+    viewed: z.boolean(),
+    explorer: explorerConfigSchema,
+  })
+  .strict();
+export const lessonPositionSchema = z.union([
+  positionSchema,
+  apiPositionSchema,
+]);
+export type LessonPosition = z.infer<typeof lessonPositionSchema>;
+export function positionMatchesIdentity(
+  identity: FoundationIdentity,
+  position: LessonPosition,
+) {
+  return identity.lesson === apiFoundationIdentity.lesson
+    ? apiPositionSchema.safeParse(position).success
+    : positionSchema.safeParse(position).success;
+}
+export const positionSaveSchema = z
+  .object({
+    identity: supportedIdentitySchema,
+    expected: z.number().int().min(0).max(1000),
+    request: z.string().uuid(),
+    position: lessonPositionSchema,
+  })
+  .strict()
+  .refine((p) => positionMatchesIdentity(p.identity, p.position), {
+    path: ["position"],
+    message: "Use this lesson’s supported position schema.",
+  });
 export const questionIdSchema = z.enum([
   "initiator",
   "database-query",
   "request-response",
+  "api-read-one",
+  "api-create-body",
+  "api-error-kind",
+  "api-representation",
 ]);
 export const practiceInputSchema = z
   .object({
-    identity: identitySchema,
+    identity: supportedIdentitySchema,
     question: questionIdSchema,
     kind: z.enum(["attempt", "hint", "explain"]),
     choice: z.string().max(40).nullable(),
@@ -38,7 +82,18 @@ export const practiceInputSchema = z
   })
   .strict()
   .superRefine((p, ctx) => {
-    const options = questions.find((q) => q.id === p.question)!.options;
+    const question = getFoundationLesson(p.identity.lesson).questions.find(
+      (q) => q.id === p.question,
+    );
+    if (!question) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["question"],
+        message: "Choose a question from this lesson.",
+      });
+      return;
+    }
+    const options = question.options;
     if (
       p.kind === "attempt"
         ? !options.some((o) => o.id === p.choice)
@@ -54,7 +109,7 @@ export const savedPositionSchema = z
   .object({
     revision: z.number().int().min(1).max(1000),
     savedAt: z.string(),
-    position: positionSchema,
+    position: lessonPositionSchema,
   })
   .strict();
 export const practiceFeedbackSchema = z
@@ -74,11 +129,28 @@ export const practiceFeedbackSchema = z
 export const foundationStateSchema = z
   .object({
     enrolled: z.literal(true),
-    identity: identitySchema,
+    identity: supportedIdentitySchema,
     saved: savedPositionSchema.nullable(),
     evidence: z.array(practiceFeedbackSchema).max(400),
   })
-  .strict();
+  .strict()
+  .superRefine((p, ctx) => {
+    if (p.saved && !positionMatchesIdentity(p.identity, p.saved.position))
+      ctx.addIssue({
+        code: "custom",
+        path: ["saved"],
+        message: "Unsupported pinned position.",
+      });
+    const ids = getFoundationLesson(p.identity.lesson).questions.map(
+      (q) => q.id,
+    );
+    if (p.evidence.some((e) => !ids.includes(e.question)))
+      ctx.addIssue({
+        code: "custom",
+        path: ["evidence"],
+        message: "Evidence belongs to another lesson.",
+      });
+  });
 export type Position = z.infer<typeof positionSchema>;
 export type SavedPosition = z.infer<typeof savedPositionSchema>;
 export type Feedback = z.infer<typeof practiceFeedbackSchema>;
