@@ -123,6 +123,14 @@ test("private outcomes record atomic attempts and distinguish delayed evidence",
       .click();
     await expect(page).toHaveURL(/\/outcomes$/);
     await page.reload();
+    // Wait for the page rather than auditing the shared Suspense loading shell.
+    await expect(
+      page.getByRole("heading", {
+        level: 1,
+        name: "Your learning outcomes.",
+        exact: true,
+      }),
+    ).toBeVisible();
     await page.keyboard.press("Tab");
     await expect(
       page.getByRole("link", { name: "Skip to content" }),

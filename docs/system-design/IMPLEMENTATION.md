@@ -218,3 +218,63 @@ execution. Reports omit private values, and successful desktop/mobile captures
 mask editable worksheet data. Only lightweight targeted validation runs locally.
 NX-046.2/.4 remain In review and deployment is blocked pending actual acceptance.
 No foundations, architecture, simulation or AI implementation is included.
+
+## Publication/access audit — 1 November 2026
+
+Created the authorised local branch `ci/studio-m1-provider-acceptance` from
+`0ab4ce2`; all reviewed dependencies are committed. GitHub authentication is
+unavailable to automation, so nothing was pushed and no PR/run was created.
+Deployment inspection found no source workflow/config or public deployment
+history; private hook visibility remains blocked on sign-in.
+
+Public metadata for historical run `41106596305` at `b69e40b` establishes that
+provider reset, pgTAP, generated-type comparison, build and stop steps reported
+success. Both overall jobs failed, including provider browser integration.
+There are no artifacts or detailed counts; the prepared new wrapper/upgrade
+fixture/expanded assertions have not run. Known annotation rule IDs are recorded
+in the handoff without private error payloads. NX-046.2/.4 remain In review.
+
+## Actual hosted acceptance and focused corrections — 1 November
+
+PR #1 is published. Accepted
+[run 41295135451](https://github.com/Mohammadhasan14/Nexus_learning_platform/actions/runs/41295135451)
+tested code `764cff52e1bedc18b43269533935f55ec5aefa4b` through merge
+`56b441cc222043a76b9639d90a5cbf705087d5a3`. Both jobs passed, establishing real
+Supabase replay of all 17 migrations through `202610290001`, preservation of a
+pre-Studio JavaScript fixture, 68 pgTAP assertions in four files, full generated
+public-schema equality/drift checks, build and scoped cleanup. **15 real-provider
+browser cases passed** with two intentional live-only skips, no required skips;
+Studio RPC/UI, privacy deletion and JavaScript cases all passed. The application
+job passed all normal formatting/lint/types/unit/isolated-DB/build/public/fixture/
+performance gates. Generated types match source byte for byte; no migration or
+type source fix was necessary. NX-046.2/.4 are now Completed on this evidence.
+
+Real-provider latency exposed audits of the shared Suspense loading shell before
+the async page h1 arrived. Tests now require the exact loaded page heading;
+all Axe rules remain enabled. The older search test also expected the toolbar
+trigger after opening via a shortcut from main; it now verifies the documented
+actual-opener return plus separate button invocation.
+
+The resulting keyboard test exposed a real populated-search-input Escape issue.
+The dialog now handles Escape explicitly, preserving composition, normal focus
+return and its existing layout. The Studio journey exercises a populated query,
+Escape and return to its worksheet field before capturing desktop/mobile images.
+Chrome's search-field Escape clearing behavior is documented by
+[MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/search).
+No course/progress, worksheet persistence, schema, credential or tutor behavior
+was changed. Sanitised failure diagnostics contain only public rule IDs and
+test-source positions, not messages, DOM, input values or secrets.
+
+Reviewed real-provider 390/1440px screenshots and JSON/schema artifacts are
+preserved locally under
+`test-results/verification/studio-provider-remote/studio-m1-provider-41295135451-1/`
+and in the seven-day run artifact. Private/editable content is masked. No
+temporary project containers, volumes or networks remained after scoped cleanup;
+Vector stayed disabled, no shared prune/image deletion or local service startup.
+The captures show the same workshop layout after the verified keyboard fix.
+
+This closes M1 provider acceptance, not managed/production deployment. Forced
+provider JWT expiry, physical devices, actual screen readers and Firefox/WebKit
+remain unclaimed; cookie-session loss/recovery and expired-cookie refresh were
+verified. Parent course work remains open and foundations Deferred. Stop without
+merge, deployment or later feature implementation.

@@ -481,6 +481,16 @@ test("real provider enrolment, exact resume, two-tab conflict and lost-session r
     await expect(
       page.getByText("Last saved: revision 4", { exact: true }),
     ).toBeVisible();
+    const explanation = page.getByLabel("Your explanation", { exact: true });
+    await expect(explanation).toBeEnabled();
+    await explanation.focus();
+    await page.keyboard.press("Control+k");
+    const search = page.getByRole("dialog", { name: "Quick search" });
+    await expect(search).toBeVisible();
+    await search.getByLabel("Find lessons and actions").fill("Courses");
+    await page.keyboard.press("Escape");
+    await expect(search).not.toBeVisible();
+    await expect(explanation).toBeFocused();
     await mkdir("test-results/verification/studio-provider", {
       recursive: true,
     });
