@@ -140,3 +140,23 @@ test("skipped M1/privacy/token checks and runner errors cannot pass browser acce
     true,
   );
 });
+
+test("fixture/performance diagnostics retain source coordinates while excluding private error contents", () => {
+  const canary = "private-browser-canary";
+  for (const suite of ["flows", "performance"]) {
+    const result = failureDetails(
+      [
+        {
+          message: `${canary} timeout`,
+          stack: `at tests/${suite}/accounts.spec.ts:123:45\n${canary}`,
+        },
+      ],
+      "accounts.spec.ts",
+    );
+    assert.deepEqual(result.locations, [
+      { file: "accounts.spec.ts", line: 123, column: 45 },
+    ]);
+    assert.equal(result.kind, "timeout");
+    assert.ok(!JSON.stringify(result).includes(canary));
+  }
+});

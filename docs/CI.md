@@ -187,3 +187,16 @@ deleting raw fixture output. Run 41888096350's old aggregate failure has no
 recoverable gate detail; no cause is inferred. Runners, timeouts, read-only
 permissions and performance budgets are unchanged. Retarget/reverify after M1
 merges. See [full evidence and limits](system-design/FOUNDATIONS.md).
+
+## Sanitized application browser diagnostics — 2026-11-08
+
+Fixture flows and performance retain all existing assertions and gates. CI selects
+`tests/support/application-reporter.ts` and turns off traces for those commands.
+It uploads only `test-results/application-report/{flows,performance}.json` for
+seven days under `application-browser-<run>-<attempt>`. Each case contains a source
+basename/line, status, expected status and duration; failures add only a fixed kind,
+allowlisted public Axe rule IDs and matching test-source coordinates. Raw errors,
+stdout, private titles, selectors, DOM, attachments, traces, cookies and Auth
+state are excluded. The provider artifact policy is unchanged. This diagnoses
+failures previously hidden by the aggregate wrapper; it does not replace actual
+provider acceptance or weaken checks.

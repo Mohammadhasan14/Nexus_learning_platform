@@ -108,7 +108,7 @@ export function failureDetails(
       });
   }
   for (const match of text.matchAll(
-    /tests\/integration\/([a-z-]+\.spec\.ts):(\d+):(\d+)/g,
+    /tests\/(?:integration|flows|performance)\/([a-z-]+\.spec\.ts):(\d+):(\d+)/g,
   )) {
     if (match[1] !== allowedFile) continue;
     const loc = {
