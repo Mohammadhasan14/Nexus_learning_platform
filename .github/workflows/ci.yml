@@ -32,14 +32,35 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Run application gates without publishing raw fixture output
         run: |
-          if npm run check > "$RUNNER_TEMP/application-checks.log" 2>&1; then
-            rm -f "$RUNNER_TEMP/application-checks.log"
-            echo "Application checks passed."
-          else
-            rm -f "$RUNNER_TEMP/application-checks.log"
-            echo "::error::Application checks failed; raw fixture output was withheld."
-            exit 1
-          fi
+          for gate in format:check lint typecheck test:unit test:db build test test:flows test:performance; do
+            browser_args=()
+            if [[ "$gate" == test:flows || "$gate" == test:performance ]]; then
+              export APPLICATION_BROWSER_SUITE="${gate#test:}"
+              browser_args=(-- --reporter=./tests/support/application-reporter.ts --trace=off)
+            fi
+            if npm run "$gate" "${browser_args[@]}" > "$RUNNER_TEMP/application-checks.log" 2>&1; then
+              rm -f "$RUNNER_TEMP/application-checks.log"
+              echo "$gate: passed. Raw output withheld."
+              echo "- $gate: passed" >> "$GITHUB_STEP_SUMMARY"
+            else
+              rm -f "$RUNNER_TEMP/application-checks.log"
+              echo "::error::$gate failed; raw fixture output was withheld."
+              echo "- $gate: failed" >> "$GITHUB_STEP_SUMMARY"
+              exit 1
+            fi
+          done
+
+      - name: Upload sanitized application browser diagnostics
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: application-browser-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 7
+          include-hidden-files: false
+          if-no-files-found: ignore
+          path: |
+            test-results/application-report/flows.json
+            test-results/application-report/performance.json
 
   local-supabase:
     name: Local Supabase integration
@@ -83,3 +104,9 @@ jobs:
             test-results/provider-artifacts/public-schema.types.ts
             test-results/provider-artifacts/workshop-390.png
             test-results/provider-artifacts/workshop-1440.png
+            test-results/provider-artifacts/foundations-390.png
+            test-results/provider-artifacts/foundations-1440.png
+            test-results/provider-artifacts/foundations-practice-390.png
+            test-results/provider-artifacts/foundations-practice-1440.png
+            test-results/provider-artifacts/foundations-recap-390.png
+            test-results/provider-artifacts/foundations-recap-1440.png

@@ -23,7 +23,7 @@ test("failure diagnostics expose public rule IDs and source locations without pr
   const detail = failureDetails(
     [
       {
-        message: `expect failed: { "id": "page-has-heading-one", "html": "${canary}", "target": "${canary}" }`,
+        message: `expect failed: { "id": "page-has-heading-one", "html": "${canary}", "target": "${canary}" }, { "id": "landmark-unique", "html": "${canary}" }`,
         stack: `Error: ${canary}\n at tests/integration/notes-search.spec.ts:229:81\n at tests/integration/${canary}.spec.ts:9:1`,
         location: {
           file: "/workspace/tests/integration/notes-search.spec.ts",
@@ -37,7 +37,7 @@ test("failure diagnostics expose public rule IDs and source locations without pr
   assert.ok(!JSON.stringify(detail).includes(canary));
   assert.deepEqual(detail, {
     kind: "accessibility",
-    rules: ["page-has-heading-one"],
+    rules: ["page-has-heading-one", "landmark-unique"],
     locations: [{ file: "notes-search.spec.ts", line: 229, column: 81 }],
   });
 });
@@ -94,6 +94,8 @@ test("skipped M1/privacy/token checks and runner errors cannot pass browser acce
   const files = [
     "system-design",
     "system-design",
+    "foundations",
+    "foundations",
     "privacy-controls",
     "privacy-export",
     "course-versions",
@@ -115,7 +117,7 @@ test("skipped M1/privacy/token checks and runner errors cannot pass browser acce
   assert.equal(browserAcceptance(cases, false), true);
   assert.equal(browserAcceptance(cases, true), false);
   assert.equal(browserAcceptance(cases.slice(1), false), false);
-  for (const index of [0, 2, 9]) {
+  for (const index of [0, 2, 4, 11]) {
     const skipped = cases.map((c, n) =>
       n === index ? { ...c, status: "skipped" } : c,
     );
@@ -137,4 +139,24 @@ test("skipped M1/privacy/token checks and runner errors cannot pass browser acce
     ),
     true,
   );
+});
+
+test("fixture/performance diagnostics retain source coordinates while excluding private error contents", () => {
+  const canary = "private-browser-canary";
+  for (const suite of ["flows", "performance"]) {
+    const result = failureDetails(
+      [
+        {
+          message: `${canary} timeout`,
+          stack: `at tests/${suite}/accounts.spec.ts:123:45\n${canary}`,
+        },
+      ],
+      "accounts.spec.ts",
+    );
+    assert.deepEqual(result.locations, [
+      { file: "accounts.spec.ts", line: 123, column: 45 },
+    ]);
+    assert.equal(result.kind, "timeout");
+    assert.ok(!JSON.stringify(result).includes(canary));
+  }
 });

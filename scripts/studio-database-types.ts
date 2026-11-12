@@ -1,4 +1,4 @@
-/** Generate only M1 additions from the isolated migration catalog. Does not contact a provider.
+/** Generate Studio additions from the isolated migration catalog. Does not contact a provider.
  * Full Supabase generation/drift verification remains npm run db:types[:check] on an authorised stack.
  */
 import ts from "typescript";
@@ -7,6 +7,7 @@ import { format } from "prettier";
 import { migrationDatabase } from "./database-harness";
 async function main() {
   const target = "lib/supabase/database.types.ts";
+  const foundations = process.argv.includes("--foundations");
   const db = await migrationDatabase();
   try {
     const source = await readFile(target, "utf8");
@@ -37,12 +38,18 @@ async function main() {
           : udt === "jsonb"
             ? "Json"
             : "string";
-    for (const name of [
-      "course_versions",
-      "studio_scenario_versions",
-      "studio_worksheets",
-      "studio_worksheet_revisions",
-    ]) {
+    for (const name of foundations
+      ? [
+          "studio_foundation_lessons",
+          "studio_foundation_positions",
+          "studio_foundation_events",
+        ]
+      : [
+          "course_versions",
+          "studio_scenario_versions",
+          "studio_worksheets",
+          "studio_worksheet_revisions",
+        ]) {
       const cols = (
         await db.query<{
           column_name: string;
@@ -85,7 +92,13 @@ async function main() {
           : { start: tables.end - 1, end: tables.end - 1, text },
       );
     }
-    for (const name of ["get_studio_workshop", "save_studio_worksheet"]) {
+    for (const name of foundations
+      ? [
+          "get_studio_foundation",
+          "save_studio_foundation",
+          "submit_studio_foundation",
+        ]
+      : ["get_studio_workshop", "save_studio_worksheet"]) {
       const row = (
         await db.query<{ names: string[]; types: string[] }>(
           `select proargnames names,array(select t.typname from unnest(p.proargtypes::oid[]) with ordinality a(id,ord) join pg_type t on t.oid=a.id order by ord) types from pg_proc p join pg_namespace n on p.pronamespace=n.oid where n.nspname='public' and p.proname=$1`,
@@ -152,7 +165,7 @@ async function main() {
     }
     await writeFile(target, await format(output, { parser: "typescript" }));
     console.log(
-      "M1 types generated from isolated catalog; no provider drift verification claimed.",
+      "Studio types generated from isolated catalog; no provider drift verification claimed.",
     );
   } finally {
     await db.close();

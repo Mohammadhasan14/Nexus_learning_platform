@@ -6,16 +6,22 @@ implementation evidence and remaining gates are in the current handoff. See [aud
 
 ## Curriculum clarification — 2026-10-29
 
-The intended beginner-to-advanced student journey starts with a short foundations
-module before the capacity workshop. NX-046.22 records clients, servers, APIs,
-databases, requests versus responses, latency versus throughput and read/write
-workloads, taught through simple examples and guided practice. This module is
-Deferred and excluded from M1 implementation. Keep the current workshop scope,
-explain unfamiliar terms inline and do not present it as the whole course or
-block access on the unimplemented prerequisite. The user supplied M1 UI references
-and authorised its implementation, then paused and later resumed M1; use the
-current handoff and canonical tracker for present status rather than the original
-audit snapshot.
+The intended beginner-to-advanced student journey starts with foundations before
+the capacity workshop. NX-046.22 remains the parent for this module. The first
+bounded slice, NX-046.23, implements the workspace and **How a web request works**;
+it is under local review, not a complete module. The remaining planned children
+are NX-046.24 APIs and data; NX-046.25 latency, throughput and concurrency;
+NX-046.26 read/write workloads; and NX-046.27 units and the transition to capacity
+estimation. Each needs simple examples, guided practice, feedback, accessible
+alternatives and independent acceptance. Statuses/evidence live only in the
+canonical register. See [the first lesson contract](FOUNDATIONS.md).
+
+Recommended order is foundations → capacity workshop, without a hard prerequisite
+lock. Existing enrolments and saved workshop routes remain valid. This first
+lesson is a separate feature branch based on verified M1; no later editor,
+simulation or AI work is part of it. The original M1 curriculum clarification
+kept foundations outside that milestone; the current request authorises only
+this first foundations lesson, not the remaining module.
 
 ## One tracker and delivery order
 
